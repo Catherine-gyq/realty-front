@@ -173,6 +173,7 @@
                 })).then(({data: usr})=>{
                   // document.write(usr.admin_name)
                     this.usr = usr;
+                    this.$store.commit('setId', this.usr.admin_id);
                     // this.$message.error(this.usr[0].admin_name)
                 })
             },

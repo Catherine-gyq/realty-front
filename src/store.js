@@ -45,56 +45,58 @@ export default new Vuex.Store({
                 add:'api/resident/add',
                 del:'api/resident/delete?tele={tele}',
                 update: 'api/resident/update',
+                usr:'api/resident/usr?tele={tele}',
             },
-            // student: {
-            //     add: 'api/student/add',
-            //     update: 'api/student/update',
-            //     del: 'api/student/delete?no={no}',
-            //     // allInfo: 'api/student/all?no={no}&name={name}',
-            //     ownCourse: 'api/elective/find/OwnCourse/student?no={no}',
-            //     enableCourse: 'api/elective/find/enableCourse/student',
+            room:{
+                allInfo:'api/room/all',
+            },
+            activity:{
+                reserve:'api/activity/reserve',
+                allInfo:'api/activity/all',
+                cancel:'api/activity/cancel?activity_id={activity_id}',
+            },
+            // teacher: {
+            //     add: 'api/teacher/add',
+            //     search: '/api/teacher/search?de={de}',
+            //     update: 'api/teacher/update',
+            //     del: 'api/teacher/delete?no={no}',
+            //     allInfo: 'api/teacher/all?no={no}&name={name}'
             // },
-            teacher: {
-                add: 'api/teacher/add',
-                search: '/api/teacher/search?de={de}',
-                update: 'api/teacher/update',
-                del: 'api/teacher/delete?no={no}',
-                allInfo: 'api/teacher/all?no={no}&name={name}'
-            },
             notice: {
                 allInfo: 'api/notice/all?time={time}&name={name}',
                 del: 'api/notice/delete?id={id}',
                 add: 'api/notice/add',
                 update: 'api/notice/update',
             },
-            // course:{
-            //     add: 'api/course/add',
-            //     update: 'api/course/update',
-            //     del: 'api/course/delete?no={no}',
-            //     allInfo: 'api/course/all?no={no}&name={name}',
-            //     allStudent: 'api/elective/find/student/course?no={no}',
-            // },
-            open: {
-                add: 'api/open/add',
-                update: 'api/open/update',
-                del: 'api/open/delete?id={id}',
-                allInfo: 'api/open/all?no={no}&name={name}',
-                search: '/api/open/search'
+            vote:{
+                add:'api/vote/add',
+                count:'api/vote/count?vote_id={vote_id}',
+                allInfo:'api/vote/all'
             },
-            department:{
-                allInfo: 'api/department/all'
+            advise:{
+                add:'api/advise/add',
+                allInfo:'api/advise/all',
             },
-            term:{
-                allInfo: 'api/term/all'
-            },
-            elective: {
-                choose: 'api/elective/add',
-                del: 'api/elective/delete?sno={sno}&cno={cno}'
-            },
-            grade:{
-                update: 'api/elective/update',
-                studentGrade: 'api/elective/find/grade/student?no={no}&term={term}'
+            repair:{
+                add:'api/repair/add',
+                allInfo:'api/repair/all?id={usr_id}',
+                cancel:'api/repair/cancel?repair_id={repair_id}'
             }
+            // open: {
+            //     add: 'api/open/add',
+            //     update: 'api/open/update',
+            //     del: 'api/open/delete?id={id}',
+            //     allInfo: 'api/open/all?no={no}&name={name}',
+            //     search: '/api/open/search'
+            // },
+            // elective: {
+            //     choose: 'api/elective/add',
+            //     del: 'api/elective/delete?sno={sno}&cno={cno}'
+            // },
+            // grade:{
+            //     update: 'api/elective/update',
+            //     studentGrade: 'api/elective/find/grade/student?no={no}&term={term}'
+            // }
         }
     },
 

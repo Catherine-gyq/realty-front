@@ -1,8 +1,14 @@
 <template>
-  <div class="panel_check">
+  <div class="panel">
+    <panel-title title="社区意见箱">
+      <el-button @click="onAddAdvise" size="mini">
+        <i class="fa el-icon-plus"></i>
+        添加
+      </el-button>
+    </panel-title>
     <div class="panel-body" style="height: 700px">
-      <el-table empty-text="暂无数据" :data="vote" v-loading="loading" element-loading-text="加载中...">
-        <el-table-column align="center" prop="id" label="投票信息id" width="200"/>
+      <el-table empty-text="暂无数据" :data="advise" v-loading="loading" element-loading-text="加载中...">
+        <el-table-column align="center" prop="id" label="消息id" width="200"/>
         <el-table-column align="center" prop="title" show-overflow-tooltip='true' label="消息标题" width="250"/>
         <el-table-column align="center" prop="people" label="发布人" width="250"/>
         <el-table-column align="center" prop="admin_id" label="发布人" v-if=false width="250"/>
@@ -27,30 +33,7 @@
 
 <script>
 export default {
-  name: "NoteBox",
-  data(){
-    return{
-      vote:{
-        id:'',
-        time:'',
-        title:'',
-        content:'',
-        people:'',
-        admin_id:'',
-      },
-    }
-  },
-  created() {
-    this.onGetVote()
-  },
-  methods:{
-    onGetVote(){
-      this.$http.get(this.$store.state.url.vote.allInfo).then(({data: vote}) => {
-        this.vote = vote
-      })
-    },
-  }
-
+name: "AdviseBox"
 }
 </script>
 

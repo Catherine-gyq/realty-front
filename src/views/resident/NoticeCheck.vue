@@ -32,7 +32,11 @@
         // url: '../../assets/images/logo.png',
         searchName:'',
         searchTime:'',
-        notices:{}
+        notices:{},
+        usr:{
+          resident_id:'',
+          name:'',
+        }
       }
     },
     components: {
@@ -40,16 +44,24 @@
     },
     created() {
       this.onGetNotice()
+      this.onGetUsr()
     },
-    methods:{
-      onRefresh()
-      {
-        this.onGetNotice()
+    methods: {
+      onRefresh() {
+        this.onGetNotice();
+        this.onGetUsr();
+      },
+      onGetUsr() {
+        this.$http.get(this.formatString(this.$store.state.url.resident.usr, {
+          tele: this.$store.state.auth.user
+        })).then(({data: usr}) => {
+          this.usr = usr
+          this.$store.commit('setId', this.usr.resident_id);
+        })
       },
       //获取所有消息
-      onGetNotice()
-      {
-        this.$http.get(this.formatString(this.$store.state.url.notice.allInfo,{
+      onGetNotice() {
+        this.$http.get(this.formatString(this.$store.state.url.notice.allInfo, {
           time: this.searchTime,
           name: this.searchName
         })).then(({data: notices}) => {

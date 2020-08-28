@@ -3,7 +3,7 @@
     <el-header>
       <div class="top-side">
         <el-row class="top-row">
-          <el-col :span="5" style="height:100%;font-size: xx-large; color: #FFD700;" >
+          <el-col :span="5" style="height:100%;font-size: xx-large; color: #ffd700;" >
             <span style="top:50px; position:fixed; text-align: center;left: 100px;"> 社区门户网站</span>
           </el-col>
           <el-col :span="14" style="height: 100%;" >
@@ -13,7 +13,8 @@
               <el-menu-item class="menu-list" index="/notice/check">社区消息</el-menu-item>
               <el-menu-item class="menu-list" index="/activity/reserve">活动预约</el-menu-item>
               <el-menu-item class="menu-list" index="/repair/report">维修预约</el-menu-item>
-              <el-menu-item class="menu-list" index="4">投票箱</el-menu-item>
+              <el-menu-item class="menu-list" index="/resident/vote">投票箱</el-menu-item>
+              <el-menu-item class="menu-list" index="/resident/advise">意见箱</el-menu-item>
             </el-menu>
           </el-col>
           <el-col :span="5" style="height: 100%; ">
