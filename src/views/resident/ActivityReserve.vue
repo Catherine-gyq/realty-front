@@ -116,6 +116,34 @@
 export default {
   name: "ActivityReserve",
   data(){
+    const validateUsage = (rule, value, callback) => {
+      if (!value || value.length === 0) {
+        callback(new Error('请输入您的用途'))
+      } else {
+        callback()
+      }
+    };
+    const validateStarttime = (rule, value, callback) => {
+      if (!value || value.length === 0) {
+        callback(new Error('请选择开始时间'))
+      } else {
+        callback()
+      }
+    };
+    const validateEndtime = (rule, value, callback) => {
+      if (!value || value.length != 11) {
+        callback(new Error('请选择结束时间'))
+      } else {
+        callback()
+      }
+    };
+    const validateDate = (rule, value, callback) => {
+      if (!value || value.length === 0) {
+        callback(new Error('请输入日期'))
+      } else {
+        callback()
+      }
+    };
     return{
       reserveDialog:false,
       checkDialog:false,
@@ -158,7 +186,13 @@ export default {
         disabledDate(time) {
           return time.getTime() < Date.now();
         }
-      }
+      },
+      rules: {
+        usage:[{required: true, trigger: 'blur', validator: validateUsage}],
+        date:[{required: true, trigger: 'blur', validator: validateDate}],
+        startTime:[{required: true, trigger: 'blur', validator: validateStarttime}],
+        endTime:[{required: true, trigger: 'blur', validator: validateEndtime}],
+      },
     }
   },
 
@@ -217,6 +251,7 @@ export default {
       this.$http.get(this.$store.state.url.activity.allInfo)
           .then(({data: activity}) => {
         this.activity = activity
+            // document.write(this.activity[1].startTime)
       })
     },
 

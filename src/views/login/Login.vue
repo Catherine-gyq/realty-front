@@ -8,7 +8,7 @@
 			<div class="title">
 				<el-radio v-model="form.identity" label="resident">住户</el-radio>
 				<el-radio v-model="form.identity" label="admin">管理员</el-radio>
-        <el-radio v-model="form.identity" label="super_admin">超级管理员</el-radio>
+<!--        <el-radio v-model="form.identity" label="super_admin">超级管理员</el-radio>-->
 <!--				<el-radio v-model="form.identity" label="admin">管理员</el-radio>-->
 			</div>
 			<el-form-item label="用户名" prop="username" class="item">

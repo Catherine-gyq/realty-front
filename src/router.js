@@ -47,7 +47,7 @@ const router = new Router({
 				{
 					path: '/resident/advise',
 					name: 'AdviseBox',
-					component: () => import('./views/resident/VoteBox')
+					component: () => import('./views/resident/AdviseBox')
 
 				}
 			]

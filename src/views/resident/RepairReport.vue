@@ -1,6 +1,6 @@
 <template>
   <div class="panel_check">
-    <h1>预约维修</h1>
+<!--    <h1>预约维修</h1>-->
     <el-row :gutter="24" >
 
       <!--新建预约-->

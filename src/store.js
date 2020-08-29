@@ -71,7 +71,8 @@ export default new Vuex.Store({
             vote:{
                 add:'api/vote/add',
                 count:'api/vote/count?vote_id={vote_id}',
-                allInfo:'api/vote/all'
+                allInfo:'api/vote/all',
+                check:'api/vote/check',
             },
             advise:{
                 add:'api/advise/add',
