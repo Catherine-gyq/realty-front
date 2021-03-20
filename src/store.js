@@ -55,12 +55,12 @@ export default new Vuex.Store({
                 allInfo:'api/activity/all',
                 cancel:'api/activity/cancel?activity_id={activity_id}',
             },
-            // teacher: {
-            //     add: 'api/teacher/add',
-            //     search: '/api/teacher/search?de={de}',
-            //     update: 'api/teacher/update',
-            //     del: 'api/teacher/delete?no={no}',
-            //     allInfo: 'api/teacher/all?no={no}&name={name}'
+            // Repair: {
+                // add: 'api/teacher/add',
+                // search: '/api/teacher/search?de={de}',
+                // update: 'api/teacher/update',
+                // del: 'api/teacher/delete?no={no}',
+            //     allInfo: 'api/repair/all?no={no}&name={name}'
             // },
             notice: {
                 allInfo: 'api/notice/all?time={time}&name={name}',
@@ -81,7 +81,8 @@ export default new Vuex.Store({
             repair:{
                 add:'api/repair/add',
                 allInfo:'api/repair/all?id={usr_id}',
-                cancel:'api/repair/cancel?repair_id={repair_id}'
+                cancel:'api/repair/cancel?repair_id={repair_id}',
+                all: 'api/repair/allInfo'
             }
             // open: {
             //     add: 'api/open/add',

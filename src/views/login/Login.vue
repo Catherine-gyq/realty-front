@@ -3,7 +3,7 @@
 		<el-form :rules="rules" label-width="100px" class="form" :model="form" ref="form">
 			<div class="title">
 <!--				<img src="../../assets/images/logo.png" alt="ems">-->
-        社区门户网站
+        社区管理网站
 			</div>
 			<div class="title">
 				<el-radio v-model="form.identity" label="resident">住户</el-radio>

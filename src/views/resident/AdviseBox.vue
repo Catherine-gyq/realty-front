@@ -1,23 +1,24 @@
 <template>
   <div class="panel_check">
-    <h1>意见箱</h1>
     <el-row :gutter="24" >
-      <el-col :span="6" :offset="1" style="height: 500px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-        <h2>新增意见反馈</h2>
-        <el-form ref="form" :model="form" label-width="80px" style="margin-top: 20px">
-          <el-form-item label="标题">
-            <el-input v-model="form.title"></el-input>
-          </el-form-item>
-          <el-form-item label="内容">
-            <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 10}" v-model="form.content"></el-input>
-          </el-form-item>
-          <el-form-item>
+      <el-col :span="6" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
+        <div style="margin: 10px 10px 0px 0px;">
+          <h2>新增意见反馈</h2>
+          <el-form ref="form" :model="adviseForm" label-width="40px" style="margin-top: 30px">
+            <el-form-item label="标题">
+              <el-input v-model="adviseForm.title"></el-input>
+            </el-form-item>
+            <el-form-item label="内容">
+              <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 10}" v-model="adviseForm.content"></el-input>
+            </el-form-item>
+          </el-form>
+          <div style="display: flex;flex-direction: row;justify-content: center;margin-top: 100px">
             <el-button type="primary" @click="onAdviseSubmit">提交</el-button>
-          </el-form-item>
-        </el-form>
+          </div>
+        </div>
       </el-col>
 
-      <el-col :span="15" :offset="1" style="height: 500px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+      <el-col :span="15" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
         <el-container style="margin-top: 20px;height: 100%;">
           <el-header style="font-size: 30px">
             <el-dropdown>
@@ -28,9 +29,9 @@
           </el-header>
           <el-main style="text-align: center;justify-content: center;width: 100%;">
             <el-table :data="boxList.slice((currpage - 1) * pagesize, currpage * pagesize)">
-              <el-table-column prop="date" label="提交日期" width="140">
+              <el-table-column prop="title" width="140" label="标题">
               </el-table-column>
-              <el-table-column prop="title" label="标题">
+              <el-table-column prop="date" label="提交日期" width="200">
               </el-table-column>
               <el-table-column prop="content" label="内容">
               </el-table-column>
@@ -64,7 +65,7 @@ export default {
       }],
       pagesize: 10,
       currpage: 1,
-      form: {
+      adviseForm: {
         date: '',
         resident_id:'',
         title: '',

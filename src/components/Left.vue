@@ -14,10 +14,9 @@
 					<i class="icon el-icon-user-solid"></i>
 					<span class="text">社区消息管理</span>
 				</el-menu-item>
-
-        <el-menu-item class="menu-list" index="/teacher/manage" v-if="$store.state.auth.identity === 'admin'">
+        <el-menu-item class="menu-list" index="/repairReserve/manage" v-if="$store.state.auth.identity === 'admin'">
           <i class="icon el-icon-user"></i>
-          <span class="text">教师信息管理</span>
+          <span class="text">维修预约信息管理</span>
         </el-menu-item>
 				<el-menu-item class="menu-list" index="/open/manage" v-if="$store.state.auth.identity === 'admin'">
 					<i class="icon el-icon-user-solid"></i>

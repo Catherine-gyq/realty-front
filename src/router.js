@@ -63,12 +63,6 @@ const router = new Router({
 					name: 'elective',
 					component: () => import('./views/student/Elective')
 				},
-				// {
-				// 	path: '/repair/report',
-				// 	name: 'repairreport',
-				// 	component: () => import('./views/resident/repairreport')
-				//
-				// },
 				{
 					path: '/student/grade',
 					name: 'studentGrade',
@@ -85,9 +79,9 @@ const router = new Router({
 					component: () => import('./views/admin/NoticeManage.vue')
 				},
 				{
-					path: '/teacher/manage',
-					name: 'TeacherManage',
-					component: () => import('./views/admin/TeacherManage.vue')
+					path: '/repairReserve/manage',
+					name: 'RepairReserve',
+					component: () => import('./views/admin/RepairReserveManage.vue')
 				},
 				{
 					path: '/open/manage',

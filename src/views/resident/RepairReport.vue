@@ -1,30 +1,27 @@
 <template>
   <div class="panel_check">
-<!--    <h1>预约维修</h1>-->
-    <el-row :gutter="24" >
-
-      <!--新建预约-->
-      <el-col :span="6" :offset="1" style="height: 500px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-        <h2>新建预约</h2>
-        <el-form ref="form" :model="form" label-width="80px" style="margin-top: 20px">
-          <el-form-item label="维修地点">
-            <el-input v-model="form.address"></el-input>
-          </el-form-item>
-          <el-form-item label="预约时间">
-            <el-date-picker type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;" :picker-options="pickerOptions" value-format="yyyy-MM-dd"></el-date-picker>
-          </el-form-item>
-          <el-form-item label="维修内容">
-            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 10}" v-model="form.content"></el-input>
-          </el-form-item>
-          <el-form-item>
+    <el-row :gutter="30" style="margin: 0px 20px 0px 20px ">
+      <el-col :span="6" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
+        <div style="margin: 10px 10px 0px 0px;">
+          <h2>新建预约</h2>
+          <el-form ref="repairForm" :model="repairForm" label-width="80px" style="margin-top: 20px">
+            <el-form-item label="维修地点" attr="address">
+              <el-input v-model="repairForm.address"></el-input>
+            </el-form-item>
+            <el-form-item label="预约时间" attr="date">
+              <el-date-picker type="date" placeholder="选择日期" v-model="repairForm.date" style="width: 100%;" :picker-options="pickerOptions" value-format="yyyy-MM-dd"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="维修内容" attr="content">
+              <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 10}" v-model="repairForm.content"></el-input>
+            </el-form-item>
+          </el-form>
+          <div style="display: flex;flex-direction: row;justify-content: center;margin-top: 100px">
             <el-button type="primary" @click="onRepairSubmit">立即预约</el-button>
-          </el-form-item>
-        </el-form>
+          </div>
+        </div>
       </el-col>
-
-
       <!--显示自己的所有预约-->
-      <el-col :span="15" :offset="1" style="height: 500px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+      <el-col :span="18" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
         <el-container style="margin-top: 20px;height: 100%;">
           <el-header style="font-size: 30px">
             <el-dropdown>
@@ -37,10 +34,10 @@
               <el-table-column prop="date" label="预约日期" width="140"/>
               <el-table-column prop="address" label="地址" width="120"/>
               <el-table-column prop="content" label="维修内容详情"/>
-              <el-table-column prop="status" label="状态"/>
+              <el-table-column prop="status" :formatter="statusTransfer" label="状态"/>
               <el-table-column align="center" label="操作">
                 <template slot-scope="props" width="200">
-                  <el-button type="info" size="mini" @click.native="onRepairCancel(props.row.repair_id)">
+                  <el-button :disabled="props.row.status!=='0'" type="info" size="mini" @click.native="onRepairCancel(props.row.repair_id)">
                     <i class="fa el-icon-edit"></i>
                     取消预约
                   </el-button>
@@ -109,12 +106,18 @@ export default {
         }
         ]
       },
-      form: {
+      repairForm: {
         address: '',
         date: '',
         content: '',
         resident_id: '',
-      }
+      },
+      repairStatus:[
+        {value:'0',label:'待批准'},
+        {value:'1',label:'待处理'},
+        {value:'2',label:'处理中'},
+        {value:'3',label:'已完成'},
+      ],
     }
   },
   created() {
@@ -131,20 +134,34 @@ export default {
     handleSizeChange (psize) {
       this.pagesize = psize
     },
-
+    statusTransfer(row){
+      console.log(row)
+      let temp = ""
+      this.repairStatus.map(e=>{
+        if (row.status === e.value){
+          // console.log(e.label)
+          temp = e.label
+          // return
+        }
+      })
+      return temp
+    },
     onGetRepair(){
       this.$http.get(this.formatString(this.$store.state.url.repair.allInfo, {
         usr_id: this.$store.state.auth.id
       })).then(({data: repair}) => {
+        console.log(repair)
         this.repairList = repair
       })
     },
     onRepairSubmit () {
-    this.form.resident_id = this.$store.state.auth.id;
-    this.$http.post(this.$store.state.url.repair.add,this.form)
+    this.repairForm.resident_id = this.$store.state.auth.id;
+    console.log(this.repairForm)
+    this.$http.post(this.$store.state.url.repair.add,this.repairForm)
         .then(()=>{
           this.$message.success("预约成功，等待审核");
           this.onRefresh();
+          this.$refs['repairForm'].resetFields();
         }).catch(()=>{
           this.$message.error("预约失败");
           // this.onRefresh();
@@ -152,14 +169,20 @@ export default {
     },
 
     onRepairCancel(id) {
-      this.$http.get(this.formatString(this.$store.state.url.repair.cancel,{
-        repair_id: id
-      })).then(() => {
-        this.$message.success("取消成功");
-        this.onRefresh();
-      }).catch(() => {
-        this.$message.error("取消失败");
-      })
+      this.$confirm('确定取消预约吗', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.get(this.formatString(this.$store.state.url.repair.cancel,{
+          repair_id: id
+        })).then(() => {
+          this.$message.success("取消成功");
+          this.onRefresh();
+        }).catch(() => {
+          this.$message.error("取消失败");
+        })
+      }).catch()
     }
   },
 }

@@ -1,33 +1,28 @@
 <template>
     <div>
-<!--      修改学生信息弹出框-->
+<!-- 修改居民信息弹出框-->
         <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
             <el-form :rules="rules"  ref="form" :model="currentRow" label-width="80px">
-                  <el-form-item label="姓名" prop="name">
-                    <el-col :span="21">
-                      <el-input v-model="currentRow.name"></el-input>
-                    </el-col>
-                  </el-form-item>
-                  <el-form-item label="性别" prop="sex">
-                    <el-col :span="21">
-                      <el-input v-model="currentRow.sex" ></el-input>
-                    </el-col>
-                  </el-form-item>
-                  <el-form-item label="手机号" prop="tele">
-                    <el-col :span="21">
-                      <el-input v-model="currentRow.tele"></el-input>
-                    </el-col>
-                  </el-form-item>
-                  <el-form-item label="地址" prop="address">
-                    <el-col :span="21">
-                      <el-input v-model="currentRow.address"></el-input>
-                    </el-col>
-                  </el-form-item>
-                <el-form-item>
-                    <el-col :span="21">
-                        <el-button @click="onResetPwd" type="primary" size="medium">重置密码</el-button>
-                    </el-col>
-                </el-form-item>
+              <el-form-item label="姓名" prop="name">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.name"></el-input>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="性别" prop="sex">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.sex" ></el-input>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="手机号" prop="tele">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.tele"></el-input>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="地址" prop="address">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.address"></el-input>
+                </el-col>
+              </el-form-item>
             </el-form>
             <div slot="footer">
                 <el-button @click="editDialog=false" size="small">
@@ -38,59 +33,30 @@
                 </el-button>
             </div>
         </el-dialog>
-
-
-<!--      添加学生信息弹出框-->
+<!--      添加居民信息弹出框-->
         <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog">
             <el-form :rules="rules" ref="form" :model="currentRow" label-width="80px">
-<!--                <el-form-item label="学号">-->
-<!--                    <el-col :span="21">-->
-<!--                        <el-input v-model="currentRow.no"></el-input>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-                <el-form-item label="姓名" prop="name">
-                    <el-col :span="21">
-                        <el-input v-model="currentRow.name"></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="性别" prop="sex">
-                    <el-col :span="21">
-                        <el-input v-model="currentRow.sex" ></el-input>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="手机号" prop="tele">
+              <el-form-item label="姓名" prop="name">
                   <el-col :span="21">
-                    <el-input v-model="currentRow.tele"></el-input>
+                      <el-input v-model="currentRow.name"></el-input>
                   </el-col>
-                </el-form-item>
-                <el-form-item label="地址" prop="address">
+              </el-form-item>
+              <el-form-item label="性别" prop="sex">
                   <el-col :span="21">
-                    <el-input v-model="currentRow.address"></el-input>
+                      <el-input v-model="currentRow.sex" ></el-input>
                   </el-col>
-                </el-form-item>
-
-<!--                <el-form-item label="出生年月">-->
-<!--                    <el-col :span="21">-->
-<!--                        <el-date-picker-->
-<!--                                v-model="currentRow.birthday"-->
-<!--                                type="date"-->
-<!--                                placeholder="选择出生年月"-->
-<!--                                value-format="yyyy-MM-dd">-->
-<!--                        </el-date-picker>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
-<!--                <el-form-item label="学院">-->
-<!--                    <el-col :span="21">-->
-<!--                        <el-select v-model="currentRow.departmentID" placeholder="请选择所属学院">-->
-<!--                            <el-option-->
-<!--                                    v-for="item in departments"-->
-<!--                                    :key="item.no"-->
-<!--                                    :label="item.name"-->
-<!--                                    :value="item.no">-->
-<!--                            </el-option>-->
-<!--                        </el-select>-->
-<!--                    </el-col>-->
-<!--                </el-form-item>-->
+              </el-form-item>
+              <el-form-item label="手机号" prop="tele">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.tele"></el-input>
+                </el-col>
+              </el-form-item>
+              <el-form-item label="地址" prop="address">
+                <el-col :span="21">
+                  <el-input v-model="currentRow.address"></el-input>
+                  <div style="font-size: 10px;text-align: right;color: rgba(203,129,58,0.86)">注：初始密码为手机号</div>
+                </el-col>
+              </el-form-item>
             </el-form>
             <div slot="footer">
                 <el-button @click="addDialog=false" size="small">
@@ -103,8 +69,7 @@
         </el-dialog>
 
 
-
-<!--页面框学生信息展示-->
+<!--页面框信息展示-->
         <div class="panel">
             <panel-title title="居民信息管理">
                 <el-button @click="onAddResident" size="mini">
@@ -120,7 +85,6 @@
                 <div style="float: left; width: 15%; margin-left: 10px">
                     <el-input v-model="searchName" placeholder="姓名" prefix-icon="el-icon-search" size="mini" @input="onRefresh"/>
                 </div>
-
             </div>
             <div class="panel-body" style="height: 700px">
                 <el-table empty-text="暂无数据" :data="residents" v-loading="loading" element-loading-text="加载中...">
@@ -139,6 +103,7 @@
                                 <i class="fa fa-remove"></i>
                                 删除
                             </el-button>
+                          <el-button @click="onResetPwd" type="primary" size="mini">密码重置</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -148,11 +113,11 @@
 </template>
 
 <script>
+    // import mislist from "@easipass/basic/mixins/mislist";
     import PanelTitle from '../../components/PanelTitle'
-
     export default {
-
         name: 'ResidentManage',
+        // mixins: [mislist],
         data() {
             const validateName = (rule, value, callback) => {
             if (!value || value.length === 0) {
@@ -214,85 +179,89 @@
             this.onGetResidents()
         },
         methods: {
-            onRefresh() {
-                this.onGetResidents()
-            },
-            //搜寻居民信息(如果没有搜索那就是全部信息)
-            onGetResidents(){
-                this.$http.get(this.formatString(this.$store.state.url.resident.allInfo, {
-                    usr_tele: this.search_tele,
-                    name: this.searchName
-                })).then(({data: residents}) => {
-                    this.residents = residents
-                })
-            },
+          onRefresh() {
+            this.onGetResidents()
+          },
+          //搜寻居民信息(如果没有搜索那就是全部信息)
+          onGetResidents() {
+            this.$http.get(this.formatString(this.$store.state.url.resident.allInfo, {
+              usr_tele: this.search_tele,
+              name: this.searchName
+            })).then(({data: residents}) => {
+              this.residents = residents
+            })
+          },
 
-            onAlterInfo(row){
-                this.currentRow = row;
-                this.editDialog = true;
-            },
+          onAlterInfo(row) {
+            this.currentRow = row;
+            this.editDialog = true;
+          },
 
-            onUploadedResident(){
-                this.$http.post(this.$store.state.url.resident.update, this.currentRow)
-                    .then(() => {
-                    this.$message.success("修改成功");
-                    this.onRefresh();
-                    this.editDialog = false
+          onUploadedResident() {
+            this.$http.post(this.$store.state.url.resident.update, this.currentRow)
+                .then(() => {
+                  this.$message.success("修改成功");
+                  this.onRefresh();
+                  this.editDialog = false
                 }).catch(() => {
-                    this.$message.error("修改失败");
-                    this.onRefresh();
-                    this.editDialog = false
-                })
-            },
+              this.$message.error("修改失败");
+              this.onRefresh();
+              this.editDialog = false
+            })
+          },
 
 
-
-
-            //是否显示编辑框
-            onAddResident(){
-                this.currentRow = {};
-                this.addDialog = true;
-            },
-            // 添加居民信息
-            onCreateResident(){
-                this.$http.post(this.$store.state.url.resident.add, this.currentRow)
-                    .then(() => {
-                        this.$message.success("添加成功");
-                        this.onRefresh();
-                        this.$message.success("首次添加用户默认密码为手机号");
-                        this.addDialog = false
-                    }).catch(() => {
-                    this.$message.error("添加失败");
-                    this.addDialog = false
-                })
-            },
-            onDeleteStudent(tele){
-                this.$http.get(this.formatString(this.$store.state.url.resident.del,{
-                    tele: tele
-                })).then(() => {
-                    this.$message.success("删除成功");
-                    this.onRefresh();
-                    this.editDialog = false
+          //是否显示编辑框
+          onAddResident() {
+            this.currentRow = {};
+            this.addDialog = true;
+          },
+          // 添加居民信息
+          onCreateResident() {
+            this.$http.post(this.$store.state.url.resident.add, this.currentRow)
+                .then(() => {
+                  this.$message.success("添加成功");
+                  this.onRefresh();
+                  this.$message.success("首次添加用户默认密码为手机号");
+                  this.addDialog = false
                 }).catch(() => {
-                    this.$message.error("删除失败");
-                    this.editDialog = false
-                })
-            },
-            onResetPwd(){
-                this.$http.get(this.formatString(this.$store.state.url.auth.reset,{
-                    username: this.currentRow.tele,
-                    identity: 'resident'
-                })).then(() => {
-                    this.$message.success("重置成功");
-                    this.editDialog = false
-                }).catch(() => {
-                    this.$message.error("重置失败");
-                    this.editDialog = false
-                })
-            }
+              this.$message.error("添加失败");
+              this.addDialog = false
+            })
+          },
+          onDeleteStudent(tele) {
+            this.$http.get(this.formatString(this.$store.state.url.resident.del, {
+              tele: tele
+            })).then(() => {
+              this.$message.success("删除成功");
+              this.onRefresh();
+              this.editDialog = false
+            }).catch(() => {
+              this.$message.error("删除失败");
+              this.editDialog = false
+            })
+          },
+          onResetPwd() {
+            this.$confirm('用户密码即将重置为初始手机号，是否继续？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$http.get(this.formatString(this.$store.state.url.auth.reset,{
+                  username: this.currentRow.tele,
+                  identity: 'resident'
+              })).then(() => {
+                  this.$message.success("重置成功");
+                  this.editDialog = false
+              }).catch(() => {
+                  this.$message.error("重置失败");
+                  this.editDialog = false
+              })
+            })
+          },
         }
     }
 </script>
-
 <style>
+
 </style>
