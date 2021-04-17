@@ -1,5 +1,4 @@
-import { isEmpty, cloneObj } from "@easipass/utils"
-import { post, get } from '@easipass/request'
+// import { post, get } from '@easipass/request'
 
 const utils = {
     merge(target, source) {
@@ -69,16 +68,16 @@ function keyCollect(data, pk) {
  */
 export default {
 
-    created() {
-        console.log(this.settings);
-        if (this.settings.isGet) {
-            this.realRequest = this.searchGet
-        } else if (this.settings.isCustom) {
-            this.realRequest = this.customRequest
-        } else {
-            this.realRequest = this.searchPost
-        }
-    },
+    // created() {
+    //     console.log(this.settings);
+    //     if (this.settings.isGet) {
+    //         this.realRequest = this.searchGet
+    //     } else if (this.settings.isCustom) {
+    //         this.realRequest = this.customRequest
+    //     } else {
+    //         this.realRequest = this.searchPost
+    //     }
+    // },
 
     computed: {
         showTotal() {
@@ -106,38 +105,38 @@ export default {
         doDelete() {
             this.$refs.table.deleteSelectRow()
         },
-        doSave() {
-            let vm = this
-            this.$refs.table.getSaveData(function (data) {
-                vm.loading = true
-                var reqData = {}
-                for (let item in data) {
-                    if (data.hasOwnProperty(item)) {
-                        if (item === 'delete') {
-                            try {
-                                reqData[item] = keyCollect(data[item], vm.settings.pk)
-                            } catch (e) {
-                                this.$pop({
-                                    type: 'danger',
-                                    message: "配置项缺失或配置错误的主键！",
-                                    hasClose: true
-                                })
-                                return
-                            }
-                        } else {
-                            reqData[item] = data[item]
-                        }
-                    }
-                }
-                post(vm.saveApi, reqData, true)
-                    .then((responseData) => {
-                        vm.refresh()
-                    }).catch(e => {
-                    console.error(e)
-                    vm.loading = false
-                })
-            })
-        },
+        // doSave() {
+        //     let vm = this
+        //     this.$refs.table.getSaveData(function (data) {
+        //         vm.loading = true
+        //         var reqData = {}
+        //         for (let item in data) {
+        //             if (data.hasOwnProperty(item)) {
+        //                 if (item === 'delete') {
+        //                     try {
+        //                         reqData[item] = keyCollect(data[item], vm.settings.pk)
+        //                     } catch (e) {
+        //                         this.$pop({
+        //                             type: 'danger',
+        //                             message: "配置项缺失或配置错误的主键！",
+        //                             hasClose: true
+        //                         })
+        //                         return
+        //                     }
+        //                 } else {
+        //                     reqData[item] = data[item]
+        //                 }
+        //             }
+        //         }
+        //         post(vm.saveApi, reqData, true)
+        //             .then((responseData) => {
+        //                 vm.refresh()
+        //             }).catch(e => {
+        //             console.error(e)
+        //             vm.loading = false
+        //         })
+        //     })
+        // },
         doReset() {
             this.$refs.table.reset()
         },
@@ -165,27 +164,27 @@ export default {
             utils.data2Number(formData, this.settings.isNumber)
             return formData
         },
-        searchPost(initPage) {
-            let body = this.getReqPrepared(initPage)
-            post(this.listApi, body)
-                .then((responseData) => {
-                    this.getReqDone(responseData)
-                }).catch(e => {
-                console.log(e)
-                this.loading = false
-            })
-        },
-        searchGet(initPage) {
-            let body = this.getReqPrepared(initPage)
-            let listApi = {...this.listApi}
-            listApi.url += this[this.entityKey] || ''
-            get(listApi, body)
-                .then((responseData) => {
-                    this.getReqDone(responseData)
-                }).catch(e => {
-                this.loading = false
-            })
-        },
+        // searchPost(initPage) {
+        //     let body = this.getReqPrepared(initPage)
+        //     post(this.listApi, body)
+        //         .then((responseData) => {
+        //             this.getReqDone(responseData)
+        //         }).catch(e => {
+        //         console.log(e)
+        //         this.loading = false
+        //     })
+        // },
+        // searchGet(initPage) {
+        //     let body = this.getReqPrepared(initPage)
+        //     let listApi = {...this.listApi}
+        //     listApi.url += this[this.entityKey] || ''
+        //     get(listApi, body)
+        //         .then((responseData) => {
+        //             this.getReqDone(responseData)
+        //         }).catch(e => {
+        //         this.loading = false
+        //     })
+        // },
         getReqPrepared(initPage) {
             this.loading = true
             let formData = this.getFormData()

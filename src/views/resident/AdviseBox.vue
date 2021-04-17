@@ -28,7 +28,7 @@
             </el-dropdown>
           </el-header>
           <el-main style="text-align: center;justify-content: center;width: 100%;">
-            <el-table :data="boxList.slice((currpage - 1) * pagesize, currpage * pagesize)">
+            <el-table :data="boxList">
               <el-table-column prop="title" width="140" label="标题">
               </el-table-column>
               <el-table-column prop="date" label="提交日期" width="200">
@@ -38,13 +38,14 @@
             </el-table>
           </el-main>
           <el-footer style="text-align: center;">
-            <el-pagination background
-                           layout="prev, pager, next, sizes, total, jumper"
-                           :page-sizes="[1, 5, 10, 15, 20]"
-                           :page-size="pagesize"
-                           :total="boxList.length"
-                           @current-change="handleCurrentChange"
-                           @size-change="handleSizeChange">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
             </el-pagination>
           </el-footer>
         </el-container>
@@ -63,8 +64,9 @@ export default {
         content: '',
         status:'',
       }],
-      pagesize: 10,
-      currpage: 1,
+      currentPage:1,
+      pageSize:10,
+      totalCount:0,
       adviseForm: {
         date: '',
         resident_id:'',
@@ -84,9 +86,16 @@ export default {
       this.onGetAdvise();
     },
     onGetAdvise(){
-      this.$http.get(this.$store.state.url.advise.allInfo).then(({data: advise}) =>
+      //获取的是所有用户的意见呢,
+      let body={
+        currentPage:this.currentPage,
+        pageSize:this.pageSize,
+      }
+      this.$http.post(this.$store.state.url.advise.allInfo,body).then(({data: data}) =>
       {
-        this.boxList = advise
+        // console.log(data)
+        this.boxList = data.residentInfo
+        this.totalCount = data.totalNum
       })
     },
     dateFormat(fmt, date) {
@@ -110,11 +119,11 @@ export default {
     },
 
     onAdviseSubmit(){
-      this.form.resident_id = this.$store.state.auth.id;
+      this.adviseForm.resident_id = this.$store.state.auth.id;
       var myDate = new Date();
       var date = this.dateFormat("YYYY-mm-dd HH:MM:SS", myDate)
-      this.form.date = date
-      this.$http.post(this.$store.state.url.advise.add,this.form)
+      this.adviseForm.date = date
+      this.$http.post(this.$store.state.url.advise.add,this.adviseForm)
           .then(()=>{
             this.$message.success("意见添加成功，请耐心等待后续");
             this.onRefresh();
@@ -124,16 +133,14 @@ export default {
       })
     },
 
-    handleCurrentChange (cpage) {
-      this.currpage = cpage
+    handleSizeChange(val) {
+      this.pageSize=val
+      this.onRefresh()
     },
-    handleSizeChange (psize) {
-      this.pagesize = psize
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.onRefresh()
     },
-    // handleSelectionChange (val) {
-    //   // console.log(val)
-    // }
-
   }
 }
 </script>

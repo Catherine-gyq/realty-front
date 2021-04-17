@@ -29,6 +29,24 @@ Vue.mixin({
     join: require('path').join
   }
 });
+//全局函数定义（临时）
+Vue.prototype.handleSizeChange = function (val){
+  if (val) {
+    this.ep_page.limit = val
+    this.onRefresh()
+  }
+}
+Vue.prototype.handleCurrentChange = function (val){
+  if (val) {
+    this.ep_page.offset = val
+    this.onRefresh()
+  }
+}
+
+
+
+
+
 
 new Vue({
   router,

@@ -58,15 +58,20 @@ const router = new Router({
 			name: 'layout',
 			component: Layout,
 			children: [
+				// {
+				// 	path: '/student/elective',
+				// 	name: 'elective',
+				// 	component: () => import('./views/student/Elective')
+				// },
+				// {
+				// 	path: '/student/grade',
+				// 	name: 'studentGrade',
+				// 	component: () => import('./views/student/StudentGrade')
+				// },
 				{
-					path: '/student/elective',
-					name: 'elective',
-					component: () => import('./views/student/Elective')
-				},
-				{
-					path: '/student/grade',
-					name: 'studentGrade',
-					component: () => import('./views/student/StudentGrade')
+					path: '/admin/manage',
+					name: 'AdminManage',
+					component: () => import('./views/admin/AdminManage.vue')
 				},
 				{
 					path: '/resident/manage',
@@ -97,6 +102,11 @@ const router = new Router({
 					path: '/common/password',
 					name: 'Password',
 					component: () => import('./views/common/Password')
+				},
+				{
+					path: '/common/personalCenter',
+					name: 'personalCenter',
+					component: () => import('./views/common/personalCenter')
 				},
 				{
 					path: '/teacher/open',

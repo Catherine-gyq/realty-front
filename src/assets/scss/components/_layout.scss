@@ -68,7 +68,9 @@
 .panel_check{
   top: 200px;
   position: absolute;
-  width: 100%;
+  width: 95%;
+  background-color: #ffffff;
+  margin: 0 40px 0 40px;
 }
 .main-content {
   position: relative;
@@ -148,7 +150,7 @@
     overflow-y: auto;
   }
   .panel {
-    margin-bottom: 20px;
+    width: 100%;
     background-color: #fff;
     border-radius: 4px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
@@ -175,6 +177,11 @@
       padding: 30px;
       overflow: hidden;
       font-weight: normal;
+      //所有输入框的样式
+      .community_input{
+        width: 300px;
+        margin-left: 20px;
+      }
       .bottom-toolbar {
         margin-top: 15px;
         padding: 15px 0;

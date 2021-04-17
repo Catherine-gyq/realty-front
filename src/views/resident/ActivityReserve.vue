@@ -1,6 +1,5 @@
 <template>
   <div class="panel_check">
-
     <!--查看所有预约-->
     <el-dialog :visible.sync="checkDialog" size="tiny" width="1500px" class="dialog">
       <div class="panel-body" style="height: 700px">
@@ -32,8 +31,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-
 
     <!--预约的填写组件 size="tiny"  应该要把所有内容整成必填的（还没写,不过问题也不大，预约失败完事儿）-->
     <el-dialog :visible.sync="reserveDialog" width="700px" class="dialog">
@@ -70,8 +67,6 @@
         </el-button>
       </div>
     </el-dialog>
-
-
 
     <el-row>
       <el-col :span="16" v-for="(room, i) in rooms" :key="i" :offset="4" style="margin-bottom: 40px">

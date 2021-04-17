@@ -81,18 +81,21 @@
 					if (valid) {
 						this.loading = true;
 						this.$http.post(this.$store.state.url.auth.login, this.form
-						).then(({data: data}) => {
-							if (data) {
+						).then(({data: result}) => {
+							if (result===2) {
 								// 登录成功则保存用户名、权限信息并跳转页面
 								this.$store.commit('setUser', this.form.username);
 								this.$store.commit('setIdentity', this.form.identity);
 								if (this.form.identity === "resident"){ this.$router.push({name: 'NoticeCheck'});}
-								else {this.$router.push({name:'ResidentManage'});}
+								else {this.$router.push({name:'AdminManage'});}
                 this.loading = false;
-							} else {
+							} else if (result===1) {
 								this.loading = false;
-								this.$message.error('登录失败')
-							}
+								this.$message.error('用户密码错误!')
+							}else if (result===0){
+                this.loading = false;
+                this.$message.error('不存在该用户！')
+              }
 						})
 					} else {
 						return false

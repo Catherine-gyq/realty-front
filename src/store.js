@@ -35,13 +35,18 @@ export default new Vuex.Store({
                 login: 'api/account/login',
                 reset: 'api/account/resetPwd?username={username}&identity={identity}',
                 update: '/api/account/updatePwd',
+                allInform:'/api/account/allInform',
                 // del:'/api/account/delete?tele={tele}',
             },
             admin: {
-                usr:'api/admin/usr?tele={tele}'
+                usr:'api/admin/usr?tele={tele}',
+                allInfo:'/api/admin/all?usr_tele={usr_tele}&name={name}&pageSize={pageSize}&currentPage={currentPage}',
+                del:'api/admin/delete?tele={tele}',
+                add:'api/admin/add',
+                update:'api/admin/update'
             },
             resident:{
-                allInfo:'api/resident/all?usr_tele={usr_tele}&name={name}',
+                allInfo:'api/resident/all?usr_tele={usr_tele}&name={name}&pageSize={pageSize}&currentPage={currentPage}',
                 add:'api/resident/add',
                 del:'api/resident/delete?tele={tele}',
                 update: 'api/resident/update',
@@ -63,7 +68,7 @@ export default new Vuex.Store({
             //     allInfo: 'api/repair/all?no={no}&name={name}'
             // },
             notice: {
-                allInfo: 'api/notice/all?time={time}&name={name}',
+                allInfo: 'api/notice/all',
                 del: 'api/notice/delete?id={id}',
                 add: 'api/notice/add',
                 update: 'api/notice/update',
@@ -80,9 +85,12 @@ export default new Vuex.Store({
             },
             repair:{
                 add:'api/repair/add',
-                allInfo:'api/repair/all?id={usr_id}',
+                // 用户角度
+                allInfo:'api/repair/all?id={usr_id}&pageSize={pageSize}&currentPage={currentPage}',
                 cancel:'api/repair/cancel?repair_id={repair_id}',
-                all: 'api/repair/allInfo'
+                // 管理员角度
+                all: 'api/repair/allInfo',
+                approve:'api/repair/approve?repair_id={repair_id}',
             }
             // open: {
             //     add: 'api/open/add',
