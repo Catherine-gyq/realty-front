@@ -79,8 +79,8 @@
       <panel-title title="管理员信息管理"></panel-title>
       <div class="panel-body" style="display: flex;">
         <el-button @click="onAddAdmin" type="primary" size="small">添加管理员</el-button>
-        <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @input="onRefresh"/>
-        <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @input="onRefresh"/>
+        <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+        <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
       </div>
       <div class="panel-body">
         <el-table empty-text="暂无数据" :data="admins" v-loading="loading" element-loading-text="加载中...">
@@ -198,7 +198,7 @@ export default {
     //搜寻管理员信息 分页搜寻
     onGetAdmins() {
       let body = {
-        usr_tele: this.search_tele,
+        tele: this.search_tele,
         name: this.searchName,
         pageSize:this.pageSize,
         currentPage:this.currentPage
