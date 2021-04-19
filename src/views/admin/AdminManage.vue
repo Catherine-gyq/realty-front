@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- 修改管理员信息弹出框-->
+    <!-- 修改或者添加管理员信息的弹出框-->
     <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
-      <el-form :rules="rules"  ref="form" :model="currentRow" label-width="80px">
+      <el-form :rules="rules"  ref="form" :model="currentRow" label-width="100px">
         <el-form-item label="姓名" prop="name">
           <el-col :span="21">
             <el-input v-model="currentRow.name"></el-input>
@@ -16,14 +16,27 @@
             </el-radio-group>
           </el-col>
         </el-form-item>
+        <el-form-item label="出生年月" prop="dateOfBirth">
+          <el-col :span="21">
+            <el-date-picker v-model="currentRow.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月">
+            </el-date-picker>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="管理员权限" prop="identity">
+          <el-select v-model="currentRow.identity" placeholder="请选择管理员身份">
+            <el-option v-for="item in administrator"
+                       :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="手机号" prop="tele">
           <el-col :span="21">
             <el-input v-model="currentRow.tele"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item label="地址" prop="address">
+        <el-form-item label="邮箱" prop="mailBox">
           <el-col :span="21">
-            <el-input v-model="currentRow.address"></el-input>
+            <el-input v-model="currentRow.mailBox"></el-input>
           </el-col>
         </el-form-item>
       </el-form>
@@ -31,44 +44,10 @@
         <el-button @click="editDialog=false" size="small">
           取消
         </el-button>
-        <el-button @click="onUploadedAdmin" type="primary" size="small">
+        <el-button v-if="ifChange" @click="onUploadedAdmin" type="primary" size="small">
           更新
         </el-button>
-      </div>
-    </el-dialog>
-    <!--      添加管理员信息弹出框-->
-    <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog">
-      <el-form :rules="rules" ref="form" :model="currentRow" label-width="80px">
-        <el-form-item label="姓名" prop="name">
-          <el-col :span="21">
-            <el-input v-model="currentRow.name"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="性别" prop="sex">
-          <el-col :span="21">
-            <el-radio-group v-model="currentRow.sex" size="medium">
-              <el-radio label="男"></el-radio>
-              <el-radio label="女"></el-radio>
-            </el-radio-group>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="手机号" prop="tele">
-          <el-col :span="21">
-            <el-input v-model="currentRow.tele"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-col :span="21">
-            <el-input v-model="currentRow.address"></el-input>
-            <div style="font-size: 10px;text-align: right;color: rgba(203,129,58,0.86)">注：初始密码为手机号</div>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="addDialog=false" size="small">
-          取消
-        </el-button>
-        <el-button @click="onCreateAdmin" type="primary" size="small">
+        <el-button v-else @click="onCreateAdmin" type="primary" size="small">
           添加
         </el-button>
       </div>
@@ -86,10 +65,10 @@
         <el-table empty-text="暂无数据" :data="admins" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="admin_name" label="姓名" />
           <el-table-column align="center" prop="admin_sex" label="性别" />
-          <el-table-column align="center" prop="type" label="权限" >
+          <el-table-column align="center" prop="identity" label="权限" >
             <template slot-scope="props">
-              <span v-if="props.row.type === 'admin'">管理员</span>
-              <span v-else-if="props.row.type === 'super_admin'">超级管理员</span>
+              <span v-if="props.row.identity === 'admin'">管理员</span>
+              <span v-else-if="props.row.identity === 'super_admin'">超级管理员</span>
             </template>
           </el-table-column>
           <el-table-column align="center" prop="mailBox" label="邮箱"/>
@@ -137,6 +116,13 @@ export default {
         callback()
       }
     };
+    const validateMailBox = (rule, value, callback) => {
+      if (!value || value.length === 0) {
+        callback(new Error('请输入邮箱'))
+      } else {
+        callback()
+      }
+    };
     const validateSex = (rule, value, callback) => {
       if (!value || value.length === 0) {
         callback(new Error('请输入性别'))
@@ -151,20 +137,22 @@ export default {
         callback()
       }
     };
-    const validateAddress = (rule, value, callback) => {
+    const validateIdentity = (rule, value, callback) => {
       if (!value || value.length === 0) {
-        callback(new Error('请输入住址'))
+        callback(new Error('请选择管理员的权限'))
       } else {
         callback()
       }
     };
     return {
       currentRow: {
-        admin_id:"",
+        id:"",
         name:"",
         sex:"",
+        identity:'',
         tele:"",
-        address:""
+        mailBox:"",
+        dateOfBirth:''
       },
       addDialog: false,
       editDialog: false,
@@ -176,13 +164,22 @@ export default {
         name: [{required: true, trigger: 'blur', validator: validateName}],
         sex: [{required: true, trigger: 'blur', validator: validateSex}],
         tele: [{required: true, trigger: 'blur', validator: validateTele}],
-        address: [{required: true, trigger: 'blur', validator: validateAddress}],
+        mailBox: [{required: true, trigger: 'blur', validator: validateMailBox}],
+        identity: [{required: true, trigger: 'blur', validator: validateIdentity}],
       },
-
+      ifChange:false,
       //  分页问题
       currentPage:1,
       pageSize:10,
       totalCount:0,
+      //管理员选项
+      administrator:[{
+        value: 'admin',
+        label: '管理员'
+      },{
+        value: 'super_admin',
+        label: '超级管理员'
+      }],
     }
   },
   components: {
@@ -220,13 +217,8 @@ export default {
       this.onRefresh()
     },
 
-
-    onAlterInfo(row) {
-      this.currentRow = row;
-      this.editDialog = true;
-    },
-
     onUploadedAdmin() {
+      //把dateOfBirth格式化
       this.$http.post(this.$store.state.url.admin.update, this.currentRow)
           .then(() => {
             this.$message.success("修改成功");
@@ -240,11 +232,31 @@ export default {
     },
 
 
-    //是否显示编辑框
+    //添加管理员
     onAddAdmin() {
+      this.ifChange=false
       this.currentRow = {};
-      this.addDialog = true;
+      // this.addDialog = true;
+      this.editDialog = true
     },
+    //修改管理员信息
+    onAlterInfo(row) {
+      this.ifChange = true
+      this.currentRow={
+        id:row.admin_id,
+        name:row.admin_name,
+        sex:row.admin_sex,
+        tele:row.admin_tele,
+        mailBox:row.mailBox,
+        identity:row.identity,
+        // address:row.address,
+        dateOfBirth:row.dateOfBirth
+      }
+      console.log(this.currentRow)
+      this.editDialog = true;
+    },
+
+
     // 添加管理员信息
     onCreateAdmin() {
       this.$http.post(this.$store.state.url.admin.add, this.currentRow)
@@ -252,10 +264,11 @@ export default {
             this.$message.success("添加成功");
             this.onRefresh();
             this.$message.success("首次添加用户默认密码为手机号");
-            this.addDialog = false
+            this.editDialog = false
           }).catch(() => {
         this.$message.error("添加失败");
-        this.addDialog = false
+        // this.addDialog = false
+        this.editDialog = false
       })
     },
     onDeleteAdmin(tele) {

@@ -89,14 +89,9 @@ const router = new Router({
 					component: () => import('./views/admin/RepairReserveManage.vue')
 				},
 				{
-					path: '/open/manage',
-					name: 'OpenManage',
-					component: () => import('./views/admin/OpenManage.vue')
-				},
-				{
-					path: '/choice/manage',
-					name: 'ChoiceManage',
-					component: () => import('./views/admin/ChoiceManage')
+					path: '/advise/manage',
+					name: 'AdviseManage',
+					component: () => import('./views/admin/AdviseManage')
 				},
 				{
 					path: '/common/password',

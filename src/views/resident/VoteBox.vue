@@ -1,6 +1,4 @@
 <template>
-
-
   <div class="panel_check">
     <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
       <div slot="footer">

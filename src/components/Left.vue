@@ -22,38 +22,14 @@
           <i class="icon el-icon-setting"></i>
           <span class="text">维修预约信息管理</span>
         </el-menu-item>
+        <el-menu-item class="menu-list" index="/advise/manage" v-if="$store.state.auth.identity === 'admin'">
+          <i class="icon el-icon-reading"></i>
+          <span class="text">意见箱管理</span>
+        </el-menu-item>
         <el-menu-item class="menu-list" index="/common/personalCenter">
-          <i class="icon el-icon-user-solid"></i>
+          <i class="icon el-icon-s-home"></i>
           <span class="text">个人中心</span>
         </el-menu-item>
-<!--				<el-menu-item class="menu-list" index="/open/manage" v-if="$store.state.auth.identity === 'admin'">-->
-<!--					<i class="icon el-icon-user-solid"></i>-->
-<!--					<span class="text">开课管理</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/choice/manage" v-if="$store.state.auth.identity === 'admin'">-->
-<!--					<i class="icon el-icon-user-solid"></i>-->
-<!--					<span class="text">选课管理</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/teacher/open" v-if="$store.state.auth.identity === 'teacher'">-->
-<!--					<i class="icon el-icon-user-solid"></i>-->
-<!--					<span class="text">授课情况</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/teacher/input" v-if="$store.state.auth.identity === 'teacher'">-->
-<!--					<i class="icon fa fa-hdd-o"></i>-->
-<!--					<span class="text">成绩录入</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/student/elective" v-if="$store.state.auth.identity === 'student'">-->
-<!--					<i class="icon fa fa-television"></i>-->
-<!--					<span class="text">学生选课</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/student/grade" v-if="$store.state.auth.identity === 'student'">-->
-<!--					<i class="icon fa fa-folder-o"></i>-->
-<!--					<span class="text">成绩单</span>-->
-<!--				</el-menu-item>-->
-<!--				<el-menu-item class="menu-list" index="/common/password" v-if="$store.state.auth.identity !== 'admin'">-->
-<!--					<i class="icon el-icon-user-solid"></i>-->
-<!--					<span class="text">修改密码</span>-->
-<!--				</el-menu-item>-->
 			</el-menu>
 		</div>
 	</div>
