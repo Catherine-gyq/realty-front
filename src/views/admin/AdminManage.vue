@@ -200,11 +200,11 @@ export default {
         pageSize:this.pageSize,
         currentPage:this.currentPage
       }
-      console.log(body)
+      this.loading=true
       this.$http.get(this.formatString(this.$store.state.url.admin.allInfo, body)).then(({data: data}) => {
-        console.log(data)
         this.admins = data.adminInfo
         this.totalCount = data.totalNum
+        this.loading=false
       })
     },
 

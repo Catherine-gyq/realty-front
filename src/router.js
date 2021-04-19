@@ -104,15 +104,15 @@ const router = new Router({
 					component: () => import('./views/common/personalCenter')
 				},
 				{
-					path: '/teacher/open',
-					name: 'OpenCourse',
-					component: () => import('./views/teacher/OpenCourse')
+					path: '/activity/manage',
+					name: 'ActivityManage',
+					component: () => import('./views/admin/ActivityManage')
 				},
-				{
-					path: '/teacher/input',
-					name: 'InputGrade',
-					component: () => import('./views/teacher/InputGrade')
-				},
+				// {
+				// 	path: '/teacher/input',
+				// 	name: 'InputGrade',
+				// 	component: () => import('./views/teacher/InputGrade')
+				// },
 			]
 		},
 	]

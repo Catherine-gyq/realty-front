@@ -16,7 +16,7 @@
         <el-table empty-text="暂无数据" :data="advises" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="意见标题" width="250"/>
           <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>
-          <el-table-column align="center" prop="date" label="发布时间" width="250"/>
+          <el-table-column align="center" prop="date" label="发布时间" :formatter="getAdviseDate" width="250"/>
           <el-table-column align="center" prop="residentName" label="意见发起人" />
           <el-table-column align="center" label="操作" width="250">
             <template slot-scope="props">
@@ -71,14 +71,7 @@ export default {
         admin_id:'',
         admin_name:''
       },
-      // timePeriod:['',''],
-      // addDialog: false,
-      // editDialog: false,
       advises: [],
-      // departments: {},
-      // admin:{},
-      // searchName: '',
-      // searchTime: '',
       loading: false,
       //意见箱的所有状态
       allStatus:[
@@ -160,6 +153,7 @@ export default {
     },
 
 
+    //改变提议的状态
     onChangeStatus(row,status){
       if (row.status!=='star'){
         let body={
@@ -188,17 +182,24 @@ export default {
         }
       }
     },
+    getAdviseDate(row){
+      return this.getChangedDate(row.date)
+    },
+    //这个是转换时间戳和时间日期之间的
+    add0(m){return m<10?'0'+m:m },
+    getChangedDate(timeStamp){
+      if (timeStamp){
+        var time = new Date(timeStamp);
+        var y = time.getFullYear();
+        var m = time.getMonth()+1;
+        var d = time.getDate();
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s)
+      }
+    },
 
-    //修改需确认
-    // onAlterInfo(row){
-    //   this.currentRow = row;
-    //   if (row.tele === this.$store.state.auth.user){
-    //     this.editDialog = true;
-    //   }
-    //   else {
-    //     this.$message.error("对不起！您没有修改权限！")
-    //   }
-    // },
     //分页函数（需修改）
     handleSizeChange(val) {
       this.pageSize=val

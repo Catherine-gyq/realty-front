@@ -22,6 +22,10 @@
           <i class="icon el-icon-setting"></i>
           <span class="text">维修预约信息管理</span>
         </el-menu-item>
+        <el-menu-item class="menu-list" index="/activity/manage" v-if="$store.state.auth.identity === 'admin'">
+          <i class="icon el-icon-collection-tag"></i>
+          <span class="text">活动预约管理</span>
+        </el-menu-item>
         <el-menu-item class="menu-list" index="/advise/manage" v-if="$store.state.auth.identity === 'admin'">
           <i class="icon el-icon-reading"></i>
           <span class="text">意见箱管理</span>
