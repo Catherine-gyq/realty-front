@@ -81,7 +81,8 @@ export default new Vuex.Store({
             },
             advise:{
                 add:'api/advise/add',
-                allInfo:'api/advise/all',
+                all:'api/advise/all',
+                allInfo:'api/advise/allInfo?resident_id={resident_id}&pageSize={pageSize}&currentPage={currentPage}',
                 change:'api/advise/changeStatus?advise_id={advise_id}&status={status}',
             },
             repair:{

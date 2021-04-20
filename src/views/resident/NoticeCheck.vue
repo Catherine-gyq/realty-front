@@ -36,7 +36,7 @@
             <div style="display: flex;">
               <div class="time_head">
                 <div style="font-size: 50px;margin: 5px 0px 0px 5px">{{notice.date}}</div>
-                <div style="bottom: 0px;float: right;font-size: 18px; margin-top: 13px">{{notice.time}}</div>
+                <div style="bottom: 0px;float: right;font-size: 18px; margin-top: 13px;margin-right: 3px">{{notice.time}}</div>
               </div>
               <div class="news_content">
                 <div style="font-weight: bold;margin-bottom: 10px">{{notice.title}}</div>
@@ -107,7 +107,7 @@
       },
       //获取所有消息
       onGetNotice() {
-       let body={
+        let body={
           // startTime: this.timePeriod[0],
           // endTime:this.timePeriod[1],
           name: this.searchName,
@@ -119,14 +119,34 @@
           this.totalCount = res.data.totalNum
           let temp=""
           for (let i=0;i<this.notices.length;i++){
-            this.notices[i].date = this.notices[i].time.slice(-2)
-            temp = this.notices[i].time.slice(0,8)
-            temp = temp.replace(/-/,"年")
-            temp = temp.replace(/-/,"月")
-            this.notices[i].time = temp
+            // this.notices[i].date = this.notices[i].time.slice(-2)
+            // temp = this.notices[i].time.slice(0,8)
+            // temp = temp.replace(/-/,"年")
+            // temp = temp.replace(/-/,"月")
+            // this.notices[i].time = temp
+
+            //总时间点
+            this.notices[i].time = this.getChangedDate(this.notices[i].time).slice(0,10)
+            //
+            this.notices[i].date = this.notices[i].time.slice(5,7)
           }
           console.log(this.notices)
         })
+      },
+
+      //这个是转换时间戳和时间日期之间的
+      add0(m){return m<10?'0'+m:m },
+      getChangedDate(timeStamp){
+        if (timeStamp){
+          var time = new Date(timeStamp);
+          var y = time.getFullYear();
+          var m = time.getMonth()+1;
+          var d = time.getDate();
+          var h = time.getHours();
+          var mm = time.getMinutes();
+          var s = time.getSeconds();
+          return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s)
+        }
       },
       handleSizeChange(val) {
         this.pageSize=val
@@ -168,5 +188,6 @@
   }
   .news_content{
     margin-left: 30px;
+    width: 70%;
   }
 </style>

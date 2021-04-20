@@ -134,7 +134,7 @@ export default {
         status:this.searchStatus
       }
       this.loading=true
-      this.$http.post(this.$store.state.url.advise.allInfo,body).then(({data: advises}) => {
+      this.$http.post(this.$store.state.url.advise.all,body).then(({data: advises}) => {
         console.log(advises)
         this.advises = advises.adviseInfo
         this.totalCount = advises.totalNum
