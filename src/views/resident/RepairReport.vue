@@ -4,15 +4,15 @@
       <el-col :span="6" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
         <div style="margin: 10px 10px 0px 0px;">
           <h2>新建预约</h2>
-          <el-form ref="repairForm" :rules="RepairRule" :model="repairForm" label-width="80px" style="margin-top: 20px">
-            <el-form-item label="维修地点" attr="address" prop="address">
-              <el-input v-model="repairForm.address"></el-input>
+          <el-form ref='repairForms' :rules="RepairRule" :model="repairForm" label-width="80px" style="margin-top: 20px">
+            <el-form-item label="维修地点" attr="repair_address" prop="repair_address">
+              <el-input v-model="repairForm.repair_address"></el-input>
             </el-form-item>
-            <el-form-item label="预约时间" attr="date" prop="date">
-              <el-date-picker type="date" placeholder="选择日期" v-model="repairForm.date" style="width: 100%;" :picker-options="pickerOptions" value-format="yyyy-MM-dd"></el-date-picker>
+            <el-form-item label="预约时间" attr="repair_time" prop="repair_time">
+              <el-date-picker type="date" placeholder="选择日期" v-model="repairForm.repair_time" style="width: 100%;" :picker-options="pickerOptions" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
-            <el-form-item label="维修内容" attr="content" prop="content">
-              <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 10}" v-model="repairForm.content"></el-input>
+            <el-form-item label="维修内容" attr="repair_content" prop="repair_content">
+              <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 10}" v-model="repairForm.repair_content"></el-input>
             </el-form-item>
           </el-form>
           <div style="display: flex;flex-direction: row;justify-content: center;margin-top: 100px">
@@ -67,9 +67,9 @@ export default {
     return {
       repairList: [{
         repair_id:'',
-        date: '',
-        address: '',
-        content: '',
+        repair_time: '',
+        repair_address: '',
+        repair_content: '',
         status: ''
       }],
       pickerOptions: {
@@ -106,14 +106,14 @@ export default {
         ]
       },
       RepairRule: {
-        address: { required: true, message: '请输入维修地点', trigger: 'blur' },
-        date: { required: true, message: '请输入预约时间', trigger: 'blur' },
-        content: { required: true, message: '请输入维修内容',trigger: 'blur' },
+        repair_address: { required: true, message: '请输入维修地点', trigger: 'blur' },
+        repair_time: { required: true, message: '请输入预约时间', trigger: 'blur' },
+        repair_content: { required: true, message: '请输入维修内容',trigger: 'blur' },
       },
       repairForm: {
-        address: '',
-        date: '',
-        content: '',
+        repair_address: '',
+        repair_time: '',
+        repair_content: '',
         resident_id: '',
       },
       repairStatus:[
@@ -161,19 +161,19 @@ export default {
       console.log(body)
       this.$http.get(this.formatString(this.$store.state.url.repair.allInfo, body)).then(({data: data}) => {
         console.log(data)
-        this.repairList = data.residentInfo
+        this.repairList = data.repairInfo
         this.totalCount = data.totalNum
       })
     },
     onRepairSubmit () {
-      this.$refs['RepairForm'].validate((valid)=>{
+      this.$refs['repairForms'].validate((valid)=>{
         if (valid){
           this.repairForm.resident_id = this.$store.state.auth.id;
           this.$http.post(this.$store.state.url.repair.add,this.repairForm)
               .then(()=>{
                 this.$message.success("预约成功，等待审核");
+                this.$refs['repairForms'].resetFields();
                 this.onRefresh();
-                this.$refs['repairForm'].resetFields();
               }).catch(()=>{
             this.$message.error("预约失败");
           })

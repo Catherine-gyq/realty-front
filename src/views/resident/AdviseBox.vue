@@ -4,7 +4,7 @@
       <el-col :span="6" style="height: 700px; border: 1px solid #eee;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);background-color: #ffffff">
         <div style="margin: 10px 10px 0px 0px;">
           <h2>新增意见反馈</h2>
-          <el-form ref="form" :model="adviseForm" label-width="40px" style="margin-top: 30px">
+          <el-form ref="adviseForms" :model="adviseForm" label-width="40px" style="margin-top: 30px">
             <el-form-item label="标题">
               <el-input v-model="adviseForm.title"></el-input>
             </el-form-item>
@@ -101,26 +101,6 @@ export default {
         this.totalCount = data.totalNum
       })
     },
-    // dateFormat(fmt, date) {
-    //   let ret;
-    //   const opt = {
-    //     "Y+": date.getFullYear().toString(),        // 年
-    //     "m+": (date.getMonth() + 1).toString(),     // 月
-    //     "d+": date.getDate().toString(),            // 日
-    //     "H+": date.getHours().toString(),           // 时
-    //     "M+": date.getMinutes().toString(),         // 分
-    //     "S+": date.getSeconds().toString()          // 秒
-    //     // 有其他格式化字符需求可以继续添加，必须转化成字符串
-    //   };
-    //   for (let k in opt) {
-    //     ret = new RegExp("(" + k + ")").exec(fmt);
-    //     if (ret) {
-    //       fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
-    //     }
-    //   }
-    //   return fmt;
-    // },
-
     onAdviseSubmit(){
       this.adviseForm.resident_id = this.$store.state.auth.id;
       var myDate = new Date();
@@ -130,6 +110,7 @@ export default {
           .then(()=>{
             this.$message.success("意见添加成功，请耐心等待后续");
             this.onRefresh();
+            this.$refs['adviseForms'].resetFields();
           }).catch(()=>{
         this.$message.error("添加失败");
         // this.onRefresh();

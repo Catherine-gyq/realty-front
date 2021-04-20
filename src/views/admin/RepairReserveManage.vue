@@ -147,7 +147,7 @@
             }
           }
           this.$http.post(this.$store.state.url.repair.all,body).then(({data: data})=>{
-            this.repairReserve = data.residentInfo
+            this.repairReserve = data.repairInfo
             this.totalCount = data.totalNum
             this.randomKey = Math.random()
           })
