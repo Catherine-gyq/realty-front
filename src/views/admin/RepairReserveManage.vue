@@ -21,11 +21,11 @@
         </div>
         <div class="panel-body" style="height: 700px">
           <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" v-loading="loading" element-loading-text="加载中...">
-            <el-table-column align="center" prop="address" label="维修地点" width="190"/>
-            <el-table-column align="center" prop="date" label="维修时间" width="190"/>
-            <el-table-column align="center" prop="content" label="维修内容" width="190"/>
-            <el-table-column align="center" prop="residentName" label="申请人" width="190"/>
-            <el-table-column align="center" prop="adminName" label="审批人" width="190">
+            <el-table-column align="center" prop="address" label="维修地点"/>
+            <el-table-column align="center" prop="date" label="维修时间"/>
+            <el-table-column align="center" prop="content" :show-overflow-tooltip="true" label="维修内容" width="250"/>
+            <el-table-column align="center" prop="residentName" label="申请人"/>
+            <el-table-column align="center" prop="adminName" label="审批人">
               <template slot-scope="props">
                 <span v-if="props.row.adminName">{{props.row.adminName}}</span>
                 <span v-else>--</span>

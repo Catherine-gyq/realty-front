@@ -112,7 +112,7 @@
                               <i class="fa fa-remove"></i>
                               删除
                           </el-button>
-                        <el-button @click="onResetPwd" type="primary" size="mini">密码重置</el-button>
+                        <el-button @click="onResetPwd(props.row.tele)" type="primary" size="mini">密码重置</el-button>
                       </template>
                   </el-table-column>
               </el-table>

@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- 修改或者添加管理员信息的弹出框-->
-    <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
-      <el-form :rules="rules"  ref="form" :model="currentRow" label-width="100px">
+    <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelEdit">
+      <el-form :rules="rules"  ref="adminForm" :model="currentRow" label-width="100px">
         <el-form-item label="姓名" prop="name">
           <el-col :span="21">
             <el-input v-model="currentRow.name"></el-input>
@@ -41,7 +41,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button @click="editDialog=false" size="small">
+        <el-button @click="cancelEdit" size="small">
           取消
         </el-button>
         <el-button v-if="ifChange" @click="onUploadedAdmin" type="primary" size="small">
@@ -79,11 +79,11 @@
                 <i class="fa el-icon-edit"></i>
                 编辑
               </el-button>
-              <el-button type="danger" size="mini" @click.native="onDeleteAdmin(props.row.tele)">
+              <el-button type="danger" size="mini" @click.native="onDeleteAdmin(props.row.admin_tele)">
                 <i class="fa fa-remove"></i>
                 删除
               </el-button>
-              <el-button @click="onResetPwd" type="primary" size="mini">密码重置</el-button>
+              <el-button @click="onResetPwd(props.row.admin_tele)" type="primary" size="mini">密码重置</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -109,27 +109,27 @@ import PanelTitle from '../../components/PanelTitle'
 export default {
   name: 'AdminManage',
   data() {
-    const validateName = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入用户名'))
-      } else {
-        callback()
-      }
-    };
-    const validateMailBox = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入邮箱'))
-      } else {
-        callback()
-      }
-    };
-    const validateSex = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入性别'))
-      } else {
-        callback()
-      }
-    };
+    // const validateName = (rule, value, callback) => {
+    //   if (!value || value.length === 0) {
+    //     callback(new Error('请输入用户名'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
+    // const validateMailBox = (rule, value, callback) => {
+    //   if (!value || value.length === 0) {
+    //     callback(new Error('请输入邮箱'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
+    // const validateSex = (rule, value, callback) => {
+    //   if (!value || value.length === 0) {
+    //     callback(new Error('请输入性别'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
     const validateTele = (rule, value, callback) => {
       if (!value || value.length != 11) {
         callback(new Error('请输入正确格式的电话号码'))
@@ -137,13 +137,13 @@ export default {
         callback()
       }
     };
-    const validateIdentity = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请选择管理员的权限'))
-      } else {
-        callback()
-      }
-    };
+    // const validateIdentity = (rule, value, callback) => {
+    //   if (!value || value.length === 0) {
+    //     callback(new Error('请选择管理员的权限'))
+    //   } else {
+    //     callback()
+    //   }
+    // };
     return {
       currentRow: {
         id:"",
@@ -161,11 +161,11 @@ export default {
       search_tele: '',
       loading: false,
       rules: {
-        name: [{required: true, trigger: 'blur', validator: validateName}],
-        sex: [{required: true, trigger: 'blur', validator: validateSex}],
+        name: [{required: true, trigger: 'blur', message:'请输入用户名'}],
+        sex: [{required: true, trigger: 'blur', message:'请输入性别'}],
         tele: [{required: true, trigger: 'blur', validator: validateTele}],
-        mailBox: [{required: true, trigger: 'blur', validator: validateMailBox}],
-        identity: [{required: true, trigger: 'blur', validator: validateIdentity}],
+        mailBox: [{required: true, trigger: 'blur', message:'请输入邮箱'}],
+        identity: [{required: true, trigger: 'blur', message:'请选择管理员的权限'}],
       },
       ifChange:false,
       //  分页问题
@@ -216,22 +216,26 @@ export default {
       this.currentPage = val
       this.onRefresh()
     },
-
+    cancelEdit(){
+      this.editDialog=false
+      this.$refs["adminForm"].resetFields()
+    },
     onUploadedAdmin() {
       //把dateOfBirth格式化
-      this.$http.post(this.$store.state.url.admin.update, this.currentRow)
-          .then(() => {
-            this.$message.success("修改成功");
+      this.$refs['adminForm'].validate((valid)=>{
+        if (valid){
+          this.$http.post(this.$store.state.url.admin.update, this.currentRow)
+              .then(() => {
+                this.$message.success("修改成功");
+                this.onRefresh();
+                this.editDialog = false
+              }).catch(() => {
+            this.$message.error("修改失败");
             this.onRefresh();
             this.editDialog = false
-          }).catch(() => {
-        this.$message.error("修改失败");
-        this.onRefresh();
-        this.editDialog = false
-      })
+          })
+        }})
     },
-
-
     //添加管理员
     onAddAdmin() {
       this.ifChange=false
@@ -259,16 +263,20 @@ export default {
 
     // 添加管理员信息
     onCreateAdmin() {
-      this.$http.post(this.$store.state.url.admin.add, this.currentRow)
-          .then(() => {
-            this.$message.success("添加成功");
-            this.onRefresh();
-            this.$message.success("首次添加用户默认密码为手机号");
+      this.$refs['adminForm'].validate((valid)=>{
+        if (valid){
+          this.$http.post(this.$store.state.url.admin.add, this.currentRow)
+              .then(() => {
+                this.$message.success("添加成功");
+                this.onRefresh();
+                this.$message.success("首次添加用户默认密码为手机号");
+                this.editDialog = false
+              }).catch(() => {
+            this.$message.error("添加失败");
+            // this.addDialog = false
             this.editDialog = false
-          }).catch(() => {
-        this.$message.error("添加失败");
-        // this.addDialog = false
-        this.editDialog = false
+          })
+        }
       })
     },
     onDeleteAdmin(tele) {
@@ -283,15 +291,15 @@ export default {
         this.editDialog = false
       })
     },
-    onResetPwd() {
+    onResetPwd(tele) {
       this.$confirm('用户密码即将重置为初始手机号，是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.$http.get(this.formatString(this.$store.state.url.auth.reset,{
-          username: this.currentRow.tele,
-          identity: 'resident'
+          username: tele,
+          identity: 'admin'
         })).then(() => {
           this.$message.success("重置成功");
           this.editDialog = false

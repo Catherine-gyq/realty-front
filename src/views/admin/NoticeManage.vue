@@ -2,7 +2,7 @@
     <div>
 <!--        修改信息  注意判断，只有原发布人才能够修改-->
         <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
-            <el-form ref="form" :model="currentRow" label-width="80px">
+            <el-form ref="editForm" :model="currentRow" label-width="80px">
                 <el-form-item label="消息标题">
                     <el-col :span="21">
                         <el-input v-model="currentRow.title" ></el-input>
@@ -37,25 +37,25 @@
 
         <!--添加信息-->
         <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog">
-            <el-form ref="form" :model="currentRow" label-width="80px">
+            <el-form ref="addForm" :model="addInfo" label-width="80px">
               <el-form-item label="消息标题">
                 <el-col :span="21">
-                  <el-input v-model="currentRow.title" ></el-input>
+                  <el-input v-model="addInfo.title" ></el-input>
                 </el-col>
               </el-form-item>
               <el-form-item label="发布时间">
                 <el-col :span="21">
-                  <el-input v-model="currentRow.time" disabled></el-input>
+                  <el-input v-model="addInfo.publish_time" disabled></el-input>
                 </el-col>
               </el-form-item>
               <el-form-item label="发布人">
                 <el-col :span="21">
-                  <el-input v-model="currentRow.people" disabled></el-input>
+                  <el-input v-model="addInfo.name" disabled></el-input>
                 </el-col>
               </el-form-item>
               <el-form-item label="消息内容">
                 <el-col :span="21" >
-                  <el-input v-model="currentRow.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>
+                  <el-input v-model="addInfo.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -141,7 +141,14 @@
             people:'',
             time:'',
             content:'',
-            admin_id:'',
+            adminId:'',
+          },
+          addInfo:{
+            title:'',
+            publish_time:'',
+            content:'',
+            adminId: '',
+            name:'',
           },
           usr: {
             admin_id:'',
@@ -202,7 +209,6 @@
             this.onGetUsr()
         },
         onGetNotice(){
-          // console.log(this.timePeriod)
           let body
           if ((this.timePeriod && this.timePeriod.length!==2) || !this.timePeriod){
             body={
@@ -223,7 +229,7 @@
           }
           this.$http.post(this.$store.state.url.notice.allInfo,body).then(({data: notices}) => {
             console.log(notices)
-            this.notices = notices.residentInfo
+            this.notices = notices.noticeInfo
             this.totalCount = notices.totalNum
           })
         },
@@ -233,10 +239,8 @@
               this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
                   tele: this.$store.state.auth.user
               })).then(({data: usr})=>{
-                // document.write(usr.admin_name)
                   this.usr = usr;
                   this.$store.commit('setId', this.usr.admin_id);
-                  // this.$message.error(this.usr[0].admin_name)
               })
           },
 
@@ -264,43 +268,48 @@
 
           //消息修改
           onUploadedNotice(){
-              this.$http.post(this.$store.state.url.notice.update, this.currentRow)
-                  .then(() => {
-                      this.$message.success("修改成功");
-                      this.onRefresh();
-                      this.editDialog = false
-                  }).catch(() => {
-                  this.$message.error("修改失败");
+            this.$http.post(this.$store.state.url.notice.update, this.currentRow)
+              .then(() => {
+                  this.$message.success("修改成功");
+                  this.onRefresh();
+                  this.$refs['editForm'].resetFields()
                   this.editDialog = false
-              })
+              }).catch(() => {
+              this.$message.error("修改失败");
+              this.editDialog = false
+            })
           },
 
 
 
           //添加消息
           onAddNotice(){
-              const myDate = new Date();
-              let date = myDate.toLocaleDateString();
-              date= date.toString();
-              date.replace('/','-');
-              this.currentRow = {};
-              this.currentRow.people = this.usr[0].admin_name
-              this.currentRow.admin_id = this.usr[0].admin_id
-              this.currentRow.time = date;
-              this.addDialog = true;
+            const myDate = new Date();
+            let date = myDate.toLocaleDateString();
+            date= date.toString();
+            date.replace('/','-');
+            this.currentRow = {};
+            this.currentRow.people = this.usr[0].admin_name
+            this.currentRow.adminId = this.usr[0].admin_id
+            this.addInfo.name = this.usr[0].admin_name
+            this.addInfo.adminId = this.usr[0].admin_id
+            this.addInfo.publish_time= date;
+            this.addDialog = true;
           },
 
           onCreateNotice(){
-              // this.currentRow.credit = this.currentRow.credit.toString();
-              this.$http.post(this.$store.state.url.notice.add, this.currentRow)
-                  .then(() => {
-                      this.$message.success("添加成功");
-                      this.onRefresh();
-                      this.addDialog = false
-                  }).catch(() => {
-                  this.$message.error("添加失败");
-                  this.addDialog = false
-              })
+            console.log(this.addInfo)
+            this.$http.post(this.$store.state.url.notice.add, this.addInfo)
+              .then(() => {
+                this.$message.success("添加成功");
+                this.onRefresh();
+                //表格清空
+                this.$refs['addForm'].resetFields()
+                this.addDialog = false
+              }).catch(() => {
+              this.$message.error("添加失败");
+              this.addDialog = false
+            })
           },
 
           onDeleteNotice(id){
