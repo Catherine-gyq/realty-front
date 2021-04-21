@@ -32,9 +32,11 @@
               </template>
             </el-table-column>
             <el-table-column align="center" prop="adminName" :formatter="statusTransfer"  label="状态" width="200"/>
-            <el-table-column align="center" label="操作">
+            <el-table-column align="center" label="操作" v-if="searchForm.reserveStatus!=='finished'">
               <template slot-scope="props">
-                <el-button type="primary" v-if="props.row.status==='0'" size="mini" @click="approveRepair(props.row.repair_id)">批准</el-button>
+                <el-button type="primary" v-if="props.row.status==='unapproved'" size="mini" @click="approveRepair(props.row.repair_id,'pending')">批准</el-button>
+                <el-button type="primary" v-if="props.row.status==='pending'" size="mini" @click="approveRepair(props.row.repair_id,'processing')">处理中</el-button>
+                <el-button type="primary" v-if="props.row.status==='processing'" size="mini" @click="approveRepair(props.row.repair_id,'finished')">已完成</el-button>
               </template>
           </el-table-column>
           </el-table>
@@ -73,13 +75,13 @@
         searchForm:{
           startTime:'',
           endTime:'',
-          reserveStatus:'0',
+          reserveStatus:'unapproved',
         },
         allStatus:[
-          {value:'0',label:'待批准'},
-          {value:'1',label:'待处理'},
-          {value:'2',label:'处理中'},
-          {value:'3',label:'已完成'},
+          {value:'unapproved',label:'待批准'},
+          {value:'pending',label:'待处理'},
+          {value:'processing',label:'处理中'},
+          {value:'finished',label:'已完成'},
         ],
         randomKey:'',
         //时间的快速选择
@@ -113,17 +115,31 @@
         currentPage:1,
         pageSize:10,
         totalCount:0,
+        usr:{
+          admin_id:'',
+          admin_name:''
+        }
       }
       },
       components: {
-          PanelTitle,
+        PanelTitle,
       },
       created() {
-          this.onGetRepairReserve()
+        this.onGetRepairReserve()
+        this.onGetUsr()
       },
       methods: {
         onRefresh() {
           this.onGetRepairReserve()
+        },
+        //获取管理员信息，用以社区消息的信息填充
+        onGetUsr(){
+          this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
+            tele: this.$store.state.auth.user
+          })).then(({data: usr})=>{
+            this.usr = usr[0];
+            this.$store.commit('setId', this.usr.admin_id);
+          })
         },
         onGetRepairReserve(){
           //使用时间和状态做筛选
@@ -172,9 +188,11 @@
         searchRadioTime(){
           this.onRefresh()
         },
-        approveRepair(repairId){
+        approveRepair(repairId,status){
           this.$http.get(this.formatString(this.$store.state.url.repair.approve, {
-            repair_id: repairId
+            adminId:this.usr.admin_id,
+            repair_id: repairId,
+            status:status
           })).then(() => {
             this.$message.success("操作成功");
             this.onRefresh();

@@ -2,7 +2,7 @@
     <div>
 <!-- 修改居民信息弹出框-->
         <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog">
-            <el-form :rules="rules"  ref="form" :model="currentRow" label-width="80px">
+            <el-form :rules="rules"  ref="editForm" :model="currentRow" label-width="80px">
               <el-form-item label="姓名" prop="name">
                 <el-col :span="21">
                   <el-input v-model="currentRow.name"></el-input>
@@ -44,7 +44,7 @@
 
 <!--      添加居民信息弹出框-->
         <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog">
-            <el-form :rules="rules" ref="form" :model="currentRow" label-width="80px">
+            <el-form :rules="rules" ref="addForm" :model="currentRow" label-width="80px">
               <el-form-item label="姓名" prop="name">
                   <el-col :span="21">
                       <el-input v-model="currentRow.name"></el-input>
@@ -138,20 +138,20 @@
     name: 'ResidentManage',
     // mixins: [mislist],
     data() {
-      const validateName = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入用户名'))
-      } else {
-        callback()
-      }
-      };
-      const validateSex = (rule, value, callback) => {
-        if (!value || value.length === 0) {
-          callback(new Error('请输入性别'))
-        } else {
-          callback()
-        }
-      };
+      // const validateName = (rule, value, callback) => {
+      // if (!value || value.length === 0) {
+      //   callback(new Error('请输入用户名'))
+      // } else {
+      //   callback()
+      // }
+      // };
+      // const validateSex = (rule, value, callback) => {
+      //   if (!value || value.length === 0) {
+      //     callback(new Error('请输入性别'))
+      //   } else {
+      //     callback()
+      //   }
+      // };
       const validateTele = (rule, value, callback) => {
         if (!value || value.length != 11) {
           callback(new Error('请输入正确格式的电话号码'))
@@ -159,20 +159,20 @@
           callback()
         }
       };
-      const validateMailBox = (rule, value, callback) => {
-        if (!value || value.length === 0) {
-          callback(new Error('请输入邮箱'))
-        } else {
-          callback()
-        }
-      };
-      const validateAddress = (rule, value, callback) => {
-        if (!value || value.length === 0) {
-          callback(new Error('请输入住址'))
-        } else {
-          callback()
-        }
-      };
+      // const validateMailBox = (rule, value, callback) => {
+      //   if (!value || value.length === 0) {
+      //     callback(new Error('请输入邮箱'))
+      //   } else {
+      //     callback()
+      //   }
+      // };
+      // const validateAddress = (rule, value, callback) => {
+      //   if (!value || value.length === 0) {
+      //     callback(new Error('请输入住址'))
+      //   } else {
+      //     callback()
+      //   }
+      // };
       return {
         currentRow: {
           id:"",
@@ -189,11 +189,11 @@
         search_tele: '',
         loading: false,
         rules: {
-          name: [{required: true, trigger: 'blur', validator: validateName}],
-          sex: [{required: true, trigger: 'blur', validator: validateSex}],
+          name: [{required: true, trigger: 'blur', message:'请输入姓名'}],
+          sex: [{required: true, trigger: 'blur', message:'请输入性别'}],
           tele: [{required: true, trigger: 'blur', validator: validateTele}],
-          mailBox: [{required: true, trigger: 'blur', validator: validateMailBox}],
-          address: [{required: true, trigger: 'blur', validator: validateAddress}],
+          mailBox: [{required: true, trigger: 'blur', message:'请输入邮箱'}],
+          address: [{required: true, trigger: 'blur', message:'请输入地址'}],
         },
 
       //  分页问题
@@ -245,17 +245,19 @@
       },
 
       onUploadedResident() {
-        console.log(this.currentRow)
-        this.$http.post(this.$store.state.url.resident.update, this.currentRow)
-            .then(() => {
-              this.$message.success("修改成功");
+        this.$refs['editForm'].validate((valid)=>{
+          if (valid){
+            this.$http.post(this.$store.state.url.resident.update, this.currentRow)
+              .then(() => {
+                this.$message.success("修改成功");
+                this.onRefresh();
+                this.editDialog = false
+              }).catch(() => {
+              this.$message.error("修改失败");
               this.onRefresh();
               this.editDialog = false
-            }).catch(() => {
-          this.$message.error("修改失败");
-          this.onRefresh();
-          this.editDialog = false
-        })
+            })
+          }})
       },
 
 
@@ -266,15 +268,19 @@
       },
       // 添加居民信息
       onCreateResident() {
-        this.$http.post(this.$store.state.url.resident.add, this.currentRow)
-            .then(() => {
-              this.$message.success("添加成功");
-              this.onRefresh();
-              this.$message.success("首次添加用户默认密码为手机号");
+        this.$refs['addForm'].validate((valid)=>{
+          if (valid){
+            this.$http.post(this.$store.state.url.resident.add, this.currentRow)
+                .then(() => {
+                  this.$message.success("添加成功");
+                  this.onRefresh();
+                  this.$message.success("首次添加用户默认密码为手机号");
+                  this.addDialog = false
+                }).catch(() => {
+              this.$message.error("添加失败");
               this.addDialog = false
-            }).catch(() => {
-          this.$message.error("添加失败");
-          this.addDialog = false
+            })
+          }
         })
       },
       onDeleteResident(tele) {

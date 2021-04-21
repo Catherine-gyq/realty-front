@@ -92,7 +92,7 @@ export default new Vuex.Store({
                 cancel:'api/repair/cancel?repair_id={repair_id}',
                 // 管理员角度
                 all: 'api/repair/allInfo',
-                approve:'api/repair/approve?repair_id={repair_id}',
+                approve:'api/repair/approve?adminId={adminId}&repair_id={repair_id}&status={status}',
             }
             // open: {
             //     add: 'api/open/add',
