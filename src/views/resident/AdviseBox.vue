@@ -5,10 +5,10 @@
         <div style="margin: 10px 10px 0px 0px;">
           <h2>新增意见反馈</h2>
           <el-form ref="adviseForms" :model="adviseForm" label-width="40px" style="margin-top: 30px">
-            <el-form-item label="标题">
+            <el-form-item label="标题" prop="title">
               <el-input v-model="adviseForm.title"></el-input>
             </el-form-item>
-            <el-form-item label="内容">
+            <el-form-item label="内容" prop="content">
               <el-input type="textarea" :autosize="{ minRows: 5, maxRows: 10}" v-model="adviseForm.content"></el-input>
             </el-form-item>
           </el-form>
@@ -104,7 +104,6 @@ export default {
     onAdviseSubmit(){
       this.adviseForm.resident_id = this.$store.state.auth.id;
       var myDate = new Date();
-      // var date = this.dateFormat("YYYY-mm-dd HH:MM:SS", myDate)
       this.adviseForm.dateTime = myDate
       this.$http.post(this.$store.state.url.advise.add,this.adviseForm)
           .then(()=>{

@@ -37,7 +37,7 @@
               <el-table-column prop="status" :formatter="statusTransfer" label="状态"/>
               <el-table-column align="center" label="操作">
                 <template slot-scope="props" width="200">
-                  <el-button :disabled="props.row.status!=='0'" type="info" size="mini" @click.native="onRepairCancel(props.row.repair_id)">
+                  <el-button :disabled="props.row.status!=='unapproved'" type="info" size="mini" @click.native="onRepairCancel(props.row.repair_id)">
                     <i class="fa el-icon-edit"></i>
                     取消预约
                   </el-button>
@@ -117,10 +117,10 @@ export default {
         resident_id: '',
       },
       repairStatus:[
-        {value:'0',label:'待批准'},
-        {value:'1',label:'待处理'},
-        {value:'2',label:'处理中'},
-        {value:'3',label:'已完成'},
+        {value:'unapproved',label:'待批准'},
+        {value:'pending',label:'待处理'},
+        {value:'processing',label:'处理中'},
+        {value:'finished',label:'已完成'},
       ],
       currentPage:1,
       pageSize:10,

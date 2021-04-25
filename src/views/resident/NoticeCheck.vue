@@ -115,7 +115,7 @@
           currentPage:this.currentPage
         }
         this.$http.post(this.$store.state.url.notice.allInfo, body).then((res) => {
-          this.notices = res.data.residentInfo
+          this.notices = res.data.noticeInfo
           this.totalCount = res.data.totalNum
           let temp=""
           for (let i=0;i<this.notices.length;i++){

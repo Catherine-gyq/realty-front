@@ -88,7 +88,7 @@
               <el-footer>
                 <template>
                   <el-popover  width="200" trigger="hover" content="查看该活动室预约情况。" style="margin-right: 20px;">
-                    <el-button @click="checkDialog = true" slot="reference" plain>
+                    <el-button @click="showReserve" slot="reference" plain>
                       查看
                     </el-button>
                   </el-popover>
@@ -196,7 +196,6 @@ export default {
   created() {
     this.onGetRoom()
     this.onGetUsr()
-    this.onGetActivity()
   },
   methods:{
     //获取房间预约情况
@@ -219,7 +218,10 @@ export default {
             this.rooms = rooms
           })
     },
-
+    showReserve(){
+      this.onGetActivity()
+      this.checkDialog=true
+    },
     onActivityReserve(usage,id){
       this.currentRow = {};
       this.reserveDialog = true;

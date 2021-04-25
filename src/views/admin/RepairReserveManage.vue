@@ -1,59 +1,59 @@
 <template>
-    <div>
-      <div class="panel">
-        <panel-title title="维修预约信息管理"></panel-title>
-        <div class="panel-body">
-          <el-date-picker style="margin-right: 20px" size="small"
-                          @change="searchRadioTime"
-              v-model="timePeriod"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              align="right">
-          </el-date-picker>
-          <!--            使用radio进行一个状态选择（待批准;待处理；处理中;已完成）-->
-          <el-radio-group v-model="searchForm.reserveStatus" @change="searchRadioStatus">
-            <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
-          </el-radio-group>
-          <el-button size="small" @click="onRefresh" type="primary" style="float: right;margin-right: 20px">刷新</el-button>
-        </div>
-        <div class="panel-body" style="height: 700px">
-          <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" v-loading="loading" element-loading-text="加载中...">
-            <el-table-column align="center" prop="address" label="维修地点"/>
-            <el-table-column align="center" prop="date" label="维修时间"/>
-            <el-table-column align="center" prop="content" :show-overflow-tooltip="true" label="维修内容" width="250"/>
-            <el-table-column align="center" prop="residentName" label="申请人"/>
-            <el-table-column align="center" prop="adminName" label="审批人">
-              <template slot-scope="props">
-                <span v-if="props.row.adminName">{{props.row.adminName}}</span>
-                <span v-else>--</span>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" prop="adminName" :formatter="statusTransfer"  label="状态" width="200"/>
-            <el-table-column align="center" label="操作" v-if="searchForm.reserveStatus!=='finished'">
-              <template slot-scope="props">
-                <el-button type="primary" v-if="props.row.status==='unapproved'" size="mini" @click="approveRepair(props.row.repair_id,'pending')">批准</el-button>
-                <el-button type="primary" v-if="props.row.status==='pending'" size="mini" @click="approveRepair(props.row.repair_id,'processing')">处理中</el-button>
-                <el-button type="primary" v-if="props.row.status==='processing'" size="mini" @click="approveRepair(props.row.repair_id,'finished')">已完成</el-button>
-              </template>
+  <div>
+    <div class="panel">
+      <panel-title title="维修预约信息管理"></panel-title>
+      <div class="panel-body">
+        <el-date-picker style="margin-right: 20px" size="small"
+                        @change="searchRadioTime"
+            v-model="timePeriod"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+        </el-date-picker>
+        <!--            使用radio进行一个状态选择（待批准;待处理；处理中;已完成）-->
+        <el-radio-group v-model="searchForm.reserveStatus" @change="searchRadioStatus">
+          <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
+        </el-radio-group>
+        <el-button size="small" @click="onRefresh" type="primary" style="float: right;margin-right: 20px">刷新</el-button>
+      </div>
+      <div class="panel-body" style="height: 700px">
+        <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" v-loading="loading" element-loading-text="加载中...">
+          <el-table-column align="center" prop="address" label="维修地点"/>
+          <el-table-column align="center" prop="date" label="维修时间"/>
+          <el-table-column align="center" prop="content" :show-overflow-tooltip="true" label="维修内容" width="250"/>
+          <el-table-column align="center" prop="residentName" label="申请人"/>
+          <el-table-column align="center" prop="adminName" label="审批人">
+            <template slot-scope="props">
+              <span v-if="props.row.adminName">{{props.row.adminName}}</span>
+              <span v-else>--</span>
+            </template>
           </el-table-column>
-          </el-table>
-          <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 50, 100]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalCount">
-            </el-pagination>
-          </div>
+          <el-table-column align="center" prop="adminName" :formatter="statusTransfer"  label="状态" width="200"/>
+          <el-table-column align="center" label="操作" v-if="searchForm.reserveStatus!=='finished'">
+            <template slot-scope="props">
+              <el-button type="primary" v-if="props.row.status==='unapproved'" size="mini" @click="approveRepair(props.row.repair_id,'pending')">批准</el-button>
+              <el-button type="primary" v-if="props.row.status==='pending'" size="mini" @click="approveRepair(props.row.repair_id,'processing')">处理中</el-button>
+              <el-button type="primary" v-if="props.row.status==='processing'" size="mini" @click="approveRepair(props.row.repair_id,'finished')">已完成</el-button>
+            </template>
+        </el-table-column>
+        </el-table>
+        <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
