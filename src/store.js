@@ -36,7 +36,6 @@ export default new Vuex.Store({
                 reset: 'api/account/resetPwd?username={username}&identity={identity}',
                 update: '/api/account/updatePwd',
                 allInform:'/api/account/allInform',
-                // del:'/api/account/delete?tele={tele}',
             },
             admin: {
                 usr:'api/admin/usr?tele={tele}',
@@ -57,16 +56,11 @@ export default new Vuex.Store({
             },
             activity:{
                 reserve:'api/activity/reserve',
-                allInfo:'api/activity/all',
+                allInfo:'api/activity/allInfo?pageSize={pageSize}&currentPage={currentPage}&room_id={room_id}',
+                all:'api/activity/all?pageSize={pageSize}&currentPage={currentPage}&room_id={room_id}&status={status}',
                 cancel:'api/activity/cancel?activity_id={activity_id}',
+                approve:'api/activity/approve?adminId={adminId}&activity_id={activity_id}&status={status}',
             },
-            // Repair: {
-                // add: 'api/teacher/add',
-                // search: '/api/teacher/search?de={de}',
-                // update: 'api/teacher/update',
-                // del: 'api/teacher/delete?no={no}',
-            //     allInfo: 'api/repair/all?no={no}&name={name}'
-            // },
             notice: {
                 allInfo: 'api/notice/all',
                 del: 'api/notice/delete?id={id}',

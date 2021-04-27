@@ -1,40 +1,28 @@
 <template>
   <div>
     <div class="panel">
-      <panel-title title="维修预约信息管理"></panel-title>
+      <panel-title title="活动室管理"></panel-title>
       <div class="panel-body">
-        <el-date-picker style="margin-right: 20px" size="small"
-                        @change="searchRadioTime"
-                        v-model="timePeriod"
-                        type="datetimerange"
-                        :picker-options="pickerOptions"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        align="right">
-        </el-date-picker>
-        <!--            使用radio进行一个状态选择（待批准;待处理；处理中;已完成）-->
-        <el-radio-group v-model="searchForm.reserveStatus" @change="searchRadioStatus">
+        <el-select v-model="searchForm.room_id" style="margin-right: 20px" :clearable="true" @change="onGetActivityReserve">
+          <el-option v-for="(item,index) in rooms" :value="item.room_id" :label="item.room_usage" :key="index"></el-option>
+        </el-select>
+        <el-radio-group v-model="searchForm.status" @change="searchRadioStatus">
           <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
         </el-radio-group>
-        <el-button size="small" @click="onRefresh" type="primary" style="float: right;margin-right: 20px">刷新</el-button>
       </div>
       <div class="panel-body" style="height: 700px">
-        <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" v-loading="loading" element-loading-text="加载中...">
-          <el-table-column align="center" prop="address" label="维修地点" width="190"/>
-          <el-table-column align="center" prop="date" label="维修时间" width="190"/>
-          <el-table-column align="center" prop="content" label="维修内容" width="190"/>
-          <el-table-column align="center" prop="residentName" label="申请人" width="190"/>
-          <el-table-column align="center" prop="adminName" label="审批人" width="190">
+        <el-table empty-text="暂无数据" :key="randomKey" :data="activityReserve" v-loading="loading" element-loading-text="加载中...">
+          <el-table-column align="center" prop="room_usage" label="活动室"/>
+          <el-table-column align="center" prop="activity_usage" label="活动室用途"/>
+          <el-table-column align="center" prop="date" label="预约日期"/>
+          <el-table-column align="center" :formatter="timeTransfer" label="使用时间"/>
+          <el-table-column align="center" prop="resident_name" label="申请人"/>
+          <el-table-column align="center" v-if="searchForm.status!=='unapproval'" prop="admin_name" label="审批人"/>
+          <el-table-column align="center" :formatter="statusTransfer"  label="状态" width="200"/>
+          <el-table-column align="center" label="操作" v-if="searchForm.status==='unapproval'">
             <template slot-scope="props">
-              <span v-if="props.row.adminName">{{props.row.adminName}}</span>
-              <span v-else>--</span>
-            </template>
-          </el-table-column>
-          <el-table-column align="center" prop="adminName" :formatter="statusTransfer"  label="状态" width="200"/>
-          <el-table-column align="center" label="操作">
-            <template slot-scope="props">
-              <el-button type="primary" v-if="props.row.status==='0'" size="mini" @click="approveRepair(props.row.repair_id)">批准</el-button>
+              <el-button type="primary" size="mini" @click="approveRepair(props.row.activity_id,'approved')">批准</el-button>
+              <el-button type="danger" size="mini" @click="approveRepair(props.row.activity_id,'rejected')">拒绝</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,25 +49,22 @@ export default {
   name: 'ActivityManage',
   data() {
     return {
-      currentRow: {},
-      addDialog: false,
-      editDialog: false,
-      repairReserve: [],
-      departments: {},
-      searchName: '',
-      searchNo: '',
+      activityReserve: [],
+      rooms:[],
       loading: false,
       timePeriod:[],
       searchForm:{
-        startTime:'',
-        endTime:'',
-        reserveStatus:'0',
+        room_id:'',
+        status:'unapproval',
+      },
+      usr: {
+        admin_id:'',
+        admin_name:''
       },
       allStatus:[
-        {value:'0',label:'待批准'},
-        {value:'1',label:'待处理'},
-        {value:'2',label:'处理中'},
-        {value:'3',label:'已完成'},
+        {value:'unapproval',label:'待批准'},
+        {value:'rejected',label:'已拒绝'},
+        {value:'approved',label:'已通过'},
       ],
       randomKey:'',
       //时间的快速选择
@@ -119,42 +104,41 @@ export default {
     PanelTitle,
   },
   created() {
-    this.onGetRepairReserve()
+    this.onGetActivityReserve()
+    this.onGetRoom()
+    this.onGetUsr()
   },
   methods: {
     onRefresh() {
-      this.onGetRepairReserve()
+      this.onGetActivityReserve()
     },
-    onGetRepairReserve(){
-      //使用时间和状态做筛选
+    //获取所有活动
+    onGetActivityReserve(){
+      this.loading=true
       let body
-      if (this.timePeriod && this.timePeriod.length===2){
-        body={
-          startTime: this.timePeriod[0],
-          endTime:this.timePeriod[1],
-          reserveStatus:this.searchForm.reserveStatus,
-          pageSize:this.pageSize,
-          currentPage:this.currentPage
-        }
+      body={
+        room_id: this.searchForm.room_id,
+        status: this.searchForm.status,
+        pageSize:this.pageSize,
+        currentPage:this.currentPage
       }
-      else{
-        body={
-          startTime: '',
-          endTime:'',
-          reserveStatus:this.searchForm.reserveStatus,
-          pageSize:this.pageSize,
-          currentPage:this.currentPage
-        }
-      }
-      this.$http.post(this.$store.state.url.repair.all,body).then(({data: data})=>{
-        this.repairReserve = data.residentInfo
+      this.$http.get(this.formatString(this.$store.state.url.activity.all,body)).then(({data: data})=>{
+        this.activityReserve = data.activityInfo
         this.totalCount = data.totalNum
+        this.loading = false
         this.randomKey = Math.random()
       })
     },
-    onAlterInfo(row){
-      this.currentRow = row;
-      this.editDialog = true;
+    //获取房间
+    onGetRoom(){
+      this.$http.get(this.$store.state.url.room.allInfo)
+          .then(({data: rooms}) => {
+            this.rooms = rooms
+          })
+    },
+    timeTransfer(row){
+      let temp = row.startTime+'-'+row.endTime
+      return temp
     },
     statusTransfer(row){
       let temp = ""
@@ -166,15 +150,29 @@ export default {
       return temp
     },
     searchRadioStatus(){
-      console.log(this.searchForm)
       this.onRefresh()
     },
     searchRadioTime(){
       this.onRefresh()
     },
-    approveRepair(repairId){
-      this.$http.get(this.formatString(this.$store.state.url.repair.approve, {
-        repair_id: repairId
+
+    //获取管理员信息，用以社区消息的信息填充
+    onGetUsr(){
+      this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
+        tele: this.$store.state.auth.user
+      })).then(({data: usr})=>{
+        this.usr = usr[0];
+        this.$store.commit('setId', this.usr.admin_id);
+      })
+    },
+    //管理员的活动状态处理
+    approveRepair(activityId,status){
+      console.log(activityId)
+      console.log(this.usr.admin_id)
+      this.$http.get(this.formatString(this.$store.state.url.activity.approve, {
+        activity_id: activityId,
+        adminId:this.usr.admin_id,
+        status:status
       })).then(() => {
         this.$message.success("操作成功");
         this.onRefresh();

@@ -2,17 +2,16 @@
   <div class="panel_check">
     <!--查看所有预约-->
     <el-dialog :visible.sync="checkDialog" size="tiny" width="1500px" class="dialog">
-      <div class="panel-body" style="height: 700px">
-<!--        v-loading="loading"-->
-        <el-table empty-text="暂无数据" :data="activity"  element-loading-text="加载中..." stripe>
-          <el-table-column align="center" prop="activity_id" label="活动编号" width="100"/>
-          <el-table-column align="center" prop="room_usage" label="房间用途" width="200"/>
-          <el-table-column align="center" prop="resident_name" label="预约人" width="200"/>
-          <el-table-column align="center" prop="resident_id" label="预约人id" width="200" v-if="false"/>
-          <el-table-column align="center" prop="date" label="预约日期" width="200"/>
-          <el-table-column align="center" prop="startTime" label="开始时间" width="200"/>
-          <el-table-column align="center" prop="endTime" label="结束时间" width="200"/>
-          <el-table-column align="center" prop="status" label="审批状态" width="200"/>
+      <div class="panel-body">
+        <el-table empty-text="暂无数据" :data="activity" v-loading="loading" element-loading-text="加载中..." stripe>
+<!--          <el-table-column align="center" prop="activity_id" label="活动编号" width="100"/>-->
+          <el-table-column align="center" prop="room_usage" label="房间用途"/>
+          <el-table-column align="center" prop="resident_name" label="预约人"/>
+          <el-table-column align="center" prop="resident_id" label="预约人id" v-if="false"/>
+          <el-table-column align="center" prop="date" label="预约日期"/>
+          <el-table-column align="center" prop="startTime" label="开始时间"/>
+          <el-table-column align="center" prop="endTime" label="结束时间"/>
+          <el-table-column align="center" prop="status" label="审批状态"/>
           <el-table-column align="center" label="操作">
             <template slot-scope="props" width="200">
 <!--              && status="待处理"{{this.$store.state.auth.id == activity.resident_id}}-->
@@ -24,17 +23,28 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
+        </div>
       </div>
-      <div slot="footer">
-        <el-button @click="checkDialog=false" size="small">
-          确定
-        </el-button>
-      </div>
+<!--      <div slot="footer">-->
+<!--        <el-button @click="checkDialog=false" size="small">-->
+<!--          确定-->
+<!--        </el-button>-->
+<!--      </div>-->
     </el-dialog>
 
     <!--预约的填写组件 size="tiny"  应该要把所有内容整成必填的（还没写,不过问题也不大，预约失败完事儿）-->
     <el-dialog :visible.sync="reserveDialog" width="700px" class="dialog">
-      <el-form ref="form" :model="currentRow" label-width="80px">
+      <el-form ref="reserveForm" :model="currentRow" label-width="80px">
         <el-form-item label="预约房间">
           <el-col :span="21">
             <el-input v-model="currentRow.room" disabled></el-input>
@@ -88,7 +98,7 @@
               <el-footer>
                 <template>
                   <el-popover  width="200" trigger="hover" content="查看该活动室预约情况。" style="margin-right: 20px;">
-                    <el-button @click="showReserve" slot="reference" plain>
+                    <el-button @click="showReserve(room.room_id)" slot="reference" plain>
                       查看
                     </el-button>
                   </el-popover>
@@ -111,38 +121,10 @@
 export default {
   name: "ActivityReserve",
   data(){
-    const validateUsage = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入您的用途'))
-      } else {
-        callback()
-      }
-    };
-    const validateStarttime = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请选择开始时间'))
-      } else {
-        callback()
-      }
-    };
-    const validateEndtime = (rule, value, callback) => {
-      if (!value || value.length != 11) {
-        callback(new Error('请选择结束时间'))
-      } else {
-        callback()
-      }
-    };
-    const validateDate = (rule, value, callback) => {
-      if (!value || value.length === 0) {
-        callback(new Error('请输入日期'))
-      } else {
-        callback()
-      }
-    };
     return{
       reserveDialog:false,
       checkDialog:false,
-      // error:false,
+      loading:false,
       currentRow:{
         room:'',
         room_id:'',
@@ -183,15 +165,17 @@ export default {
         }
       },
       rules: {
-        usage:[{required: true, trigger: 'blur', validator: validateUsage}],
-        date:[{required: true, trigger: 'blur', validator: validateDate}],
-        startTime:[{required: true, trigger: 'blur', validator: validateStarttime}],
-        endTime:[{required: true, trigger: 'blur', validator: validateEndtime}],
+        usage:[{required: true, trigger: 'blur', message:'请输入您的用途'}],
+        date:[{required: true, trigger: 'blur', message:'请输入使用时间'}],
+        startTime:[{required: true, trigger: 'blur', message:'请输入开始时间'}],
+        endTime:[{required: true, trigger: 'blur', message:'请输入结束时间'}],
       },
+      //  分页问题
+      currentPage:1,
+      pageSize:10,
+      totalCount:0,
     }
   },
-
-
 
   created() {
     this.onGetRoom()
@@ -218,8 +202,8 @@ export default {
             this.rooms = rooms
           })
     },
-    showReserve(){
-      this.onGetActivity()
+    showReserve(room_id){
+      this.onGetActivity(room_id)
       this.checkDialog=true
     },
     onActivityReserve(usage,id){
@@ -232,29 +216,40 @@ export default {
 
     //提交活动室预约
     onReserveSubmit(){
-      this.$http.post(this.$store.state.url.activity.reserve, this.currentRow)
-      .then(()=>{
-        this.$message.success("预约成功，等待审核");
-        this.onRefresh();
-        this.reserveDialog = false;
-      }).catch(()=>{
-        this.$message.error("预约失败");
-        this.reserveDialog = false;
+      this.$ref['reserveForm'].validate((valid)=>{
+        if (valid){
+          this.$http.post(this.$store.state.url.activity.reserve, this.currentRow).then(()=>{
+            this.$message.success("预约成功，等待审核");
+            this.onRefresh();
+            this.reserveDialog = false;
+          }).catch(()=>{
+            this.$message.error("预约失败");
+            this.reserveDialog = false;
+          })
+        }
       })
     },
 
   //  获取所有预约内容
-    onGetActivity(){
-      this.$http.get(this.$store.state.url.activity.allInfo)
-          .then(({data: activity}) => {
-        this.activity = activity
-            // document.write(this.activity[1].startTime)
+    onGetActivity(room_id){
+      let body={
+        room_id:room_id,
+        pageSize:this.pageSize,
+        currentPage:this.currentPage
+      }
+      this.loading=true
+      this.$http.get(this.formatString(this.$store.state.url.activity.allInfo,body))
+          .then(({data:activity}) => {
+            this.loading=false
+            this.activity = activity.activityInfo
+            this.totalCount = activity.totalNum
       })
     },
 
+
+
     //删除预约
     onCancelReserve(activity_id){
-      // document.write(activity_id)
       this.$http.get(this.formatString(this.$store.state.url.activity.cancel,{
         activity_id: activity_id
       })).then(() => {
@@ -265,7 +260,18 @@ export default {
         this.$message.error("取消失败");
         this.checkDialog = false
       })
-    }
+    },
+
+    //分页控制
+    handleSizeChange(val) {
+      this.pageSize=val
+      this.onRefresh()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.onRefresh()
+    },
+
 
   }
 }
