@@ -192,7 +192,8 @@
           name: [{required: true, trigger: 'blur', message:'请输入姓名'}],
           sex: [{required: true, trigger: 'blur', message:'请输入性别'}],
           tele: [{required: true, trigger: 'blur', validator: validateTele}],
-          mailBox: [{required: true, trigger: 'blur', message:'请输入邮箱'}],
+          mailBox: [{required: true, trigger: 'blur',pattern: '^[a-z0-9]+([._\\\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$',
+            message: '请输入正确的邮箱格式'}],
           address: [{required: true, trigger: 'blur', message:'请输入地址'}],
         },
 

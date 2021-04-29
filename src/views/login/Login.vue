@@ -8,8 +8,6 @@
 			<div class="title">
 				<el-radio v-model="form.identity" label="resident">住户</el-radio>
 				<el-radio v-model="form.identity" label="admin">管理员</el-radio>
-<!--        <el-radio v-model="form.identity" label="super_admin">超级管理员</el-radio>-->
-<!--				<el-radio v-model="form.identity" label="admin">管理员</el-radio>-->
 			</div>
 			<el-form-item label="用户名" prop="username" class="item">
 				<el-input v-model="form.username" ref="username" autocomplete="off"/>
@@ -32,20 +30,20 @@
 	export default {
 		name: 'Login',
 		data() {
-			const validateUsername = (rule, value, callback) => {
-				if (!value || value.length === 0) {
-					callback(new Error('请输入用户名'))
-				} else {
-					callback()
-				}
-			};
-			const validatePassword = (rule, value, callback) => {
-				if (!value || value.length === 0) {
-					callback(new Error('请输入密码'))
-				} else {
-					callback()
-				}
-			};
+			// const validateUsername = (rule, value, callback) => {
+			// 	if (!value || value.length === 0) {
+			// 		callback(new Error('请输入用户名'))
+			// 	} else {
+			// 		callback()
+			// 	}
+			// };
+			// const validatePassword = (rule, value, callback) => {
+			// 	if (!value || value.length === 0) {
+			// 		callback(new Error('请输入密码'))
+			// 	} else {
+			// 		callback()
+			// 	}
+			// };
 			return {
 				form: {
 					username: null,
@@ -53,8 +51,8 @@
 					identity: 'resident'
 				},
 				rules: {
-					username: [{required: true, trigger: 'blur', validator: validateUsername}],
-					password: [{required: true, trigger: 'blur', validator: validatePassword}]
+					username: [{required: true, trigger: 'blur', message:"请输入用户名"}],
+					password: [{required: true, trigger: 'blur', message:"请输入密码"}]
 				},
 				type: {
 					password: 'password'
