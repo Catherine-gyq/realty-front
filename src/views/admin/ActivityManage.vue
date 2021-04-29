@@ -2,16 +2,19 @@
   <div>
     <div class="panel">
       <panel-title title="活动室管理"></panel-title>
-      <div class="panel-body">
-        <el-select v-model="searchForm.room_id" style="margin-right: 20px" :clearable="true" @change="onGetActivityReserve">
-          <el-option v-for="(item,index) in rooms" :value="item.room_id" :label="item.room_usage" :key="index"></el-option>
-        </el-select>
-        <el-radio-group v-model="searchForm.status" @change="searchRadioStatus">
-          <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
-        </el-radio-group>
+      <div class="panel-body" style="display: flex;justify-content: space-between">
+        <div>
+          <el-select v-model="searchForm.room_id" style="margin-right: 20px" :clearable="true" @change="onGetActivityReserve">
+            <el-option v-for="(item,index) in rooms" :value="item.room_id" :label="item.room_usage" :key="index"></el-option>
+          </el-select>
+          <el-radio-group v-model="searchForm.status" @change="searchRadioStatus">
+            <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
+          </el-radio-group>
+        </div>
+        <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
       </div>
       <div class="panel-body" style="height: 700px">
-        <el-table empty-text="暂无数据" :key="randomKey" :data="activityReserve" v-loading="loading" element-loading-text="加载中...">
+        <el-table empty-text="暂无数据" :key="randomKey" id="activityTable" :data="activityReserve" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="room_usage" label="活动室"/>
           <el-table-column align="center" prop="activity_usage" label="活动室用途"/>
           <el-table-column align="center" prop="date" label="预约日期"/>
@@ -44,6 +47,8 @@
 
 <script>
 import PanelTitle from '../../components/PanelTitle'
+import FileSaver from "file-saver"
+import XLSX from "xlsx";
 
 export default {
   name: 'ActivityManage',
@@ -188,7 +193,25 @@ export default {
       this.currentPage = val
       this.onRefresh()
     },
-    },
+    //导出表格
+    exportExcel() {
+      var wb = XLSX.utils.table_to_book(document.querySelector("#activityTable"));
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "activity.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    }
+  },
 }
 </script>
 

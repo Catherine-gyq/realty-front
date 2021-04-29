@@ -9,21 +9,53 @@
           </div>
         </el-col>
         <el-col :span="16">
-          <el-form :model="personalInformation" style="margin-top: 50px">
+          <el-form :model="personalInformation" style="margin-top: 50px" label-width="100px">
+<!--            如果是用户-->
             <div v-if="usrIdentity==='resident'">
-              <el-form-item label="姓名：">{{personalInformation.name}}</el-form-item>
+              <el-form-item label="姓名：">{{personalInformation.name}}
+                <el-popover placement="bottom" content="修改个人信息" trigger="hover">
+                  <i style="margin-left: 20px;cursor: pointer" @click="editInfo" slot="reference" class="el-icon-edit"></i>
+                </el-popover>
+              </el-form-item>
               <el-form-item label="电话号码：">{{personalInformation.tele}}</el-form-item>
               <el-form-item label="邮箱：">{{personalInformation.mailBox}}</el-form-item>
               <el-form-item label="居住地点：">{{personalInformation.address}}</el-form-item>
               <el-form-item label="出生年月：">{{personalInformation.dateOfBirth}}</el-form-item>
               <el-form-item label="性别：">{{personalInformation.sex}}</el-form-item>
             </div>
+<!--            如果是管理员-->
             <div v-else>
-              <el-form-item label="姓名：">{{personalInformation.admin_name}}</el-form-item>
+              <el-form-item label="姓名：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.admin_name"></el-input>
+                <div v-else>
+                  {{personalInformation.admin_name}}
+                  <el-popover content="修改个人信息" trigger="hover">
+                    <i style="margin-left: 20px;cursor: pointer" slot="reference" @click="editInfo" class="el-icon-edit"></i>
+                  </el-popover>
+                </div>
+              </el-form-item>
               <el-form-item label="电话号码：">{{personalInformation.admin_tele}}</el-form-item>
-              <el-form-item label="邮箱：">{{personalInformation.mailBox}}</el-form-item>
-              <el-form-item label="出生年月：">{{personalInformation.dateOfBirth}}</el-form-item>
-              <el-form-item label="性别：">{{personalInformation.admin_sex}}</el-form-item>
+              <el-form-item label="邮箱：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.mailBox"></el-input>
+                <div v-else>
+                  {{personalInformation.mailBox}}
+                </div>
+              </el-form-item>
+              <el-form-item label="出生年月：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.dateOfBirth"></el-input>
+                <div v-else>{{personalInformation.dateOfBirth}}</div>
+              </el-form-item>
+              <el-form-item label="性别：">
+                <el-radio-group v-if="infoEdit" v-model="personalInformation.admin_sex" size="medium">
+                  <el-radio label="男"></el-radio>
+                  <el-radio label="女"></el-radio>
+                </el-radio-group>
+                <div v-else>{{personalInformation.admin_sex}}</div>
+              </el-form-item>
+              <div v-if="infoEdit" style="margin: 40px 0 0 100px">
+                <el-button size="small" type="primary" @click="submitInfo">确定</el-button>
+                <el-button size="small" @click="cancelEdit">取消</el-button>
+              </div>
             </div>
           </el-form>
         </el-col>
@@ -89,9 +121,8 @@ export default {
       changePassword: {
         newPassword: { required: true, message: '请设置相应密码', trigger: 'blur' },
         passwordConfirm:{required:true,validator: this.passConfirm,message:'两次输入密码需一致',trigger:'blur'},
-        // newPassword:[{required: true, trigger: 'blur', message:'请输入密码'}],
-        // passwordConfirm:[{required: true, trigger: 'blur', message:'请再次输入密码'}],
       },
+      infoEdit:false
     }
   },
   created(){
@@ -178,6 +209,17 @@ export default {
       this.ifPassword = 'unknown'
       this.$refs['confirmPassword'].resetFields()
       this.$refs['newPasswords'].resetFields()
+    },
+    //编辑信息
+    editInfo(){
+      this.infoEdit=true;
+    },
+    //分类用户和管理员提交
+    submitInfo(){
+
+    },
+    cancelEdit(){
+      this.infoEdit=false;
     }
   }
 }
@@ -208,5 +250,8 @@ export default {
 .head_title{
   font-size: 20px;
   margin-bottom: 30px;
+}
+.input_type{
+  width: 280px;
 }
 </style>

@@ -4,7 +4,7 @@
     <!--页面展示-->
     <div class="panel">
       <panel-title title="意见箱管理"></panel-title>
-      <div class="panel-body" style="height: 700px">
+      <div class="panel-body" style="min-height: 700px">
         <el-select style="margin-left: 20px;margin-bottom: 40px" v-model="searchStatus" placeholder="请选择意见状态" @change="onGetAdvise">
           <el-option
               v-for="item in allStatus"
@@ -13,7 +13,8 @@
               :value="item.value">
           </el-option>
         </el-select>
-        <el-table empty-text="暂无数据" :data="advises" v-loading="loading" element-loading-text="加载中...">
+        <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
+        <el-table empty-text="暂无数据" :data="advises" id="adviseTable" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="意见标题" width="250"/>
           <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>
           <el-table-column align="center" prop="date" label="发布时间" :formatter="getAdviseDate" width="250"/>
@@ -53,6 +54,8 @@
 
 <script>
 import PanelTitle from '../../components/PanelTitle'
+import FileSaver from "file-saver"
+import XLSX from "xlsx";
 
 export default {
   name: 'NoticeManage',
@@ -268,6 +271,24 @@ export default {
           this.editDialog = false
         })
       })
+    },
+    //导出表格
+    exportExcel() {
+      var wb = XLSX.utils.table_to_book(document.querySelector("#adviseTable"));
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "advise.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
     }
   }
 }

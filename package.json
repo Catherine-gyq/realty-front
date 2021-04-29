@@ -32,7 +32,8 @@
     "vue-echarts": "^4.1.0",
     "vue-router": "^3.4.2",
     "vuex": "^3.5.1",
-    "vuex-persist": "^2.2.0"
+    "vuex-persist": "^2.2.0",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
@@ -41,6 +42,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "file-saver": "^2.0.5",
     "vue-cli-plugin-element-ui": "^1.1.4",
     "vue-template-compiler": "^2.6.11"
   },

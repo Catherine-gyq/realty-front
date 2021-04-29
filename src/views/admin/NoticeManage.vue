@@ -73,25 +73,28 @@
         <!--页面展示-->
         <div class="panel">
           <panel-title title="社区消息管理"></panel-title>
-            <div class="panel-body" style="display: flex">
-              <el-button @click="onAddNotice" size="small" type="primary">
-                添加消息
-              </el-button>
-              <el-date-picker class="community_input" style="margin-right: 20px" size="small"
-                              value-format="yyyy-MM-dd"
-                              @change="onRefresh"
-                              v-model="timePeriod"
-                              type="datetimerange"
-                              :picker-options="pickerOptions"
-                              range-separator="至"
-                              start-placeholder="开始日期"
-                              end-placeholder="结束日期"
-                              align="right">
-              </el-date-picker>
-              <el-input class="community_input" v-model="searchName" placeholder="请输入标题来查询消息" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+            <div class="panel-body" style="display: flex;justify-content: space-between">
+              <div>
+                <el-button @click="onAddNotice" size="small" type="primary">
+                  添加消息
+                </el-button>
+                <el-date-picker class="community_input" style="margin-right: 20px" size="small"
+                                value-format="yyyy-MM-dd"
+                                @change="onRefresh"
+                                v-model="timePeriod"
+                                type="datetimerange"
+                                :picker-options="pickerOptions"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期"
+                                align="right">
+                </el-date-picker>
+                <el-input class="community_input" v-model="searchName" placeholder="请输入标题来查询消息" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+              </div>
+              <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
             </div>
             <div class="panel-body" style="height: 700px">
-              <el-table empty-text="暂无数据" :data="notices" v-loading="loading" element-loading-text="加载中...">
+              <el-table empty-text="暂无数据" :data="notices" id="noticeTable" v-loading="loading" element-loading-text="加载中...">
                   <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
                   <el-table-column align="center" prop="people" label="发布人"/>
 <!--                  <el-table-column align="center" prop="admin_id" label="发布人" v-if=false />-->
@@ -128,6 +131,8 @@
 
 <script>
     import PanelTitle from '../../components/PanelTitle'
+    import FileSaver from "file-saver"
+    import XLSX from "xlsx"
 
     export default {
       name: 'NoticeManage',
@@ -352,6 +357,24 @@
             return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s)
           }
         },
+        //导出表格
+        exportExcel() {
+          var wb = XLSX.utils.table_to_book(document.querySelector("#noticeTable"));
+          var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+          });
+          try {
+            FileSaver.saveAs(
+                new Blob([wbout], { type: "application/octet-stream" }),
+                "notice.xlsx"
+            );
+          } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+          }
+          return wbout;
+        }
       }
     }
 </script>

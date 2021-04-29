@@ -85,18 +85,19 @@
             </div>
         </el-dialog>
 
-
 <!--页面框信息展示-->
         <div class="panel">
             <panel-title title="居民信息管理"></panel-title>
-            <div class="panel-body" style="display: flex;">
-              <el-button @click="onAddResident" type="primary" size="small">添加居民</el-button>
-              <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
-              <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+            <div class="panel-body" style="display: flex;justify-content: space-between">
+              <div>
+                <el-button @click="onAddResident" type="primary" size="small">添加居民</el-button>
+                <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+                <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+              </div>
+              <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
             </div>
             <div class="panel-body">
-              <el-table empty-text="暂无数据" :data="residents" v-loading="loading" element-loading-text="加载中...">
-<!--                    <el-table-column align="center" prop="resident_id" label="居民id" width="200"/>-->
+              <el-table empty-text="暂无数据" :data="residents" id="residentTable" v-loading="loading" element-loading-text="加载中...">
                   <el-table-column align="center" prop="name" label="姓名" width="200"/>
                   <el-table-column align="center" prop="sex" label="性别" width="200"/>
                   <el-table-column align="center" prop="mailBox" label="邮箱" width="300"/>
@@ -134,24 +135,11 @@
 
 <script>
   import PanelTitle from '../../components/PanelTitle'
+  import FileSaver from "file-saver"
+  import XLSX from "xlsx";
   export default {
     name: 'ResidentManage',
-    // mixins: [mislist],
     data() {
-      // const validateName = (rule, value, callback) => {
-      // if (!value || value.length === 0) {
-      //   callback(new Error('请输入用户名'))
-      // } else {
-      //   callback()
-      // }
-      // };
-      // const validateSex = (rule, value, callback) => {
-      //   if (!value || value.length === 0) {
-      //     callback(new Error('请输入性别'))
-      //   } else {
-      //     callback()
-      //   }
-      // };
       const validateTele = (rule, value, callback) => {
         if (!value || value.length != 11) {
           callback(new Error('请输入正确格式的电话号码'))
@@ -159,20 +147,6 @@
           callback()
         }
       };
-      // const validateMailBox = (rule, value, callback) => {
-      //   if (!value || value.length === 0) {
-      //     callback(new Error('请输入邮箱'))
-      //   } else {
-      //     callback()
-      //   }
-      // };
-      // const validateAddress = (rule, value, callback) => {
-      //   if (!value || value.length === 0) {
-      //     callback(new Error('请输入住址'))
-      //   } else {
-      //     callback()
-      //   }
-      // };
       return {
         currentRow: {
           id:"",
@@ -314,6 +288,24 @@
           })
         })
       },
+      //导出表格
+      exportExcel() {
+        var wb = XLSX.utils.table_to_book(document.querySelector("#residentTable"));
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array"
+        });
+        try {
+          FileSaver.saveAs(
+              new Blob([wbout], { type: "application/octet-stream" }),
+              "resident.xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+      }
     }
   }
 </script>

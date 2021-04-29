@@ -54,15 +54,18 @@
     </el-dialog>
 
     <!--页面框信息展示-->
-    <div class="panel">
+    <div class="panel" style="min-height: 800px">
       <panel-title title="管理员信息管理"></panel-title>
-      <div class="panel-body" style="display: flex;">
-        <el-button @click="onAddAdmin" type="primary" size="small">添加管理员</el-button>
-        <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
-        <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+      <div class="panel-body" style="display: flex;justify-content: space-between;">
+        <div>
+          <el-button @click="onAddAdmin" type="primary" size="small">添加管理员</el-button>
+          <el-input class="community_input" v-model="search_tele" placeholder="请输入用户手机号来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+          <el-input class="community_input" v-model="searchName" placeholder="请输入用户姓名来查询用户" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+        </div>
+        <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
       </div>
       <div class="panel-body">
-        <el-table empty-text="暂无数据" :data="admins" v-loading="loading" element-loading-text="加载中...">
+        <el-table empty-text="暂无数据" :data="admins" id="adminTable" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="admin_name" label="姓名" />
           <el-table-column align="center" prop="admin_sex" label="性别" />
           <el-table-column align="center" prop="identity" label="权限" >
@@ -106,30 +109,11 @@
 <script>
 
 import PanelTitle from '../../components/PanelTitle'
+import FileSaver from "file-saver"
+import XLSX from "xlsx"
 export default {
   name: 'AdminManage',
   data() {
-    // const validateName = (rule, value, callback) => {
-    //   if (!value || value.length === 0) {
-    //     callback(new Error('请输入用户名'))
-    //   } else {
-    //     callback()
-    //   }
-    // };
-    // const validateMailBox = (rule, value, callback) => {
-    //   if (!value || value.length === 0) {
-    //     callback(new Error('请输入邮箱'))
-    //   } else {
-    //     callback()
-    //   }
-    // };
-    // const validateSex = (rule, value, callback) => {
-    //   if (!value || value.length === 0) {
-    //     callback(new Error('请输入性别'))
-    //   } else {
-    //     callback()
-    //   }
-    // };
     const validateTele = (rule, value, callback) => {
       if (!value || value.length != 11) {
         callback(new Error('请输入正确格式的电话号码'))
@@ -137,13 +121,6 @@ export default {
         callback()
       }
     };
-    // const validateIdentity = (rule, value, callback) => {
-    //   if (!value || value.length === 0) {
-    //     callback(new Error('请选择管理员的权限'))
-    //   } else {
-    //     callback()
-    //   }
-    // };
     return {
       currentRow: {
         id:"",
@@ -241,7 +218,6 @@ export default {
     onAddAdmin() {
       this.ifChange=false
       this.currentRow = {};
-      // this.addDialog = true;
       this.editDialog = true
     },
     //修改管理员信息
@@ -254,7 +230,6 @@ export default {
         tele:row.admin_tele,
         mailBox:row.mailBox,
         identity:row.identity,
-        // address:row.address,
         dateOfBirth:row.dateOfBirth
       }
       console.log(this.currentRow)
@@ -274,7 +249,6 @@ export default {
                 this.editDialog = false
               }).catch(() => {
             this.$message.error("添加失败");
-            // this.addDialog = false
             this.editDialog = false
           })
         }
@@ -310,6 +284,24 @@ export default {
         })
       })
     },
+    //导出表格
+    exportExcel() {
+      var wb = XLSX.utils.table_to_book(document.querySelector("#adminTable"));
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array"
+      });
+      try {
+        FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "admin.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    }
   }
 }
 </script>

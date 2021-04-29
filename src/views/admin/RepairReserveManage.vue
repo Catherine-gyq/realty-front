@@ -17,10 +17,10 @@
         <el-radio-group v-model="searchForm.reserveStatus" @change="searchRadioStatus">
           <el-radio v-for="(item,index) in allStatus" :key="index"  :label="item.value">{{item.label}}</el-radio>
         </el-radio-group>
-        <el-button size="small" @click="onRefresh" type="primary" style="float: right;margin-right: 20px">刷新</el-button>
+        <el-button size="small" @click="exportExcel" type="primary" style="float: right;margin-right: 20px">导出EXCEL</el-button>
       </div>
       <div class="panel-body" style="height: 700px">
-        <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" v-loading="loading" element-loading-text="加载中...">
+        <el-table empty-text="暂无数据" :key="randomKey" :data="repairReserve" id="repairTable" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="address" label="维修地点"/>
           <el-table-column align="center" prop="date" label="维修时间"/>
           <el-table-column align="center" prop="content" :show-overflow-tooltip="true" label="维修内容" width="250"/>
@@ -58,6 +58,8 @@
 
 <script>
   import PanelTitle from '../../components/PanelTitle'
+  import XLSX from "xlsx"
+  import FileSaver from "file-saver"
 
   export default {
     name: 'RepairReserveManage',
@@ -208,7 +210,24 @@
           this.currentPage = val
           this.onRefresh()
         },
-
+        //导出表格
+        exportExcel() {
+          var wb = XLSX.utils.table_to_book(document.querySelector("#adminTable"));
+          var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+          });
+          try {
+            FileSaver.saveAs(
+                new Blob([wbout], { type: "application/octet-stream" }),
+                "repair.xlsx"
+            );
+          } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+          }
+          return wbout;
+        }
       }
   }
 </script>
