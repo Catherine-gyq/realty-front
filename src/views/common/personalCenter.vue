@@ -12,16 +12,43 @@
           <el-form :model="personalInformation" style="margin-top: 50px" label-width="100px">
 <!--            如果是用户-->
             <div v-if="usrIdentity==='resident'">
-              <el-form-item label="姓名：">{{personalInformation.name}}
-                <el-popover placement="bottom" content="修改个人信息" trigger="hover">
-                  <i style="margin-left: 20px;cursor: pointer" @click="editInfo" slot="reference" class="el-icon-edit"></i>
-                </el-popover>
+              <el-form-item label="姓名：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.name"></el-input>
+                <div v-else>
+                  {{personalInformation.name}}
+                  <el-popover placement="bottom" content="修改个人信息" trigger="hover">
+                    <i style="margin-left: 20px;cursor: pointer" @click="editInfo" slot="reference" class="el-icon-edit"></i>
+                  </el-popover>
+                </div>
               </el-form-item>
               <el-form-item label="电话号码：">{{personalInformation.tele}}</el-form-item>
-              <el-form-item label="邮箱：">{{personalInformation.mailBox}}</el-form-item>
-              <el-form-item label="居住地点：">{{personalInformation.address}}</el-form-item>
-              <el-form-item label="出生年月：">{{personalInformation.dateOfBirth}}</el-form-item>
-              <el-form-item label="性别：">{{personalInformation.sex}}</el-form-item>
+              <el-form-item label="邮箱：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.mailBox"></el-input>
+                <div v-else>
+                  {{personalInformation.mailBox}}
+                </div>
+              </el-form-item>
+              <el-form-item label="居住地点：">
+                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.address"></el-input>
+                <div v-else>
+                  {{personalInformation.address}}
+                </div>
+              </el-form-item>
+              <el-form-item label="出生年月：">
+                <el-date-picker v-if="infoEdit" v-model="personalInformation.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月"></el-date-picker>
+                <div v-else>
+                  {{personalInformation.dateOfBirth}}
+                </div>
+              </el-form-item>
+              <el-form-item label="性别：">
+                <el-radio-group v-if="infoEdit" v-model="personalInformation.admin_sex" size="medium">
+                  <el-radio label="男"></el-radio>
+                  <el-radio label="女"></el-radio>
+                </el-radio-group>
+                <div v-else>
+                  {{personalInformation.sex}}
+                </div>
+              </el-form-item>
             </div>
 <!--            如果是管理员-->
             <div v-else>
@@ -42,7 +69,7 @@
                 </div>
               </el-form-item>
               <el-form-item label="出生年月：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.dateOfBirth"></el-input>
+                <el-date-picker v-if="infoEdit" v-model="personalInformation.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月"></el-date-picker>
                 <div v-else>{{personalInformation.dateOfBirth}}</div>
               </el-form-item>
               <el-form-item label="性别：">
@@ -216,7 +243,33 @@ export default {
     },
     //分类用户和管理员提交
     submitInfo(){
-
+      console.log(this.personalInformation)
+      if (this.usrIdentity ==='admin'){
+        let body={
+          id:this.personalInformation.admin_id,
+          name:this.personalInformation.admin_name,
+          sex:this.personalInformation.admin_sex,
+          tele:this.personalInformation.admin_tele,
+          mailBox:this.personalInformation.mailBox,
+          dateOfBirth:this.personalInformation.dateOfBirth,
+          identity:'admin'
+        }
+        this.$http.post(this.$store.state.url.admin.update, body)
+            .then(() => {
+              this.$message.success("修改成功");
+              this.infoEdit=false;
+            }).catch(() => {
+          this.$message.error("修改失败");
+        })
+      }else if (this.usrIdentity === 'resident'){
+        this.$http.post(this.$store.state.url.resident.update, this.personalInformation)
+            .then(() => {
+              this.$message.success("修改成功");
+              this.infoEdit=false;
+            }).catch(() => {
+          this.$message.error("修改失败");
+        })
+      }
     },
     cancelEdit(){
       this.infoEdit=false;
