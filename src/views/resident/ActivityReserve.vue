@@ -4,17 +4,15 @@
     <el-dialog :visible.sync="checkDialog" size="tiny" width="1500px" class="dialog">
       <div class="panel-body">
         <el-table empty-text="暂无数据" :data="activity" v-loading="loading" element-loading-text="加载中..." stripe>
-<!--          <el-table-column align="center" prop="activity_id" label="活动编号" width="100"/>-->
           <el-table-column align="center" prop="room_usage" label="房间用途"/>
           <el-table-column align="center" prop="resident_name" label="预约人"/>
           <el-table-column align="center" prop="resident_id" label="预约人id" v-if="false"/>
           <el-table-column align="center" prop="date" label="预约日期"/>
           <el-table-column align="center" prop="startTime" label="开始时间"/>
           <el-table-column align="center" prop="endTime" label="结束时间"/>
-          <el-table-column align="center" prop="status" label="审批状态"/>
+          <el-table-column align="center" prop="status" :formatter="statusTransfer" label="审批状态"/>
           <el-table-column align="center" label="操作">
             <template slot-scope="props" width="200">
-<!--              && status="待处理"{{this.$store.state.auth.id == activity.resident_id}}-->
               <el-button type="info" size="mini" @click.native="onCancelReserve(props.row.activity_id)"
               :disabled="usr.resident_id == props.row.resident_id ? false : true">
                 <i class="fa el-icon-edit"></i>
@@ -35,11 +33,6 @@
           </el-pagination>
         </div>
       </div>
-<!--      <div slot="footer">-->
-<!--        <el-button @click="checkDialog=false" size="small">-->
-<!--          确定-->
-<!--        </el-button>-->
-<!--      </div>-->
     </el-dialog>
 
     <!--预约的填写组件 size="tiny"  应该要把所有内容整成必填的（还没写,不过问题也不大，预约失败完事儿）-->
@@ -83,7 +76,6 @@
         <el-card :body-style="{ padding: '0px' }">
           <el-container>
             <el-aside width="40%">
-<!--              fit="fill"-->
               <el-image v-bind:src="room.picture" style="margin: 20px;" fit="fill"></el-image>
             </el-aside>
             <el-container>
@@ -158,7 +150,11 @@ export default {
         room_num:'',
         room_address:''
       },
-
+      allStatus:[
+        {value:'unapproval',label:'待批准'},
+        {value:'rejected',label:'已拒绝'},
+        {value:'approved',label:'已通过'},
+      ],
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() < Date.now();
@@ -195,7 +191,16 @@ export default {
         // this.$store.commit('setId', this.usr.resident_id);
       })
     },
-
+    //状态转换
+    statusTransfer(row){
+      let temp = ""
+      this.allStatus.map(e=>{
+        if (row.status === e.value){
+          temp = e.label
+        }
+      })
+      return temp
+    },
     onGetRoom(){
       this.$http.get(this.$store.state.url.room.allInfo)
           .then(({data: rooms}) => {

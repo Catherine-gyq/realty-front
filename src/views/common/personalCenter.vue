@@ -88,6 +88,9 @@
         </el-col>
       </el-row>
     </div>
+
+
+<!--    修改密码的部分 -->
     <div style="margin:20px 0 0 20px" v-else>
       <div class="left_display">
         <div class="head_title">修改密码</div>

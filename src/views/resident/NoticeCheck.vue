@@ -10,19 +10,19 @@
         <el-menu
             default-active="1"
             class="el-menu-vertical-demo">
-          <el-menu-item index="1">
+          <el-menu-item index="1" @click="changeStatus('communityDynamic')">
             <i class="el-icon-location"></i>
             <span>小区动态</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="2" @click="changeStatus('latestNews')">
             <i class="el-icon-menu"></i>
             <span slot="title">近期新闻</span>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="3" @click="changeStatus('importantNotice')">
             <i class="el-icon-document"></i>
             <span slot="title">重要通知</span>
           </el-menu-item>
-          <el-menu-item index="4">
+          <el-menu-item index="4" @click="changeStatus('facilityUse')">
             <i class="el-icon-setting"></i>
             <span slot="title">设施使用</span>
           </el-menu-item>
@@ -66,10 +66,6 @@
 </template>
 
 <script>
-  // import PanelTitle from '../../components/PanelTitle'
-
-  import {getNoticeAllInfo} from "@/views/resident/api";
-
   export default {
     name: "NoticeCheck",
     data() {
@@ -84,6 +80,7 @@
         currentPage:1,
         pageSize:10,
         totalCount:0,
+        type:'communityDynamic'
       }
     },
     components: {
@@ -105,29 +102,25 @@
           this.$store.commit('setId', this.usr.resident_id);
         })
       },
+      changeStatus(type) {
+        this.type = type
+        this.onRefresh()
+      },
       //获取所有消息
       onGetNotice() {
         let body={
-          // startTime: this.timePeriod[0],
-          // endTime:this.timePeriod[1],
           name: this.searchName,
           pageSize:this.pageSize,
-          currentPage:this.currentPage
+          currentPage:this.currentPage,
+          type:this.type
         }
         this.$http.post(this.$store.state.url.notice.allInfo, body).then((res) => {
           this.notices = res.data.noticeInfo
           this.totalCount = res.data.totalNum
           let temp=""
           for (let i=0;i<this.notices.length;i++){
-            // this.notices[i].date = this.notices[i].time.slice(-2)
-            // temp = this.notices[i].time.slice(0,8)
-            // temp = temp.replace(/-/,"年")
-            // temp = temp.replace(/-/,"月")
-            // this.notices[i].time = temp
-
             //总时间点
             this.notices[i].time = this.getChangedDate(this.notices[i].time).slice(0,10)
-            //
             this.notices[i].date = this.notices[i].time.slice(5,7)
           }
           console.log(this.notices)

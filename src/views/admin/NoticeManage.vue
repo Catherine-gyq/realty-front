@@ -212,6 +212,7 @@
             this.onGetNotice()
             this.onGetUsr()
         },
+        //获取所有的消息
         onGetNotice(){
           let body
           if ((this.timePeriod && this.timePeriod.length!==2) || !this.timePeriod){
