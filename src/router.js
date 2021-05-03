@@ -49,7 +49,12 @@ const router = new Router({
 					name: 'AdviseBox',
 					component: () => import('./views/resident/AdviseBox')
 
-				}
+				},
+				{
+					path: '/resident/personalCenter',
+					name: 'residentPersonalCenter',
+					component: () => import('./views/resident/personalCenter')
+				},
 			]
 		},
 		{
@@ -58,16 +63,6 @@ const router = new Router({
 			name: 'layout',
 			component: Layout,
 			children: [
-				// {
-				// 	path: '/student/elective',
-				// 	name: 'elective',
-				// 	component: () => import('./views/student/Elective')
-				// },
-				// {
-				// 	path: '/student/grade',
-				// 	name: 'studentGrade',
-				// 	component: () => import('./views/student/StudentGrade')
-				// },
 				{
 					path: '/admin/manage',
 					name: 'AdminManage',
@@ -100,19 +95,14 @@ const router = new Router({
 				},
 				{
 					path: '/common/personalCenter',
-					name: 'personalCenter',
-					component: () => import('./views/common/personalCenter')
+					name: 'adminPersonalCenter',
+					component: () => import('./views/admin/personalCenter')
 				},
 				{
 					path: '/activity/manage',
 					name: 'ActivityManage',
 					component: () => import('./views/admin/ActivityManage')
 				},
-				// {
-				// 	path: '/teacher/input',
-				// 	name: 'InputGrade',
-				// 	component: () => import('./views/teacher/InputGrade')
-				// },
 			]
 		},
 	]

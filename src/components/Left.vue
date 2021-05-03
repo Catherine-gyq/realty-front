@@ -30,10 +30,10 @@
           <i class="icon el-icon-reading"></i>
           <span class="text">意见箱管理</span>
         </el-menu-item>
-        <el-menu-item class="menu-list" index="/common/personalCenter">
-          <i class="icon el-icon-s-home"></i>
-          <span class="text">个人中心</span>
-        </el-menu-item>
+<!--        <el-menu-item class="menu-list" index="/common/personalCenter">-->
+<!--          <i class="icon el-icon-s-home"></i>-->
+<!--          <span class="text">个人中心</span>-->
+<!--        </el-menu-item>-->
 			</el-menu>
 		</div>
 	</div>

@@ -10,48 +10,7 @@
         </el-col>
         <el-col :span="16">
           <el-form :model="personalInformation" style="margin-top: 50px" label-width="100px">
-<!--            如果是用户-->
-            <div v-if="usrIdentity==='resident'">
-              <el-form-item label="姓名：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.name"></el-input>
-                <div v-else>
-                  {{personalInformation.name}}
-                  <el-popover placement="bottom" content="修改个人信息" trigger="hover">
-                    <i style="margin-left: 20px;cursor: pointer" @click="editInfo" slot="reference" class="el-icon-edit"></i>
-                  </el-popover>
-                </div>
-              </el-form-item>
-              <el-form-item label="电话号码：">{{personalInformation.tele}}</el-form-item>
-              <el-form-item label="邮箱：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.mailBox"></el-input>
-                <div v-else>
-                  {{personalInformation.mailBox}}
-                </div>
-              </el-form-item>
-              <el-form-item label="居住地点：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.address"></el-input>
-                <div v-else>
-                  {{personalInformation.address}}
-                </div>
-              </el-form-item>
-              <el-form-item label="出生年月：">
-                <el-date-picker v-if="infoEdit" v-model="personalInformation.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月"></el-date-picker>
-                <div v-else>
-                  {{personalInformation.dateOfBirth}}
-                </div>
-              </el-form-item>
-              <el-form-item label="性别：">
-                <el-radio-group v-if="infoEdit" v-model="personalInformation.admin_sex" size="medium">
-                  <el-radio label="男"></el-radio>
-                  <el-radio label="女"></el-radio>
-                </el-radio-group>
-                <div v-else>
-                  {{personalInformation.sex}}
-                </div>
-              </el-form-item>
-            </div>
-<!--            如果是管理员-->
-            <div v-else>
+            <!--            如果是管理员-->
               <el-form-item label="姓名：">
                 <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.admin_name"></el-input>
                 <div v-else>
@@ -83,14 +42,12 @@
                 <el-button size="small" type="primary" @click="submitInfo">确定</el-button>
                 <el-button size="small" @click="cancelEdit">取消</el-button>
               </div>
-            </div>
           </el-form>
         </el-col>
       </el-row>
     </div>
 
-
-<!--    修改密码的部分 -->
+    <!--    修改密码的部分 -->
     <div style="margin:20px 0 0 20px" v-else>
       <div class="left_display">
         <div class="head_title">修改密码</div>
@@ -169,7 +126,7 @@ export default {
           this.$store.commit('setId', this.personalInformation.resident_id);
         })
       }else{
-      //用户为管理员或者超级管理员
+        //用户为管理员或者超级管理员
         this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
           tele: this.$store.state.auth.user
         })).then(({data: usr})=>{
@@ -178,7 +135,7 @@ export default {
         })
       }
     },
-  //  打开更新密码的dialog
+    //  打开更新密码的dialog
     updatePassword(){
       this.resetDialog=true;
     },
@@ -194,12 +151,12 @@ export default {
         if (valid){
           this.$http.post(this.$store.state.url.auth.login,body)
               .then(({data: result}) => {
-            if (result===2){
-              this.ifPassword = 'true'
-            }else if (result===1){
-              this.ifPassword = 'false'
-            }
-          })
+                if (result===2){
+                  this.ifPassword = 'true'
+                }else if (result===1){
+                  this.ifPassword = 'false'
+                }
+              })
         }
       })
     },
@@ -207,10 +164,10 @@ export default {
       if (value.length === 0) {
         callback('不能为空')
       } else if (value !== this.confirmForm.newPassword) {
-          callback('密码与确认密码不匹配，请重新输入')
-        }
-        else {
-          callback()
+        callback('密码与确认密码不匹配，请重新输入')
+      }
+      else {
+        callback()
       }
     },
     //设置新的密码
@@ -223,17 +180,17 @@ export default {
       this.$refs['newPasswords'].validate((valid)=>{
         if (valid){
           this.$http.post(this.$store.state.url.auth.update,body)
-            .then(()=> {
-              this.$message.success("修改成功");
-              this.$router.push({name:'login'})
-            })
-            .catch(()=>{
-              this.$message.error("修改失败");
-            })
+              .then(()=> {
+                this.$message.success("修改成功");
+                this.$router.push({name:'login'})
+              })
+              .catch(()=>{
+                this.$message.error("修改失败");
+              })
         }
       })
     },
-  //  取消修改
+    //  取消修改
     cancelChange(){
       this.resetDialog=false
       this.ifPassword = 'unknown'

@@ -88,21 +88,6 @@ export default new Vuex.Store({
                 all: 'api/repair/allInfo',
                 approve:'api/repair/approve?adminId={adminId}&repair_id={repair_id}&status={status}',
             }
-            // open: {
-            //     add: 'api/open/add',
-            //     update: 'api/open/update',
-            //     del: 'api/open/delete?id={id}',
-            //     allInfo: 'api/open/all?no={no}&name={name}',
-            //     search: '/api/open/search'
-            // },
-            // elective: {
-            //     choose: 'api/elective/add',
-            //     del: 'api/elective/delete?sno={sno}&cno={cno}'
-            // },
-            // grade:{
-            //     update: 'api/elective/update',
-            //     studentGrade: 'api/elective/find/grade/student?no={no}&term={term}'
-            // }
         }
     },
 
