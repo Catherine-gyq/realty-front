@@ -27,6 +27,11 @@ const router = new Router({
 					component: () => import('./views/resident/NoticeCheck')
 				},
 				{
+					path: '/notice/detail',
+					name: 'NoticeDetail',
+					component: () => import('./views/resident/NoticeDetail')
+				},
+				{
 					path: '/repair/report',
 					name: 'RepairReport',
 					component: () => import('./views/resident/RepairReport')

@@ -5,7 +5,7 @@
     <div class="news_head">
       小区新闻
     </div>
-    <el-row>
+    <el-row style="min-height: 800px">
       <el-col :span="4">
         <el-menu
             default-active="1"
@@ -31,7 +31,7 @@
       <el-col :span="20">
       <!--一个消息，使用ｖ－for-->
         <div class="news_container">
-          <div v-for="(notice, i) in notices" :key="i" >
+          <div v-for="(notice, index) in notices" :key="index" >
             <el-divider></el-divider>
             <div style="display: flex;">
               <div class="time_head">
@@ -44,21 +44,23 @@
               </div>
             </div>
             <div style="text-align: right">
-              <el-button style="margin-top: 20px;" type="primary">查看详情</el-button>
+              <el-button style="margin-top: 20px;" type="primary" @click="onGetDetail(notice.id)">查看详情</el-button>
             </div>
           </div>
           <el-divider></el-divider>
         </div>
-        <div class="block" style="display: flex;justify-content: center;margin-top: 20px;margin-bottom: 20px;">
-          <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[10, 20, 50, 100]"
-              :page-size="pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalCount">
-          </el-pagination>
+        <div class="block" style="bottom: 0;position:absolute;width: 80%">
+          <div style="display: flex;justify-content: center;margin-bottom:30px ">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="totalCount">
+            </el-pagination>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -125,6 +127,10 @@
           }
           console.log(this.notices)
         })
+      },
+      //获取消息的详细信息并展示
+      onGetDetail(noticeId){
+        this.$router.push({name:'NoticeDetail'})
       },
 
       //这个是转换时间戳和时间日期之间的

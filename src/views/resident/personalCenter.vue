@@ -1,5 +1,5 @@
 <template>
-  <div class="panel_check" style="min-height: 800px;">
+  <div class="personal" style="min-height: 800px;">
     <div v-if="!resetDialog">
       <el-row>
         <el-col :span="8">
@@ -51,7 +51,7 @@
     </div>
 
     <!--    修改密码的部分 -->
-    <div style="margin:20px 0 0 20px" v-else>
+    <div style="margin:20px 0 0 200px;" v-else>
       <div class="left_display">
         <div class="head_title">修改密码</div>
         <div>
@@ -221,6 +221,13 @@ export default {
 </script>
 
 <style scoped>
+.personal{
+  top: 200px;
+  position: absolute;
+  width: 95%;
+  /*background-color: #ffffff;*/
+  margin: 0 40px 0 40px;
+}
 .center_display{
   display: flex;
   justify-content: center;
