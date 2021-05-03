@@ -197,25 +197,6 @@ export default {
     },
     //分类用户和管理员提交
     submitInfo(){
-      console.log(this.personalInformation)
-      // if (this.usrIdentity ==='admin'){
-      //   let body={
-      //     id:this.personalInformation.admin_id,
-      //     name:this.personalInformation.admin_name,
-      //     sex:this.personalInformation.admin_sex,
-      //     tele:this.personalInformation.admin_tele,
-      //     mailBox:this.personalInformation.mailBox,
-      //     dateOfBirth:this.personalInformation.dateOfBirth,
-      //     identity:'admin'
-      //   }
-      //   this.$http.post(this.$store.state.url.admin.update, body)
-      //       .then(() => {
-      //         this.$message.success("修改成功");
-      //         this.infoEdit=false;
-      //       }).catch(() => {
-      //     this.$message.error("修改失败");
-      //   })
-      // }else if (this.usrIdentity === 'resident'){
       let body={
         id:this.personalInformation.resident_id,
         tele:this.personalInformation.tele,
@@ -231,7 +212,6 @@ export default {
           }).catch(() => {
         this.$message.error("修改失败");
       })
-      // }
     },
     cancelEdit(){
       this.infoEdit=false;
