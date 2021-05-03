@@ -26,7 +26,7 @@
         if (this.$store.state.auth.identity ==='resident'){
           this.$router.push({name:'residentPersonalCenter'})
         }else{
-          this.$router.path({name:'adminPersonalCenter'})
+          this.$router.push({name:'adminPersonalCenter'})
         }
       },
 			onLogout() {

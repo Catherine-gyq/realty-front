@@ -108,6 +108,11 @@ const router = new Router({
 					name: 'ActivityManage',
 					component: () => import('./views/admin/ActivityManage')
 				},
+				{
+					path: '/warn/manage',
+					name: 'WarnManage',
+					component: () => import('./views/admin/WarnManage')
+				},
 			]
 		},
 	]

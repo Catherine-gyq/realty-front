@@ -130,7 +130,7 @@
       },
       //获取消息的详细信息并展示
       onGetDetail(noticeId){
-        this.$router.push({name:'NoticeDetail'})
+        this.$router.push({name:'NoticeDetail',params:{noticeId:noticeId}})
       },
 
       //这个是转换时间戳和时间日期之间的
