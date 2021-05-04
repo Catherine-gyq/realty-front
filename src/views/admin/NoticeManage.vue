@@ -1,75 +1,5 @@
 <template>
     <div>
-<!--        修改信息  注意判断，只有原发布人才能够修改-->
-<!--      <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelUpdate">-->
-<!--        <el-form ref="editForm" :model="currentRow" label-width="80px">-->
-<!--          <el-form-item label="消息标题" prop="title">-->
-<!--              <el-col :span="21">-->
-<!--                  <el-input v-model="currentRow.title" ></el-input>-->
-<!--              </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="发布时间" prop="time">-->
-<!--            <el-col :span="21">-->
-<!--              <el-input v-model="currentRow.time" disabled></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="发布人" prop="people">-->
-<!--            <el-col :span="21">-->
-<!--              <el-input v-model="currentRow.people" disabled></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="消息内容" prop="content">-->
-<!--            <el-col :span="21" >-->
-<!--              <el-input v-model="currentRow.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--        </el-form>-->
-<!--        <div slot="footer">-->
-<!--          <el-button @click="cancelUpdate" size="small">-->
-<!--              取消-->
-<!--          </el-button>-->
-<!--          <el-button @click="onUploadedNotice" type="primary" size="small">-->
-<!--              更新-->
-<!--          </el-button>-->
-<!--        </div>-->
-<!--      </el-dialog>-->
-
-
-        <!--添加信息-->
-<!--      <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog" :before-close="cancelCreate">-->
-<!--        <el-form ref="addForm" :model="addInfo" label-width="80px">-->
-<!--          <el-form-item label="消息标题" prop="title">-->
-<!--            <el-col :span="21">-->
-<!--              <el-input v-model="addInfo.title" ></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="发布时间" prop="publish_time">-->
-<!--            <el-col :span="21">-->
-<!--              <el-input v-model="addInfo.publish_time" disabled></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="发布人" prop="name">-->
-<!--            <el-col :span="21">-->
-<!--              <el-input v-model="addInfo.name" disabled></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item label="消息梗概" prop="content">-->
-<!--            <el-col :span="21" >-->
-<!--              <el-input v-model="addInfo.abstract" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>-->
-<!--            </el-col>-->
-<!--          </el-form-item>-->
-<!--        </el-form>-->
-<!--        <div slot="footer">-->
-<!--          <el-button @click="cancelCreate" size="small">-->
-<!--              取消-->
-<!--          </el-button>-->
-<!--          <el-button @click="onCreateNotice" type="primary" size="small">-->
-<!--              添加-->
-<!--          </el-button>-->
-<!--        </div>-->
-<!--      </el-dialog>-->
-
-
         <!--页面展示-->
       <div class="panel">
         <panel-title title="社区消息管理"></panel-title>
@@ -140,15 +70,6 @@
     name: 'NoticeManage',
     data() {
       return {
-        // currentRow: {
-        //   id:'',
-        //   tele:'',
-        //   tile:'',
-        //   people:'',
-        //   time:'',
-        //   content:'',
-        //   adminId:'',
-        // },
         addInfo:{
           title:'',
           publish_time:'',
@@ -289,22 +210,22 @@
       },
 
       //消息修改
-      onUploadedNotice(){
-        this.$http.post(this.$store.state.url.notice.update, this.currentRow)
-          .then(() => {
-            this.$message.success("修改成功");
-            this.onRefresh();
-            this.$refs['editForm'].resetFields()
-            this.editDialog = false
-          }).catch(() => {
-          this.$message.error("修改失败");
-          this.editDialog = false
-        })
-      },
-      cancelUpdate(){
-        this.editDialog=false
-        this.$refs['editForm'].resetFields()
-      },
+      // onUploadedNotice(){
+      //   this.$http.post(this.$store.state.url.notice.update, this.currentRow)
+      //     .then(() => {
+      //       this.$message.success("修改成功");
+      //       this.onRefresh();
+      //       this.$refs['editForm'].resetFields()
+      //       this.editDialog = false
+      //     }).catch(() => {
+      //     this.$message.error("修改失败");
+      //     this.editDialog = false
+      //   })
+      // },
+      // cancelUpdate(){
+      //   this.editDialog=false
+      //   this.$refs['editForm'].resetFields()
+      // },
 
       //添加消息
       onAddNotice(){
@@ -316,33 +237,33 @@
 
 
         //下面的是一些数据处理
-        this.currentRow = {};
-        this.currentRow.people = this.usr[0].admin_name
-        this.currentRow.adminId = this.usr[0].admin_id
-        this.addInfo.name = this.usr[0].admin_name
-        this.addInfo.adminId = this.usr[0].admin_id
+        // this.currentRow = {};
+        // this.currentRow.people = this.usr[0].admin_name
+        // this.currentRow.adminId = this.usr[0].admin_id
+        // this.addInfo.name = this.usr[0].admin_name
+        // this.addInfo.adminId = this.usr[0].admin_id
         // this.addInfo.publish_time= date;
-        this.addDialog = true;
+        // this.addDialog = true;
       },
 
-      onCreateNotice(){
-        console.log(this.addInfo)
-        this.$http.post(this.$store.state.url.notice.add, this.addInfo)
-          .then(() => {
-            this.$message.success("添加成功");
-            this.onRefresh();
-            this.$refs['addForm'].resetFields()
-            this.addDialog = false
-          }).catch(() => {
-          this.$message.error("添加失败");
-          this.addDialog = false
-        })
-      },
+      // onCreateNotice(){
+      //   console.log(this.addInfo)
+      //   this.$http.post(this.$store.state.url.notice.add, this.addInfo)
+      //     .then(() => {
+      //       this.$message.success("添加成功");
+      //       this.onRefresh();
+      //       this.$refs['addForm'].resetFields()
+      //       this.addDialog = false
+      //     }).catch(() => {
+      //     this.$message.error("添加失败");
+      //     this.addDialog = false
+      //   })
+      // },
+      // cancelCreate(){
+      //   this.addDialog = false
+      //   this.$refs['addForm'].resetFields()
+      // },
 
-      cancelCreate(){
-        this.addDialog = false
-        this.$refs['addForm'].resetFields()
-      },
       onDeleteNotice(id){
         this.$confirm('确定删除本条社区消息吗？', '提示', {
           confirmButtonText: '确定',
