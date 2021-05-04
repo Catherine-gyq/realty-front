@@ -11,12 +11,18 @@ import store from './store'
 import VueAxios from 'vue-axios'
 import VueClipboard from 'vue-clipboard2'
 import http from './http'
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
 
 // UI框架、图表框架引入
 Vue.use(ElementUI);
 Vue.use(VCharts);
 Vue.use(VueClipboard);
 Vue.use(VueAxios, http);
+Vue.use(VueQuillEditor);
 
 // 不显示生产环境消息，非生产环境下关闭
 Vue.config.productionTip = false;

@@ -1,73 +1,73 @@
 <template>
     <div>
 <!--        修改信息  注意判断，只有原发布人才能够修改-->
-      <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelUpdate">
-        <el-form ref="editForm" :model="currentRow" label-width="80px">
-          <el-form-item label="消息标题" prop="title">
-              <el-col :span="21">
-                  <el-input v-model="currentRow.title" ></el-input>
-              </el-col>
-          </el-form-item>
-          <el-form-item label="发布时间" prop="time">
-            <el-col :span="21">
-              <el-input v-model="currentRow.time" disabled></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="发布人" prop="people">
-            <el-col :span="21">
-              <el-input v-model="currentRow.people" disabled></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="消息内容" prop="content">
-            <el-col :span="21" >
-              <el-input v-model="currentRow.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>
-            </el-col>
-          </el-form-item>
-        </el-form>
-        <div slot="footer">
-          <el-button @click="cancelUpdate" size="small">
-              取消
-          </el-button>
-          <el-button @click="onUploadedNotice" type="primary" size="small">
-              更新
-          </el-button>
-        </div>
-      </el-dialog>
+<!--      <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelUpdate">-->
+<!--        <el-form ref="editForm" :model="currentRow" label-width="80px">-->
+<!--          <el-form-item label="消息标题" prop="title">-->
+<!--              <el-col :span="21">-->
+<!--                  <el-input v-model="currentRow.title" ></el-input>-->
+<!--              </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="发布时间" prop="time">-->
+<!--            <el-col :span="21">-->
+<!--              <el-input v-model="currentRow.time" disabled></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="发布人" prop="people">-->
+<!--            <el-col :span="21">-->
+<!--              <el-input v-model="currentRow.people" disabled></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="消息内容" prop="content">-->
+<!--            <el-col :span="21" >-->
+<!--              <el-input v-model="currentRow.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
+<!--        <div slot="footer">-->
+<!--          <el-button @click="cancelUpdate" size="small">-->
+<!--              取消-->
+<!--          </el-button>-->
+<!--          <el-button @click="onUploadedNotice" type="primary" size="small">-->
+<!--              更新-->
+<!--          </el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
 
 
         <!--添加信息-->
-      <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog" :before-close="cancelCreate">
-        <el-form ref="addForm" :model="addInfo" label-width="80px">
-          <el-form-item label="消息标题" prop="title">
-            <el-col :span="21">
-              <el-input v-model="addInfo.title" ></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="发布时间" prop="publish_time">
-            <el-col :span="21">
-              <el-input v-model="addInfo.publish_time" disabled></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="发布人" prop="name">
-            <el-col :span="21">
-              <el-input v-model="addInfo.name" disabled></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="消息内容" prop="content">
-            <el-col :span="21" >
-              <el-input v-model="addInfo.content" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>
-            </el-col>
-          </el-form-item>
-        </el-form>
-        <div slot="footer">
-          <el-button @click="cancelCreate" size="small">
-              取消
-          </el-button>
-          <el-button @click="onCreateNotice" type="primary" size="small">
-              添加
-          </el-button>
-        </div>
-      </el-dialog>
+<!--      <el-dialog :visible.sync="addDialog" size="tiny" width="600px" class="dialog" :before-close="cancelCreate">-->
+<!--        <el-form ref="addForm" :model="addInfo" label-width="80px">-->
+<!--          <el-form-item label="消息标题" prop="title">-->
+<!--            <el-col :span="21">-->
+<!--              <el-input v-model="addInfo.title" ></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="发布时间" prop="publish_time">-->
+<!--            <el-col :span="21">-->
+<!--              <el-input v-model="addInfo.publish_time" disabled></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="发布人" prop="name">-->
+<!--            <el-col :span="21">-->
+<!--              <el-input v-model="addInfo.name" disabled></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item label="消息梗概" prop="content">-->
+<!--            <el-col :span="21" >-->
+<!--              <el-input v-model="addInfo.abstract" type="textarea" :autosize="{minRows: 2, maxRows: 10}"></el-input>-->
+<!--            </el-col>-->
+<!--          </el-form-item>-->
+<!--        </el-form>-->
+<!--        <div slot="footer">-->
+<!--          <el-button @click="cancelCreate" size="small">-->
+<!--              取消-->
+<!--          </el-button>-->
+<!--          <el-button @click="onCreateNotice" type="primary" size="small">-->
+<!--              添加-->
+<!--          </el-button>-->
+<!--        </div>-->
+<!--      </el-dialog>-->
 
 
         <!--页面展示-->
@@ -102,7 +102,7 @@
                 <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
                 <el-table-column align="center" prop="people" label="发布人"/>
                 <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
-                <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="消息内容" width="450"/>
+                <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
                 <el-table-column align="center" label="操作" width="250">
                     <template slot-scope="props">
                         <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
@@ -140,15 +140,15 @@
     name: 'NoticeManage',
     data() {
       return {
-        currentRow: {
-          id:'',
-          tele:'',
-          tile:'',
-          people:'',
-          time:'',
-          content:'',
-          adminId:'',
-        },
+        // currentRow: {
+        //   id:'',
+        //   tele:'',
+        //   tile:'',
+        //   people:'',
+        //   time:'',
+        //   content:'',
+        //   adminId:'',
+        // },
         addInfo:{
           title:'',
           publish_time:'',
@@ -265,9 +265,13 @@
 
       //修改需确认
       onAlterInfo(row){
-        this.currentRow = row;
+        console.log(row)
+        // this.currentRow = row;
         if (row.tele === this.$store.state.auth.user){
-          this.editDialog = true;
+          //传参 消息id
+          this.$router.push({name:'NoticeAdd',params:{noticeId:row.id,
+              adminId:this.usr.admin_id,
+              adminName:this.usr.admin_name}})
         }
         else {
           this.$message.error("对不起！您没有修改权限！")
@@ -304,16 +308,20 @@
 
       //添加消息
       onAddNotice(){
-        const myDate = new Date();
-        let date = myDate.toLocaleDateString();
-        date= date.toString();
-        date.replace('/','-');
+        // const myDate = new Date();
+        // let date = myDate.toLocaleDateString();
+        // date= date.toString();
+        // date.replace('/','-');
+        this.$router.push({name:'NoticeAdd'})
+
+
+        //下面的是一些数据处理
         this.currentRow = {};
         this.currentRow.people = this.usr[0].admin_name
         this.currentRow.adminId = this.usr[0].admin_id
         this.addInfo.name = this.usr[0].admin_name
         this.addInfo.adminId = this.usr[0].admin_id
-        this.addInfo.publish_time= date;
+        // this.addInfo.publish_time= date;
         this.addDialog = true;
       },
 

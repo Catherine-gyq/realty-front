@@ -66,6 +66,7 @@ export default new Vuex.Store({
                 del: 'api/notice/delete?id={id}',
                 add: 'api/notice/add',
                 update: 'api/notice/update',
+                detail:'api/notice/detail?id={id}'
             },
             vote:{
                 add:'api/vote/add',

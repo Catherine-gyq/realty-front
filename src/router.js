@@ -84,6 +84,11 @@ const router = new Router({
 					component: () => import('./views/admin/NoticeManage.vue')
 				},
 				{
+					path: '/notice/add',
+					name: 'NoticeAdd',
+					component: () => import('./views/admin/NoticeAdd.vue')
+				},
+				{
 					path: '/repairReserve/manage',
 					name: 'RepairReserve',
 					component: () => import('./views/admin/RepairReserveManage.vue')
