@@ -29,22 +29,23 @@
           </div>
           <div class="panel-body" style="height: 700px">
             <el-table empty-text="暂无数据" :data="notices" id="noticeTable" v-loading="loading" element-loading-text="加载中...">
-                <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
-                <el-table-column align="center" prop="people" label="发布人"/>
-                <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
-                <el-table-column align="center" prop="abstracts" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
-                <el-table-column align="center" label="操作" width="250">
-                    <template slot-scope="props">
-                        <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
-                            <i class="fa el-icon-edit"></i>
-                            编辑
-                        </el-button>
-                        <el-button type="danger" size="mini" @click.native="onDeleteNotice(props.row.id)">
-                            <i class="fa fa-remove"></i>
-                            删除
-                        </el-button>
-                    </template>
-                </el-table-column>
+              <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
+              <el-table-column align="center" prop="people" label="发布人"/>
+              <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
+<!--              <el-table-column align="center" prop="type" label="消息类型"></el-table-column>-->
+              <el-table-column align="center" prop="abstracts" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
+              <el-table-column align="center" label="操作" width="250">
+                  <template slot-scope="props">
+                      <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
+                          <i class="fa el-icon-edit"></i>
+                          编辑
+                      </el-button>
+                      <el-button type="danger" size="mini" @click.native="onDeleteNotice(props.row.id)">
+                          <i class="fa fa-remove"></i>
+                          删除
+                      </el-button>
+                  </template>
+              </el-table-column>
             </el-table>
             <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
               <el-pagination
@@ -179,15 +180,15 @@
         this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
             tele: this.$store.state.auth.user
         })).then(({data: usr})=>{
-            this.usr = usr;
-            this.$store.commit('setId', this.usr.admin_id);
+          console.log(usr)
+          this.usr = usr[0];
+          this.$store.commit('setId', this.usr.admin_id);
         })
       },
 
       //修改需确认
       onAlterInfo(row){
         console.log(row)
-        // this.currentRow = row;
         if (row.tele === this.$store.state.auth.user){
           //传参 消息id
           this.$router.push({name:'NoticeAdd',params:{noticeId:row.id,
@@ -211,7 +212,8 @@
 
       //添加消息
       onAddNotice(){
-        this.$router.push({name:'NoticeAdd'})
+        console.log(this.usr.admin_name)
+        this.$router.push({name:'NoticeAdd',params:{adminName:this.usr.admin_name,adminId:this.usr.admin_id}})
       },
 
       onDeleteNotice(id){
