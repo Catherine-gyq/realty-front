@@ -16,9 +16,9 @@
           <el-input class="noticeInput" v-model="currentRow.people" disabled></el-input>
         </el-col>
       </el-form-item>
-      <el-form-item label="消息摘要" prop="abstract">
+      <el-form-item label="消息摘要" prop="abstracts">
         <el-col :span="21" >
-          <el-input v-model="currentRow.abstract" type="textarea" :autosize="{minRows: 4, maxRows: 10}"></el-input>
+          <el-input v-model="currentRow.abstracts" type="textarea" :autosize="{minRows: 4, maxRows: 10}"></el-input>
         </el-col>
       </el-form-item>
 <!--      在这里应用插件输入-->
@@ -70,9 +70,7 @@ export default {
   methods:{
     onSetStatus(){
       const myDate = new Date();
-      let date = myDate.toLocaleDateString();
-      date= date.toString();
-      date.replace('/','-');
+      let date = this.getChangedDate(myDate)
       //应该有专门用来转换的函数
       this.currentRow.time= date;
       console.log(this.$route.params.noticeId)
@@ -90,6 +88,7 @@ export default {
       this.$http.get(this.formatString(this.$store.state.url.notice.detail,{
         id: this.noticeId
       })).then(({data: notice})=>{
+        notice.time = this.getChangedDate(notice.time)
         this.currentRow = notice;
       })
     },
@@ -106,6 +105,7 @@ export default {
     },
     //修改消息
     onModifyNotice(){
+      console.log(this.currentRow)
       this.$http.post(this.$store.state.url.notice.update, this.currentRow)
           .then(() => {
             this.$message.success("修改成功");
@@ -127,6 +127,7 @@ export default {
     saveHtml:function(event){
       alert(this.content);
     },
+
     //这个是转换时间戳和时间日期之间的
     add0(m){return m<10?'0'+m:m },
     getChangedDate(timeStamp){

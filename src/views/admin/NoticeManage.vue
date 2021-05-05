@@ -32,7 +32,7 @@
                 <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
                 <el-table-column align="center" prop="people" label="发布人"/>
                 <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
-                <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
+                <el-table-column align="center" prop="abstracts" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
                 <el-table-column align="center" label="操作" width="250">
                     <template slot-scope="props">
                         <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
@@ -209,60 +209,10 @@
         this.onRefresh()
       },
 
-      //消息修改
-      // onUploadedNotice(){
-      //   this.$http.post(this.$store.state.url.notice.update, this.currentRow)
-      //     .then(() => {
-      //       this.$message.success("修改成功");
-      //       this.onRefresh();
-      //       this.$refs['editForm'].resetFields()
-      //       this.editDialog = false
-      //     }).catch(() => {
-      //     this.$message.error("修改失败");
-      //     this.editDialog = false
-      //   })
-      // },
-      // cancelUpdate(){
-      //   this.editDialog=false
-      //   this.$refs['editForm'].resetFields()
-      // },
-
       //添加消息
       onAddNotice(){
-        // const myDate = new Date();
-        // let date = myDate.toLocaleDateString();
-        // date= date.toString();
-        // date.replace('/','-');
         this.$router.push({name:'NoticeAdd'})
-
-
-        //下面的是一些数据处理
-        // this.currentRow = {};
-        // this.currentRow.people = this.usr[0].admin_name
-        // this.currentRow.adminId = this.usr[0].admin_id
-        // this.addInfo.name = this.usr[0].admin_name
-        // this.addInfo.adminId = this.usr[0].admin_id
-        // this.addInfo.publish_time= date;
-        // this.addDialog = true;
       },
-
-      // onCreateNotice(){
-      //   console.log(this.addInfo)
-      //   this.$http.post(this.$store.state.url.notice.add, this.addInfo)
-      //     .then(() => {
-      //       this.$message.success("添加成功");
-      //       this.onRefresh();
-      //       this.$refs['addForm'].resetFields()
-      //       this.addDialog = false
-      //     }).catch(() => {
-      //     this.$message.error("添加失败");
-      //     this.addDialog = false
-      //   })
-      // },
-      // cancelCreate(){
-      //   this.addDialog = false
-      //   this.$refs['addForm'].resetFields()
-      // },
 
       onDeleteNotice(id){
         this.$confirm('确定删除本条社区消息吗？', '提示', {
