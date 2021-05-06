@@ -40,7 +40,7 @@
               </div>
               <div class="news_content">
                 <div style="font-weight: bold;margin-bottom: 10px">{{notice.title}}</div>
-                <div>{{notice.content}}</div>
+                <div>{{notice.abstracts}}</div>
               </div>
             </div>
             <div style="text-align: right">

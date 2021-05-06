@@ -13,13 +13,25 @@
 <script>
 export default {
   name: "NoticeDetail",
+  data(){
+    return{
+      noticeId:'',
+      noticeData:{}
+    }
+  },
   created() {
     this.getNoticeDetail();
   },
   methods:{
     //传递过来的
     getNoticeDetail(){
-
+      this.noticeId = this.$route.params.noticeId
+      this.$http.get(this.formatString(this.$store.state.url.notice.detail,{
+        id: this.noticeId
+      })).then(({data: notice})=>{
+        notice.time = this.getChangedDate(notice.time)
+        this.noticeData = notice;
+      })
     }
   }
 }

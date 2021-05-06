@@ -185,6 +185,11 @@
           this.$store.commit('setId', this.usr.admin_id);
         })
       },
+      //添加消息
+      onAddNotice(){
+        console.log(this.usr.admin_name)
+        this.$router.push({name:'NoticeAdd',params:{adminName:this.usr.admin_name,adminId:this.usr.admin_id}})
+      },
 
       //修改需确认
       onAlterInfo(row){
@@ -208,12 +213,6 @@
       handleCurrentChange(val) {
         this.currentPage = val
         this.onRefresh()
-      },
-
-      //添加消息
-      onAddNotice(){
-        console.log(this.usr.admin_name)
-        this.$router.push({name:'NoticeAdd',params:{adminName:this.usr.admin_name,adminId:this.usr.admin_id}})
       },
 
       onDeleteNotice(id){

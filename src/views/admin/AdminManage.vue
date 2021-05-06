@@ -216,24 +216,31 @@ export default {
     },
     //添加管理员
     onAddAdmin() {
-      this.ifChange=false
-      this.currentRow = {};
-      this.editDialog = true
+      if (this.$store.state.auth.identity==='super_admin'){
+        this.ifChange=false
+        this.currentRow = {};
+        this.editDialog = true
+      }else {
+        this.$message.error('不具备此权限')
+      }
     },
     //修改管理员信息
     onAlterInfo(row) {
-      this.ifChange = true
-      this.currentRow={
-        id:row.admin_id,
-        name:row.admin_name,
-        sex:row.admin_sex,
-        tele:row.admin_tele,
-        mailBox:row.mailBox,
-        identity:row.identity,
-        dateOfBirth:row.dateOfBirth
+      if (this.$store.state.auth.identity==='super_admin'){
+        this.ifChange = true
+        this.currentRow={
+          id:row.admin_id,
+          name:row.admin_name,
+          sex:row.admin_sex,
+          tele:row.admin_tele,
+          mailBox:row.mailBox,
+          identity:row.identity,
+          dateOfBirth:row.dateOfBirth
+        }
+        this.editDialog = true;
+      }else{
+        this.$message.error('不具备此权限')
       }
-      console.log(this.currentRow)
-      this.editDialog = true;
     },
 
 
@@ -255,34 +262,43 @@ export default {
       })
     },
     onDeleteAdmin(tele) {
-      this.$http.get(this.formatString(this.$store.state.url.admin.del, {
-        tele: tele
-      })).then(() => {
-        this.$message.success("删除成功");
-        this.onRefresh();
-        this.editDialog = false
-      }).catch(() => {
-        this.$message.error("删除失败");
-        this.editDialog = false
-      })
-    },
-    onResetPwd(tele) {
-      this.$confirm('用户密码即将重置为初始手机号，是否继续？', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$http.get(this.formatString(this.$store.state.url.auth.reset,{
-          username: tele,
-          identity: 'admin'
+      if (this.$store.state.auth.identity==='super_admin'){
+        this.$http.get(this.formatString(this.$store.state.url.admin.del, {
+          tele: tele
         })).then(() => {
-          this.$message.success("重置成功");
+          this.$message.success("删除成功");
+          this.onRefresh();
           this.editDialog = false
         }).catch(() => {
-          this.$message.error("重置失败");
+          this.$message.error("删除失败");
           this.editDialog = false
         })
-      })
+      }else{
+        this.$message.error("不具备此权限")
+      }
+
+    },
+    onResetPwd(tele) {
+      if (this.$store.state.auth.identity==='super_admin'){
+        this.$confirm('用户密码即将重置为初始手机号，是否继续？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(this.formatString(this.$store.state.url.auth.reset,{
+            username: tele,
+            identity: 'admin'
+          })).then(() => {
+            this.$message.success("重置成功");
+            this.editDialog = false
+          }).catch(() => {
+            this.$message.error("重置失败");
+            this.editDialog = false
+          })
+        })
+      }else{
+        this.$message.error("不具备此权限")
+      }
     },
     //导出表格
     exportExcel() {
