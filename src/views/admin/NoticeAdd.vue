@@ -65,8 +65,6 @@ export default {
         type: [{required: true, trigger:'blur', message:'请选择消息类型'}],
         abstracts:[{required: true, trigger:'blur', message:'请填写消息摘要'}],
         content:[{required: true, trigger:'blur', message:'请填写消息内容'}]
-        // mailBox: [{required: true, trigger: 'blur',pattern: '^[a-z0-9]+([._\\\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$',
-        //   message: '请输入正确的邮箱格式'}],
       },
     }
   },

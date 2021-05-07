@@ -4,7 +4,7 @@
       <div class="panel">
         <panel-title title="社区消息管理"></panel-title>
         <el-radio-group class="typeChoose" v-model="noticeType" @change="searchRadioType">
-          <el-radio label="allType">所有状态</el-radio>
+          <el-radio label="allType">所有类型</el-radio>
           <el-radio v-for="(item,index) in allNoticeType" :key="index"  :label="item.value">{{item.label}}</el-radio>
         </el-radio-group>
           <div class="panel-body" style="display: flex;justify-content: space-between">
@@ -195,7 +195,6 @@
       onAlterInfo(row){
         console.log(row)
         if (row.tele === this.$store.state.auth.user){
-          //传参 消息id
           this.$router.push({name:'NoticeAdd',params:{noticeId:row.id,
               adminId:this.usr.admin_id,
               adminName:this.usr.admin_name}})

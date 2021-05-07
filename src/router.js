@@ -99,6 +99,11 @@ const router = new Router({
 					component: () => import('./views/admin/AdviseManage')
 				},
 				{
+					path: '/advise/response',
+					name: 'AdviseResponse',
+					component: () => import('./views/admin/AdviseResponse')
+				},
+				{
 					path: '/common/password',
 					name: 'Password',
 					component: () => import('./views/common/Password')

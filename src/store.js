@@ -77,6 +77,8 @@ export default new Vuex.Store({
             advise:{
                 add:'api/advise/add',
                 all:'api/advise/all',
+                detail:'api/advise/detail',
+                feedback:'api/advise/feedback',
                 allInfo:'api/advise/allInfo?resident_id={resident_id}&pageSize={pageSize}&currentPage={currentPage}',
                 change:'api/advise/changeStatus?advise_id={advise_id}&status={status}',
             },
