@@ -153,7 +153,8 @@ export default {
       this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
         tele: this.$store.state.auth.user
       })).then(({data: usr})=>{
-        this.usr = usr;
+        this.usr = usr[0];
+        // console.log(this.usr)
         this.$store.commit('setId', this.usr.admin_id);
       })
     },
@@ -188,6 +189,7 @@ export default {
       }
     },
     onResponse(adviseId){
+      console.log(this.usr.admin_id)
       this.$router.push({name:'AdviseResponse',params:{adviseId:adviseId,
           adminId:this.usr.admin_id,
           adminName:this.usr.admin_name}})

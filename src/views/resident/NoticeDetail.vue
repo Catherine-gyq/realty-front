@@ -5,8 +5,6 @@
         <el-breadcrumb separator="/">
           <el-breadcrumb-item style="font-weight: lighter;color: #999999" :to="{ path: '/notice/check' }">消息管理</el-breadcrumb-item>
           <el-breadcrumb-item><a style="font-weight: bold">消息详情</a></el-breadcrumb-item>
-<!--          <el-breadcrumb-item>活动列表</el-breadcrumb-item>-->
-<!--          <el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
         </el-breadcrumb>
       </div>
       <div class="noticeTitle">{{noticeData.title}}</div>

@@ -70,7 +70,7 @@ export default {
   },
   computed:{
     editor() {
-      return this.$refs.myQuillEditor.quill;
+      return this.$refs.myQuillEditor.quill
     },
   },
   created() {
@@ -147,7 +147,6 @@ export default {
     saveHtml:function(event){
       alert(this.content);
     },
-
     //这个是转换时间戳和时间日期之间的
     add0(m){return m<10?'0'+m:m },
     getChangedDate(timeStamp){
