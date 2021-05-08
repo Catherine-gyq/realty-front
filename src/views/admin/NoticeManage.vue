@@ -1,66 +1,64 @@
 <template>
-    <div>
-        <!--页面展示-->
-      <div class="panel">
-        <panel-title title="社区消息管理"></panel-title>
-        <el-radio-group class="typeChoose" v-model="noticeType" @change="searchRadioType">
-          <el-radio label="allType">所有类型</el-radio>
-          <el-radio v-for="(item,index) in allNoticeType" :key="index"  :label="item.value">{{item.label}}</el-radio>
-        </el-radio-group>
-          <div class="panel-body" style="display: flex;justify-content: space-between">
-            <div>
-              <el-button @click="onAddNotice" size="small" type="primary">
-                添加消息
-              </el-button>
-              <el-date-picker class="community_input" style="margin-right: 20px" size="small"
-                              value-format="yyyy-MM-dd"
-                              @change="onRefresh"
-                              v-model="timePeriod"
-                              type="datetimerange"
-                              :picker-options="pickerOptions"
-                              range-separator="至"
-                              start-placeholder="开始日期"
-                              end-placeholder="结束日期"
-                              align="right">
-              </el-date-picker>
-              <el-input class="community_input" v-model="searchName" placeholder="请输入标题来查询消息" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
-            </div>
-            <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
-          </div>
-          <div class="panel-body" style="height: 700px">
-            <el-table empty-text="暂无数据" :data="notices" id="noticeTable" v-loading="loading" element-loading-text="加载中...">
-              <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
-              <el-table-column align="center" prop="people" label="发布人"/>
-              <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
-<!--              <el-table-column align="center" prop="type" label="消息类型"></el-table-column>-->
-              <el-table-column align="center" prop="abstracts" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
-              <el-table-column align="center" label="操作" width="250">
-                  <template slot-scope="props">
-                      <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
-                          <i class="fa el-icon-edit"></i>
-                          编辑
-                      </el-button>
-                      <el-button type="danger" size="mini" @click.native="onDeleteNotice(props.row.id)">
-                          <i class="fa fa-remove"></i>
-                          删除
-                      </el-button>
-                  </template>
-              </el-table-column>
-            </el-table>
-            <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
-              <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="pageSize"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="totalCount">
-              </el-pagination>
-            </div>
-          </div>
+    <!--页面展示-->
+  <div class="panel">
+    <panel-title title="社区消息管理"></panel-title>
+    <el-radio-group class="typeChoose" v-model="noticeType" @change="searchRadioType">
+      <el-radio label="allType">所有类型</el-radio>
+      <el-radio v-for="(item,index) in allNoticeType" :key="index"  :label="item.value">{{item.label}}</el-radio>
+    </el-radio-group>
+      <div class="panel-body" style="display: flex;justify-content: space-between">
+        <div>
+          <el-button @click="onAddNotice" size="small" type="primary">
+            添加消息
+          </el-button>
+          <el-date-picker class="community_input" style="margin-right: 20px" size="small"
+                          value-format="yyyy-MM-dd"
+                          @change="onRefresh"
+                          v-model="timePeriod"
+                          type="datetimerange"
+                          :picker-options="pickerOptions"
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期"
+                          align="right">
+          </el-date-picker>
+          <el-input class="community_input" v-model="searchName" placeholder="请输入标题来查询消息" prefix-icon="el-icon-search" size="small" @keyup.enter.native="onRefresh"/>
+        </div>
+        <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
       </div>
-    </div>
+      <div class="panel-body" style="height: 700px">
+        <el-table empty-text="暂无数据" :data="notices" id="noticeTable" v-loading="loading" element-loading-text="加载中...">
+          <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="消息标题"/>
+          <el-table-column align="center" prop="people" label="发布人"/>
+          <el-table-column align="center" prop="time" label="发布时间" :formatter="getNoticeDate"/>
+          <!--<el-table-column align="center" prop="type" label="消息类型"></el-table-column>-->
+          <el-table-column align="center" prop="abstracts" :show-overflow-tooltip='true' label="消息梗概" width="450"/>
+          <el-table-column align="center" label="操作" width="250">
+            <template slot-scope="props">
+              <el-button type="info" size="mini" @click.native="onAlterInfo(props.row)">
+                <i class="fa el-icon-edit"></i>
+                编辑
+              </el-button>
+              <el-button type="danger" size="mini" @click.native="onDeleteNotice(props.row.id)">
+                <i class="fa fa-remove"></i>
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[10, 20, 50, 100]"
+              :page-size="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalCount">
+          </el-pagination>
+        </div>
+      </div>
+  </div>
 </template>
 
 <script>

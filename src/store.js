@@ -53,6 +53,9 @@ export default new Vuex.Store({
             },
             room:{
                 allInfo:'api/room/all',
+                del:'api/room/delete?roomId={roomId}',
+                add:'api/room/add',
+                update:'api/room/update'
             },
             activity:{
                 reserve:'api/activity/reserve',

@@ -203,9 +203,9 @@ export default {
     },
     onGetRoom(){
       this.$http.get(this.$store.state.url.room.allInfo)
-          .then(({data: rooms}) => {
-            this.rooms = rooms
-          })
+        .then(({data: rooms}) => {
+          this.rooms = rooms
+        })
     },
     showReserve(room_id){
       this.onGetActivity(room_id)
