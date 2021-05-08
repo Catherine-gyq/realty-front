@@ -14,17 +14,23 @@
         </el-select>
         <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
         <el-table empty-text="暂无数据" :data="advises" id="adviseTable" v-loading="loading" element-loading-text="加载中...">
-          <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="意见标题" width="250"/>
-          <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>
-          <el-table-column align="center" prop="date" label="发起时间" :formatter="getAdviseDate" width="250"/>
+          <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="意见标题"/>
+<!--          <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>-->
           <el-table-column align="center" prop="residentName" label="意见发起人" />
+          <el-table-column align="center" prop="date" label="发起时间" :formatter="getAdviseDate"/>
+          <el-table-column align="center" v-if="searchStatus !=='unchecked'" prop="adminName" label="处理人"/>
+          <el-table-column align="center" v-if="searchStatus !=='unchecked'" prop="feedback" label="反馈内容">
+            <template slot-scope="scope">
+              <p v-html="scope.row.feedback"></p>
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="操作" width="250">
             <template slot-scope="props">
-              <el-button type="info" size="mini" @click.native="onResponse(props.row.advise_id)">
+              <el-button type="info" v-if="searchStatus==='unchecked'" size="mini" @click.native="onResponse(props.row.advise_id)">
                 <i class="fa el-icon-edit"></i>
                 回复
               </el-button>
-              <el-button type="info" size="mini" @click.native="onChangeStatus(props.row,'checked')">
+              <el-button type="info" v-if="searchStatus !=='unchecked'" size="mini" @click.native="onChangeStatus(props.row,'checked')">
                 <i class="fa el-icon-edit"></i>
                 查看
               </el-button>
