@@ -8,6 +8,9 @@
         </el-breadcrumb>
       </div>
       <div class="noticeTitle">{{noticeData.title}}</div>
+      <div class="adminName">
+        <span>报道人：</span>{{noticeData.adminName}}
+      </div>
       <div class="dateTime">{{noticeData.time}}</div>
       <!--    摘要展示-->
       <div class="abstract">{{noticeData.abstracts}}</div>
@@ -69,11 +72,17 @@ export default {
   font-size: 30px;
   margin: 0 0 10px 0;
 }
+.adminName{
+  margin: 0 0 10px 10px;
+  color: #999999;
+}
+
 .dateTime{
+  margin: 0 0 0 10px;
   color: #999999;
 }
 .abstract{
-  margin: 10px 0 10px 0;
+  margin: 20px 0 40px 0;
   font-style: italic;
 }
 </style>

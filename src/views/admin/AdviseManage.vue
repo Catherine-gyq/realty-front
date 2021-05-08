@@ -15,7 +15,7 @@
         <el-button size="small" @click="exportExcel" style="float: right;margin-right: 20px" type="primary">导出EXCEL</el-button>
         <el-table empty-text="暂无数据" :data="advises" id="adviseTable" v-loading="loading" element-loading-text="加载中...">
           <el-table-column align="center" prop="title" :show-overflow-tooltip='true' label="意见标题"/>
-<!--          <el-table-column align="center" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>-->
+<!--          <el-table-column align="center" v-if="searchStatus==='unchecked'" prop="content" :show-overflow-tooltip='true' label="意见内容" width="400"/>-->
           <el-table-column align="center" prop="residentName" label="意见发起人" />
           <el-table-column align="center" prop="date" label="发起时间" :formatter="getAdviseDate"/>
           <el-table-column align="center" v-if="searchStatus !=='unchecked'" prop="adminName" label="处理人"/>
@@ -87,8 +87,8 @@ export default {
       loading: false,
       //意见箱的所有状态
       allStatus:[
-        {value:'unchecked',label:'未查看'},
-        {value:'checked',label:'已查看'},
+        {value:'unchecked',label:'未回复'},
+        {value:'checked',label:'已回复'},
         {value:'star',label:'挂起'},
       ],
       //时间的快速选择

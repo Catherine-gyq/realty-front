@@ -14,6 +14,9 @@
         <span>提出时间：</span>{{advise.date}}
       </div>
       <div class="formItem">
+        <span>意见标题：</span>{{advise.title}}
+      </div>
+      <div class="formItem">
         <span>意见内容：</span>{{advise.content}}
       </div>
       <div style="margin:50px 0 10px 0">反馈内容：</div>
@@ -77,24 +80,17 @@ export default {
         feedback:this.feedback
       }
       console.log(body)
+      //反馈意见则反馈后意见状态直接变为已查看
       this.$http.post(this.$store.state.url.advise.feedback,body).then(()=>{
         this.$message.success("反馈成功！")
-        // this.$router.push({name:'AdviseManage'})
         //将意见的状态直接改为已查看
         this.$http.get(this.formatString(this.$store.state.url.advise.change,{
           advise_id:this.adviseId,
           status:'checked'
         })).then(() => {
           this.$router.push({name:'AdviseManage'})
-              // this.onRefresh();
             }).catch(() => {
-          // this.onRefresh();
         })
-
-
-
-
-
       }).catch(()=>{
         this.$message.error("反馈失败！")
       })
