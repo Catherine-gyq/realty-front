@@ -58,12 +58,8 @@ export default {
   },
   methods:{
     onGetAdvise(){
-      console.log(this.$route.params.adminId)
-      if (this.$route.params.adviseId){
-        this.adviseId = this.$route.params.adviseId
-        this.adminId = this.$route.params.adminId
-      }
-      // console.log(this.adviseId)
+      this.adviseId = this.$route.query.adviseId
+      this.adminId = this.$route.query.adminId
       this.$http.get(this.formatString(this.$store.state.url.advise.detail,{
         adviseId: this.adviseId
       })).then(({data: advise})=>{

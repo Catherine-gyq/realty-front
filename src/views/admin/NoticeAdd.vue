@@ -82,15 +82,15 @@ export default {
       let date = this.getChangedDate(myDate)
       //应该有专门用来转换的函数
       this.currentRow.time= date;
-      console.log(this.$route.params.adminName)
-      this.noticeId = this.$route.params.noticeId
+      console.log(this.$route.query.adminName)
+      this.noticeId = this.$route.query.noticeId
       if (this.noticeId){
         this.ifAdd = false
         this.getNoticeDetail()
       }else{
         this.ifAdd = true;
-        this.currentRow.adminName = this.$route.params.adminName
-        this.currentRow.adminId = this.$route.params.adminId
+        this.currentRow.adminName = this.$route.query.adminName
+        this.currentRow.adminId = this.$route.query.adminId
       }
     },
     //获取消息的具体信息
@@ -100,7 +100,6 @@ export default {
       })).then(({data: notice})=>{
         notice.time = this.getChangedDate(notice.time)
         this.currentRow = notice;
-        // this.currentRow.adminName = this.$route.params.adminName
       })
     },
     //添加消息

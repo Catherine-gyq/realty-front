@@ -196,7 +196,7 @@ export default {
     },
     onResponse(adviseId){
       console.log(this.usr.admin_id)
-      this.$router.push({name:'AdviseResponse',params:{adviseId:adviseId,
+      this.$router.push({name:'AdviseResponse',query:{adviseId:adviseId,
           adminId:this.usr.admin_id,
           adminName:this.usr.admin_name}})
     },

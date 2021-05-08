@@ -188,14 +188,14 @@
       //添加消息
       onAddNotice(){
         console.log(this.usr.admin_name)
-        this.$router.push({name:'NoticeAdd',params:{adminName:this.usr.admin_name,adminId:this.usr.admin_id}})
+        this.$router.push({name:'NoticeAdd',query:{adminName:this.usr.admin_name,adminId:this.usr.admin_id}})
       },
 
       //修改需确认
       onAlterInfo(row){
         console.log(row)
         if (row.tele === this.$store.state.auth.user){
-          this.$router.push({name:'NoticeAdd',params:{noticeId:row.id,
+          this.$router.push({name:'NoticeAdd',query:{noticeId:row.id,
               adminId:this.usr.admin_id,
               adminName:this.usr.admin_name}})
         }

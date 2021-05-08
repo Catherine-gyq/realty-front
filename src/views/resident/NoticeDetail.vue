@@ -35,7 +35,7 @@ export default {
   methods:{
     //传递过来的
     getNoticeDetail(){
-      this.noticeId = this.$route.params.noticeId
+      this.noticeId = this.$route.query.noticeId
       this.$http.get(this.formatString(this.$store.state.url.notice.detail,{
         id: this.noticeId
       })).then(({data: notice})=>{
