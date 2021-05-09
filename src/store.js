@@ -52,7 +52,7 @@ export default new Vuex.Store({
                 usr:'api/resident/usr?tele={tele}',
             },
             room:{
-                allInfo:'api/room/all',
+                allInfo:'api/room/all?pageSize={pageSize}&currentPage={currentPage}',
                 del:'api/room/delete?roomId={roomId}',
                 add:'api/room/add',
                 update:'api/room/update'
