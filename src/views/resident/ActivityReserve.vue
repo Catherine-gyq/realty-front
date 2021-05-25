@@ -106,6 +106,17 @@
         </el-card>
       </el-col>
     </el-row>
+    <div class="block" style="display: flex;justify-content: center;margin-top: 20px">
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalCount">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -202,9 +213,14 @@ export default {
       return temp
     },
     onGetRoom(){
-      this.$http.get(this.$store.state.url.room.allInfo)
+      let body={
+        pageSize:this.pageSize,
+        currentPage:this.currentPage
+      };
+      this.$http.get(this.formatString(this.$store.state.url.room.allInfo,body))
         .then(({data: rooms}) => {
-          this.rooms = rooms
+          this.rooms = rooms.roomInfo
+          this.totalCount = rooms.totalNum
         })
     },
     showReserve(room_id){

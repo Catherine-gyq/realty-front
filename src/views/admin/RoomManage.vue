@@ -1,5 +1,6 @@
 <template>
   <div>
+<!--    修改的弹窗本窗-->
     <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelEdit">
       <el-form :rules="roomRules" ref="roomRules" :model="roomData" label-width="100px">
         <el-form-item label="房间用途" prop="room_usage">
@@ -33,9 +34,10 @@
         <el-button v-else @click="onUpdateRoom" type="primary" size="small">
           更新
         </el-button>
-
       </div>
     </el-dialog>
+
+
     <div class="panel">
       <panel-title title="社区活动室管理"></panel-title>
       <div class="panel-body">
@@ -127,14 +129,17 @@ export default {
     },
     //打开修改房间信息的弹窗
     onAlterInfo(roomData){
-      this.roomData = roomData
-      this.editDialog = true
-      this.ifAdd = false
+      // this.roomData = roomData
+      // this.editDialog = true
+      // this.ifAdd = false
+      let roomId=this.roomData.roomId
+      this.$router.push({name:'NoticeDetail',query:{roomId:roomId}})
     },
     //打开添加房间信息的弹窗
     onAddRoom(){
-      this.ifAdd = true
-      this.editDialog = true
+      // this.ifAdd = true
+      // this.editDialog = true
+      this.$router.push({name:'RoomAdd'})
     },
     //根据房间的id来删除房间
     onDeleteRoom(roomId){
@@ -146,9 +151,10 @@ export default {
       })
     },
     //创建房间信息
-    onCreateRoom(){
-
-    },
+    // onCreateRoom(){
+    //   // this.$router.push({name:'NoticeDetail',query:{noticeId:noticeId}})
+    //   this.$router.push({name:'RoomAdd'})
+    // },
     //更新房间的信息
     onUpdateRoom(){
       this.$refs['roomRules'].validate((valid)=>{

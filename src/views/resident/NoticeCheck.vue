@@ -1,69 +1,69 @@
 <template>
-  <div class="panel_check">
-<!--    <el-scrollbar style="height: 100%; width:100%;overflow-x: hidden;">-->
-<!--      <img src="../../assets/images/logo.png" alt="ems" style="margin-bottom: 50px;">-->
-    <div class="news_head">
-      小区新闻
-    </div>
-    <el-row style="min-height: 800px">
-      <el-col :span="4">
-        <el-menu
-            default-active="1"
-            class="el-menu-vertical-demo">
-          <el-menu-item index="1" @click="changeStatus('communityDynamic')">
-            <i class="el-icon-location"></i>
-            <span>小区动态</span>
-          </el-menu-item>
-          <el-menu-item index="2" @click="changeStatus('latestNews')">
-            <i class="el-icon-menu"></i>
-            <span slot="title">近期新闻</span>
-          </el-menu-item>
-          <el-menu-item index="3" @click="changeStatus('importantNotice')">
-            <i class="el-icon-document"></i>
-            <span slot="title">重要通知</span>
-          </el-menu-item>
-          <el-menu-item index="4" @click="changeStatus('facilityUse')">
-            <i class="el-icon-setting"></i>
-            <span slot="title">设施使用</span>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-      <el-col :span="20">
-      <!--一个消息，使用ｖ－for-->
-        <div class="news_container">
-          <div v-for="(notice, index) in notices" :key="index" >
+  <div style="background-color: white;height: 100%;width: 100%">
+    <div class="panel_check">
+      <div class="news_head">
+        小区新闻
+      </div>
+      <el-row style="min-height: 800px">
+        <el-col :span="4">
+          <el-menu
+              default-active="1"
+              class="el-menu-vertical-demo">
+            <el-menu-item index="1" @click="changeStatus('communityDynamic')">
+              <i class="el-icon-location"></i>
+              <span>小区动态</span>
+            </el-menu-item>
+            <el-menu-item index="2" @click="changeStatus('latestNews')">
+              <i class="el-icon-menu"></i>
+              <span slot="title">近期新闻</span>
+            </el-menu-item>
+            <el-menu-item index="3" @click="changeStatus('importantNotice')">
+              <i class="el-icon-document"></i>
+              <span slot="title">重要通知</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="changeStatus('facilityUse')">
+              <i class="el-icon-setting"></i>
+              <span slot="title">设施使用</span>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+        <el-col :span="20">
+        <!--一个消息，使用ｖ－for-->
+          <div class="news_container">
+            <div v-for="(notice, index) in notices" :key="index" >
+              <el-divider></el-divider>
+              <div style="display: flex;">
+                <div class="time_head">
+                  <div style="font-size: 50px;margin: 5px 0px 0px 5px">{{notice.date}}</div>
+                  <div style="bottom: 0px;float: right;font-size: 18px; margin-top: 13px;margin-right: 3px">{{notice.time}}</div>
+                </div>
+                <div class="news_content">
+                  <div style="font-weight: bold;margin-bottom: 10px">{{notice.title}}</div>
+                  <div>{{notice.abstracts}}</div>
+                </div>
+              </div>
+              <div style="text-align: right">
+                <el-button style="margin-top: 20px;" type="primary" @click="onGetDetail(notice.id)">查看详情</el-button>
+              </div>
+            </div>
             <el-divider></el-divider>
-            <div style="display: flex;">
-              <div class="time_head">
-                <div style="font-size: 50px;margin: 5px 0px 0px 5px">{{notice.date}}</div>
-                <div style="bottom: 0px;float: right;font-size: 18px; margin-top: 13px;margin-right: 3px">{{notice.time}}</div>
-              </div>
-              <div class="news_content">
-                <div style="font-weight: bold;margin-bottom: 10px">{{notice.title}}</div>
-                <div>{{notice.abstracts}}</div>
-              </div>
-            </div>
-            <div style="text-align: right">
-              <el-button style="margin-top: 20px;" type="primary" @click="onGetDetail(notice.id)">查看详情</el-button>
+          </div>
+          <div class="block" style="bottom: 0;position:absolute;width: 80%">
+            <div style="display: flex;justify-content: center;margin-bottom:30px ">
+              <el-pagination
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[10, 20, 50, 100]"
+                  :page-size="pageSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="totalCount">
+              </el-pagination>
             </div>
           </div>
-          <el-divider></el-divider>
-        </div>
-        <div class="block" style="bottom: 0;position:absolute;width: 80%">
-          <div style="display: flex;justify-content: center;margin-bottom:30px ">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 50, 100]"
-                :page-size="pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalCount">
-            </el-pagination>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 

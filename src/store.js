@@ -56,7 +56,8 @@ export default new Vuex.Store({
                 allInfo:'api/room/all?pageSize={pageSize}&currentPage={currentPage}',
                 del:'api/room/delete?roomId={roomId}',
                 add:'api/room/add',
-                update:'api/room/update'
+                update:'api/room/update',
+                detail:'api/room/detail?roomId={roomId}'
             },
             activity:{
                 reserve:'api/activity/reserve',

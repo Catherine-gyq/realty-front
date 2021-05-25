@@ -32,7 +32,21 @@
               <el-table-column prop="title" width="140" label="标题"></el-table-column>
               <el-table-column prop="date" label="提交日期" :formatter="getAdviseDate" width="200"></el-table-column>
               <el-table-column prop="content" label="内容"></el-table-column>
+<!--              <el-table-column prop="feedback" label="反馈">-->
+<!--                <template slot-scope="props">-->
+<!--                  <div v-if="props.feedback">{{props.feedback}}</div>-->
+<!--                  <div v-else>暂无</div>-->
+<!--                </template>-->
+<!--              </el-table-column>-->
               <el-table-column prop="status" label="审阅状态" width="200px" :formatter="getAdviseStatus"></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="props">
+                  <el-button :disabled="props.row.status!=='checked'" type="info" size="mini" @click.native="onAlterInfo(props.row.feedback)">
+                    <i class="fa el-icon-edit"></i>
+                    查看回复
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </el-main>
           <el-footer style="text-align: center;">

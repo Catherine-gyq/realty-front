@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-form :rules="roomRules" ref="roomRules" :model="roomData" label-width="100px">
+  <div class="panel" style="min-height: 900px">
+    <el-form style="margin:30px 200px 0 20px" :rules="roomRules" ref="roomRules" :model="roomData" label-width="100px">
       <el-form-item label="房间用途" prop="room_usage">
         <el-col :span="21">
           <el-input v-model="roomData.room_usage"></el-input>
@@ -33,14 +33,14 @@
         </el-upload>
       </el-form-item>
     </el-form>
-    <div>
-      <el-button @click="cancelEdit" size="small">
+    <div class="center_display">
+      <el-button @click="cancelEdit" style="margin-right: 50px">
         取消
       </el-button>
-      <el-button v-if="ifAdd" @click="onCreateRoom" type="primary" size="small">
+      <el-button v-if="ifAdd" @click="onCreateRoom" type="primary">
         添加
       </el-button>
-      <el-button v-else @click="onUpdateRoom" type="primary" size="small">
+      <el-button v-else @click="onUpdateRoom" type="primary">
         更新
       </el-button>
     </div>
@@ -53,7 +53,14 @@ export default {
   data(){
     return{
       ifAdd:false,
-      roomData:{}
+      roomData:{},
+      roomId:'',
+      roomRules: {
+        room_usage: [{required: true, trigger: 'blur', message:'请输入房间用途'}],
+        room_address: [{required: true, trigger: 'blur', message:'请输入房间地址'}],
+        room_num: [{required: true, trigger: 'blur', message:'请输入房间'}],
+        description:[{required: true, trigger: 'blur', message:'请输入房间描述'}]
+      },
     }
   },
   created() {
@@ -62,7 +69,55 @@ export default {
   methods:{
     //获取房间的具体信息
     onGetRoom(){
-
+      if (this.$route.query.roomId){
+        this.roomId = this.$route.query.roomId
+      }else{
+        this.ifAdd = true
+      }
+      let body={
+        roomId:this.roomId
+      }
+      this.$http.get(this.formatString(this.$store.state.url.admin.detail, body)).then(({data: data}) => {
+        // this.admins = data.adminInfo
+        // this.totalCount = data.totalNum
+        // this.loading=false
+        this.roomData = data
+      })
+    },
+    cancelEdit(){
+      this.$router.push({name:'RoomManage'})
+    },
+    //创建房间信息
+    onCreateRoom(){
+      this.$refs['roomRules'].validate((valid)=>{
+        if (valid){
+          this.$http.post(this.$store.state.url.room.add, this.roomData)
+              .then(() => {
+                this.$message.success("添加成功");
+                this.onRefresh();
+                this.editDialog = false
+              }).catch(() => {
+            this.$message.error("添加失败");
+            this.onRefresh();
+            this.editDialog = false
+          })
+        }})
+    },
+    //更新房间信息
+    onUpdateRoom(){
+      this.$refs['roomRules'].validate((valid)=>{
+        if (valid){
+          this.$http.post(this.$store.state.url.room.update, this.roomData)
+              .then(() => {
+                this.$message.success("修改成功");
+                this.onRefresh();
+                this.editDialog = false
+              }).catch(() => {
+            this.$message.error("修改失败");
+            this.onRefresh();
+            this.editDialog = false
+          })
+        }})
     }
   }
 
@@ -70,5 +125,13 @@ export default {
 </script>
 
 <style scoped>
+.center_display{
+  display: flex;
+  justify-content: center;
+  margin-top: 150px;
+  align-content: center;
+  align-items: center;
+  flex-direction: row;
+}
 
 </style>
