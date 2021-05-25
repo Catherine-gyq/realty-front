@@ -42,7 +42,8 @@ export default new Vuex.Store({
                 allInfo:'/api/admin/all?tele={tele}&name={name}&pageSize={pageSize}&currentPage={currentPage}',
                 del:'api/admin/delete?tele={tele}',
                 add:'api/admin/add',
-                update:'api/admin/update'
+                update:'api/admin/update',
+                upload:'api/admin/upload'
             },
             resident:{
                 allInfo:'api/resident/all?usr_tele={usr_tele}&name={name}&pageSize={pageSize}&currentPage={currentPage}',

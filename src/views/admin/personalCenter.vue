@@ -4,44 +4,55 @@
       <el-row>
         <el-col :span="8">
           <div class="center_display">
-            <el-image style="border-radius: 50%;height: 200px;width: 200px;margin-top: 40px" src="http://localhost:8080/ActivityRoom/avatar.jpg"></el-image>
+            <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
+<!--            <el-upload-->
+<!--                class="avatar-uploader"-->
+<!--                action="/api/admin/upload"-->
+<!--                :show-file-list="false"-->
+<!--                :on-success="handleAvatarSuccess"-->
+<!--                :before-upload="beforeAvatarUpload"-->
+<!--                name="image">-->
+<!--&lt;!&ndash;              &ndash;&gt;-->
+<!--              <img v-if="imageUrl" src="file:///tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">-->
+<!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
+<!--            </el-upload>-->
+            <img src="http://localhost8080/tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">
             <el-button style="margin-top: 40px;margin-bottom: 40px" @click="updatePassword">更新密码</el-button>
           </div>
         </el-col>
         <el-col :span="16">
           <el-form :model="personalInformation" style="margin-top: 50px" label-width="100px">
-            <!--            如果是管理员-->
-              <el-form-item label="姓名：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.admin_name"></el-input>
-                <div v-else>
-                  {{personalInformation.admin_name}}
-                  <el-popover content="修改个人信息" trigger="hover">
-                    <i style="margin-left: 20px;cursor: pointer" slot="reference" @click="editInfo" class="el-icon-edit"></i>
-                  </el-popover>
-                </div>
-              </el-form-item>
-              <el-form-item label="电话号码：">{{personalInformation.admin_tele}}</el-form-item>
-              <el-form-item label="邮箱：">
-                <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.mailBox"></el-input>
-                <div v-else>
-                  {{personalInformation.mailBox}}
-                </div>
-              </el-form-item>
-              <el-form-item label="出生年月：">
-                <el-date-picker v-if="infoEdit" v-model="personalInformation.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月"></el-date-picker>
-                <div v-else>{{personalInformation.dateOfBirth}}</div>
-              </el-form-item>
-              <el-form-item label="性别：">
-                <el-radio-group v-if="infoEdit" v-model="personalInformation.admin_sex" size="medium">
-                  <el-radio label="男"></el-radio>
-                  <el-radio label="女"></el-radio>
-                </el-radio-group>
-                <div v-else>{{personalInformation.admin_sex}}</div>
-              </el-form-item>
-              <div v-if="infoEdit" style="margin: 40px 0 0 100px">
-                <el-button size="small" type="primary" @click="submitInfo">确定</el-button>
-                <el-button size="small" @click="cancelEdit">取消</el-button>
+            <el-form-item label="姓名：">
+              <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.admin_name"></el-input>
+              <div v-else>
+                {{personalInformation.admin_name}}
+                <el-popover content="修改个人信息" trigger="hover">
+                  <i style="margin-left: 20px;cursor: pointer" slot="reference" @click="editInfo" class="el-icon-edit"></i>
+                </el-popover>
               </div>
+            </el-form-item>
+            <el-form-item label="电话号码：">{{personalInformation.admin_tele}}</el-form-item>
+            <el-form-item label="邮箱：">
+              <el-input v-if="infoEdit" class="input_type" v-model="personalInformation.mailBox"></el-input>
+              <div v-else>
+                {{personalInformation.mailBox}}
+              </div>
+            </el-form-item>
+            <el-form-item label="出生年月：">
+              <el-date-picker v-if="infoEdit" v-model="personalInformation.dateOfBirth" value-format="yyyy-MM-dd" type="date" placeholder="请选择出生年月"></el-date-picker>
+              <div v-else>{{personalInformation.dateOfBirth}}</div>
+            </el-form-item>
+            <el-form-item label="性别：">
+              <el-radio-group v-if="infoEdit" v-model="personalInformation.admin_sex" size="medium">
+                <el-radio label="男"></el-radio>
+                <el-radio label="女"></el-radio>
+              </el-radio-group>
+              <div v-else>{{personalInformation.admin_sex}}</div>
+            </el-form-item>
+            <div v-if="infoEdit" style="margin: 40px 0 0 100px">
+              <el-button size="small" type="primary" @click="submitInfo">确定</el-button>
+              <el-button size="small" @click="cancelEdit">取消</el-button>
+            </div>
           </el-form>
         </el-col>
       </el-row>
@@ -233,6 +244,21 @@ export default {
     },
     cancelEdit(){
       this.infoEdit=false;
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
     }
   }
 }
@@ -266,5 +292,29 @@ export default {
 }
 .input_type{
   width: 280px;
+}
+.avatar-uploader {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-top: 60px;
+}
+/*.avatar-uploader .el-upload:hover {*/
+/*  border-color: #409EFF;*/
+/*}*/
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel" style="min-height: 800px">
+  <div class="panel" style="min-height: 900px">
     <el-form :rules="noticeRules" class="formStyle" ref="editForm" :model="currentRow" label-width="80px">
       <el-form-item label="消息标题" prop="title">
         <el-input class="noticeInput" v-model="currentRow.title"></el-input>
