@@ -41,7 +41,7 @@
               <el-table-column prop="status" label="审阅状态" width="200px" :formatter="getAdviseStatus"></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="props">
-                  <el-button :disabled="props.row.status!=='checked'" type="info" size="mini" @click.native="onAlterInfo(props.row.feedback)">
+                  <el-button :disabled="props.row.status!=='checked'" type="info" size="mini" @click.native="getResponse(props.row)">
                     <i class="fa el-icon-edit"></i>
                     查看回复
                   </el-button>
@@ -63,6 +63,34 @@
         </el-container>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="checkDialog" width="700px">
+      <el-form :data="chosenData" label-width="50px" size="medium">
+        <el-form-item>
+          <el-row>
+            <el-col :span="4"><span style="font-size: 20px">标题：</span></el-col>
+            <el-col :span="20"><span style="font-size: 20px">{{chosenData.title}}</span></el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item >
+          <el-row>
+            <el-col :span="4"><span style="font-size: 20px">提交日期：</span></el-col>
+            <el-col :span="20"><span style="font-size: 20px">{{chosenData.date}}</span></el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item >
+          <el-row>
+            <el-col :span="4"><span style="font-size: 20px">内容：</span></el-col>
+            <el-col :span="20"><span style="font-size: 20px">{{chosenData.content}}</span></el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item>
+          <el-row>
+            <el-col :span="4"><span style="font-size: 20px">反馈：</span></el-col>
+            <el-col :span="20"><span style="font-size: 20px" v-html="chosenData.feedback">{{chosenData.feedback}}</span></el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -89,7 +117,8 @@ export default {
           {value:"unchecked", label:"未查看"},
           {value:"checked", label:"已查看"},
           {value:"star", label:"挂起"}],
-
+      chosenData:{},
+      checkDialog:false
   }
   },
   created() {
@@ -158,7 +187,13 @@ export default {
         return y+'-'+this.add0(m)+'-'+this.add0(d)+' '+this.add0(h)+':'+this.add0(mm)+':'+this.add0(s)
       }
     },
-
+    getResponse(allData){
+    //  展示
+      this.chosenData = allData
+      console.log(allData)
+      this.chosenData.date = this.getChangedDate(allData.date)
+      this.checkDialog = true
+    },
     handleSizeChange(val) {
       this.pageSize=val
       this.onRefresh()
@@ -172,6 +207,11 @@ export default {
 </script>
 
 <style>
+.contain_left{
+  display: flex;
+  align-content: center;
+  justify-content: left;
+}
 .el-header {
   background-color: #B3C0D1;
   color: #333;

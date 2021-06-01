@@ -43,7 +43,7 @@ export default new Vuex.Store({
                 del:'api/admin/delete?tele={tele}',
                 add:'api/admin/add',
                 update:'api/admin/update',
-                upload:'api/admin/upload'
+                upload:'api/admin/upload?adminId={adminId}&avatar={avatar}'
             },
             resident:{
                 allInfo:'api/resident/all?usr_tele={usr_tele}&name={name}&pageSize={pageSize}&currentPage={currentPage}',

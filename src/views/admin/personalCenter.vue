@@ -5,18 +5,17 @@
         <el-col :span="8">
           <div class="center_display">
             <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
-<!--            <el-upload-->
-<!--                class="avatar-uploader"-->
-<!--                action="/api/admin/upload"-->
-<!--                :show-file-list="false"-->
-<!--                :on-success="handleAvatarSuccess"-->
-<!--                :before-upload="beforeAvatarUpload"-->
-<!--                name="image">-->
-<!--&lt;!&ndash;              &ndash;&gt;-->
-<!--              <img v-if="imageUrl" src="file:///tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">-->
-<!--              <i v-else class="el-icon-plus avatar-uploader-icon"></i>-->
-<!--            </el-upload>-->
-            <img src="http://localhost8080/tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">
+            <el-upload
+                class="avatar-uploader"
+                action="/api/admin/upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                name="image">
+              <img v-if="imageUrl" src="file:///tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+<!--            <img src="http://localhost8080/tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">-->
             <el-button style="margin-top: 40px;margin-bottom: 40px" @click="updatePassword">更新密码</el-button>
           </div>
         </el-col>
@@ -120,7 +119,8 @@ export default {
         newPassword: { required: true, message: '请设置相应密码', trigger: 'blur' },
         passwordConfirm:{required:true,validator: this.passConfirm,message:'两次输入密码需一致',trigger:'blur'},
       },
-      infoEdit:false
+      infoEdit:false,
+      imageUrl:''
     }
   },
   created(){
@@ -134,6 +134,8 @@ export default {
           tele: this.$store.state.auth.user
         })).then(({data: usr})=>{
           this.personalInformation = usr[0];
+          console.log(this.personalInformation)
+          this.imageUrl = this.personalInformation.avatar;
           this.$store.commit('setId', this.personalInformation.resident_id);
         })
       }else{
@@ -142,6 +144,8 @@ export default {
           tele: this.$store.state.auth.user
         })).then(({data: usr})=>{
           this.personalInformation = usr[0];
+          console.log(this.personalInformation)
+          this.imageUrl = this.personalInformation.avatar;
           this.$store.commit('setId', this.personalInformation.admin_id);
         })
       }
@@ -246,7 +250,7 @@ export default {
       this.infoEdit=false;
     },
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      // this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';

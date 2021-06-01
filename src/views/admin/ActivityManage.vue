@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="panel">
-      <panel-title title="活动室管理"></panel-title>
+      <panel-title title="活动预约管理"></panel-title>
       <div class="panel-body" style="display: flex;justify-content: space-between">
         <div>
           <el-select v-model="searchForm.room_id" style="margin-right: 20px" :clearable="true" @change="onGetActivityReserve">
