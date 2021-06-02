@@ -4,18 +4,18 @@
       <el-row>
         <el-col :span="8">
           <div class="center_display">
-            <!--                action="https://jsonplaceholder.typicode.com/posts/"-->
             <el-upload
                 class="avatar-uploader"
                 action="/api/admin/upload"
+                :data="{adminId: this.personalInformation.admin_id}"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
-                name="image">
-              <img v-if="imageUrl" src="file:///tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">
+                name="image"
+                >
+              <img v-if="imageUrl" :src='imageUrl' class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
-<!--            <img src="http://localhost8080/tmp/tomcat-docbase.1251216294920285837.8080/upload/image" class="avatar">-->
             <el-button style="margin-top: 40px;margin-bottom: 40px" @click="updatePassword">更新密码</el-button>
           </div>
         </el-col>
@@ -120,7 +120,7 @@ export default {
         passwordConfirm:{required:true,validator: this.passConfirm,message:'两次输入密码需一致',trigger:'blur'},
       },
       infoEdit:false,
-      imageUrl:''
+      imageUrl:'',
     }
   },
   created(){
@@ -129,26 +129,18 @@ export default {
   methods:{
     //获取用户信息
     getUsrInfo(){
-      if (this.$store.state.auth.identity==="resident"){
-        this.$http.get(this.formatString(this.$store.state.url.resident.usr,{
-          tele: this.$store.state.auth.user
-        })).then(({data: usr})=>{
-          this.personalInformation = usr[0];
-          console.log(this.personalInformation)
-          this.imageUrl = this.personalInformation.avatar;
-          this.$store.commit('setId', this.personalInformation.resident_id);
-        })
-      }else{
-        //用户为管理员或者超级管理员
-        this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
-          tele: this.$store.state.auth.user
-        })).then(({data: usr})=>{
-          this.personalInformation = usr[0];
-          console.log(this.personalInformation)
-          this.imageUrl = this.personalInformation.avatar;
-          this.$store.commit('setId', this.personalInformation.admin_id);
-        })
-      }
+      //用户为管理员或者超级管理员
+      this.$http.get(this.formatString(this.$store.state.url.admin.usr,{
+        tele: this.$store.state.auth.user
+      })).then(({data: usr})=>{
+        this.personalInformation = usr[0];
+        console.log(this.personalInformation)
+        this.imageUrl = this.personalInformation.avatar;
+        this.$store.commit('setId', this.personalInformation.admin_id);
+      })
+    },
+    onRefresh(){
+      this.getUsrInfo()
     },
     //  打开更新密码的dialog
     updatePassword(){
@@ -250,7 +242,7 @@ export default {
       this.infoEdit=false;
     },
     handleAvatarSuccess(res, file) {
-      // this.imageUrl = URL.createObjectURL(file.raw);
+      this.onRefresh()
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg';

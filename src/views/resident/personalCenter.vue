@@ -4,6 +4,18 @@
       <el-row>
         <el-col :span="8">
           <div class="center_display">
+            <el-upload
+                class="avatar-uploader"
+                action="/api/resident/upload"
+                :data="{residentId: this.personalInformation.resident_id}"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                name="image"
+            >
+              <img v-if="imageUrl" :src='imageUrl' class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
             <el-image style="border-radius: 50%;height: 200px;width: 200px;margin-top: 40px" src="http://localhost:8080/ActivityRoom/avatar.jpg"></el-image>
             <el-button style="margin-top: 40px;margin-bottom: 40px" @click="updatePassword">更新密码</el-button>
           </div>
@@ -133,6 +145,9 @@ export default {
     updatePassword(){
       this.resetDialog=true;
     },
+    onRefresh(){
+      this.getUsrInfo()
+    },
     //确认代码是否正确
     getPassword(){
       let body={
@@ -215,6 +230,21 @@ export default {
     },
     cancelEdit(){
       this.infoEdit=false;
+    },
+    handleAvatarSuccess(res, file) {
+      this.onRefresh()
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isJPG && isLt2M;
     }
   }
 }

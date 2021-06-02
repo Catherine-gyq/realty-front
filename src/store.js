@@ -50,6 +50,7 @@ export default new Vuex.Store({
                 add:'api/resident/add',
                 del:'api/resident/delete?tele={tele}',
                 update: 'api/resident/update',
+                upload:'api/admin/upload?residentId={residentId}&avatar={avatar}',
                 usr:'api/resident/usr?tele={tele}',
             },
             room:{
