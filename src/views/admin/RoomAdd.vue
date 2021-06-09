@@ -28,7 +28,9 @@
             :show-file-list="false"
             action="/api/room/upload"
             >
-          <i class="el-icon-upload"></i>
+          <img v-if="imageUrl" :src='imageUrl' class="avatar">
+<!--          <i  class="el-icon-plus avatar-uploader-icon"></i>-->
+          <i v-else class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
@@ -56,6 +58,7 @@ export default {
       ifAdd:false,
       roomData:{},
       roomId:'',
+      imageUrl:'',
       roomRules: {
         room_usage: [{required: true, trigger: 'blur', message:'请输入房间用途'}],
         room_address: [{required: true, trigger: 'blur', message:'请输入房间地址'}],
@@ -70,6 +73,7 @@ export default {
   methods:{
     //获取房间的具体信息
     onGetRoom(){
+      console.log(this.$route.query.roomId)
       if (this.$route.query.roomId){
         this.roomId = this.$route.query.roomId
       }else{
@@ -78,11 +82,10 @@ export default {
       let body={
         roomId:this.roomId
       }
-      this.$http.get(this.formatString(this.$store.state.url.admin.detail, body)).then(({data: data}) => {
-        // this.admins = data.adminInfo
-        // this.totalCount = data.totalNum
-        // this.loading=false
+      this.$http.get(this.formatString(this.$store.state.url.room.detail, body)).then(({data: data}) => {
+        console.log(data)
         this.roomData = data
+        this.imageUrl = data.picture
       })
     },
     cancelEdit(){
@@ -95,12 +98,9 @@ export default {
           this.$http.post(this.$store.state.url.room.add, this.roomData)
               .then(() => {
                 this.$message.success("添加成功");
-                this.onRefresh();
-                this.editDialog = false
+                this.$router.push({name:'RoomManage'})
               }).catch(() => {
-            this.$message.error("添加失败");
-            this.onRefresh();
-            this.editDialog = false
+              this.$message.error("添加失败");
           })
         }})
     },
@@ -108,15 +108,21 @@ export default {
     onUpdateRoom(){
       this.$refs['roomRules'].validate((valid)=>{
         if (valid){
-          this.$http.post(this.$store.state.url.room.update, this.roomData)
+          console.log(this.roomData)
+          let body={
+            id:this.roomData.room_id,
+            usage:this.roomData.room_usage,
+            num:this.roomData.room_num,
+            address:this.roomData.room_address,
+            description: this.roomData.description,
+            picture: this.roomData.picture
+          }
+          this.$http.post(this.$store.state.url.room.update, body)
               .then(() => {
                 this.$message.success("修改成功");
-                this.onRefresh();
-                this.editDialog = false
+                this.$router.push({name:'RoomManage'})
               }).catch(() => {
-            this.$message.error("修改失败");
-            this.onRefresh();
-            this.editDialog = false
+                this.$message.error("修改失败");
           })
         }})
     }

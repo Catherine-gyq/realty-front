@@ -1,41 +1,41 @@
 <template>
   <div>
 <!--    修改的弹窗本窗-->
-    <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelEdit">
-      <el-form :rules="roomRules" ref="roomRules" :model="roomData" label-width="100px">
-        <el-form-item label="房间用途" prop="room_usage">
-          <el-col :span="21">
-            <el-input v-model="roomData.room_usage"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="房间地址" prop="room_address">
-          <el-col :span="21">
-            <el-input v-model="roomData.room_address"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="房间容量" prop="room_num">
-          <el-col :span="21">
-            <el-input v-model="roomData.room_num"></el-input>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="房间描述" prop="description">
-          <el-col :span="21">
-            <el-input v-model="roomData.description" type="textarea"></el-input>
-          </el-col>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="cancelEdit" size="small">
-          取消
-        </el-button>
-        <el-button v-if="ifAdd" @click="onCreateRoom" type="primary" size="small">
-          添加
-        </el-button>
-        <el-button v-else @click="onUpdateRoom" type="primary" size="small">
-          更新
-        </el-button>
-      </div>
-    </el-dialog>
+<!--    <el-dialog :visible.sync="editDialog" size="tiny" width="600px" class="dialog" :before-close="cancelEdit">-->
+<!--      <el-form :rules="roomRules" ref="roomRules" :model="roomData" label-width="100px">-->
+<!--        <el-form-item label="房间用途" prop="room_usage">-->
+<!--          <el-col :span="21">-->
+<!--            <el-input v-model="roomData.room_usage"></el-input>-->
+<!--          </el-col>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="房间地址" prop="room_address">-->
+<!--          <el-col :span="21">-->
+<!--            <el-input v-model="roomData.room_address"></el-input>-->
+<!--          </el-col>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="房间容量" prop="room_num">-->
+<!--          <el-col :span="21">-->
+<!--            <el-input v-model="roomData.room_num"></el-input>-->
+<!--          </el-col>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="房间描述" prop="description">-->
+<!--          <el-col :span="21">-->
+<!--            <el-input v-model="roomData.description" type="textarea"></el-input>-->
+<!--          </el-col>-->
+<!--        </el-form-item>-->
+<!--      </el-form>-->
+<!--      <div slot="footer">-->
+<!--        <el-button @click="cancelEdit" size="small">-->
+<!--          取消-->
+<!--        </el-button>-->
+<!--        <el-button v-if="ifAdd" @click="onCreateRoom" type="primary" size="small">-->
+<!--          添加-->
+<!--        </el-button>-->
+<!--        <el-button v-else @click="onUpdateRoom" type="primary" size="small">-->
+<!--          更新-->
+<!--        </el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
 
 
     <div class="panel">
@@ -129,16 +129,11 @@ export default {
     },
     //打开修改房间信息的弹窗
     onAlterInfo(roomData){
-      // this.roomData = roomData
-      // this.editDialog = true
-      // this.ifAdd = false
-      let roomId=this.roomData.roomId
-      this.$router.push({name:'NoticeDetail',query:{roomId:roomId}})
+      let roomId=roomData.room_id
+      this.$router.push({name:'RoomAdd',query:{roomId:roomId}})
     },
     //打开添加房间信息的弹窗
     onAddRoom(){
-      // this.ifAdd = true
-      // this.editDialog = true
       this.$router.push({name:'RoomAdd'})
     },
     //根据房间的id来删除房间
@@ -150,11 +145,6 @@ export default {
             this.$message.error('删除失败！')
       })
     },
-    //创建房间信息
-    // onCreateRoom(){
-    //   // this.$router.push({name:'NoticeDetail',query:{noticeId:noticeId}})
-    //   this.$router.push({name:'RoomAdd'})
-    // },
     //更新房间的信息
     onUpdateRoom(){
       this.$refs['roomRules'].validate((valid)=>{
