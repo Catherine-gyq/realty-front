@@ -124,7 +124,8 @@ export default {
         newPassword: { required: true, message: '请设置相应密码', trigger: 'blur' },
         passwordConfirm:{required:true,validator: this.passConfirm,message:'两次输入密码需一致',trigger:'blur'},
       },
-      infoEdit:false
+      infoEdit:false,
+      imageUrl:''
     }
   },
   created(){
@@ -138,6 +139,8 @@ export default {
       })).then(({data: usr})=>{
         this.personalInformation = usr;
         console.log(this.personalInformation)
+        this.imageUrl = this.personalInformation.avatar;
+        this.imageUrl = this.imageUrl+'?rnd='+Math.random()
         this.$store.commit('setId', this.personalInformation.resident_id);
       })
     },

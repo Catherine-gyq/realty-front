@@ -56,7 +56,14 @@ export default {
   data(){
     return{
       ifAdd:false,
-      roomData:{},
+      roomData:{
+        description:'',
+        picture:'',
+        room_address:'',
+        room_id:'',
+        room_num:'',
+        room_usage:''
+      },
       roomId:'',
       imageUrl:'',
       roomRules: {

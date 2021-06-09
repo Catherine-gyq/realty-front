@@ -136,6 +136,7 @@ export default {
         this.personalInformation = usr[0];
         console.log(this.personalInformation)
         this.imageUrl = this.personalInformation.avatar;
+        this.imageUrl = this.imageUrl+'?rnd='+Math.random()
         this.$store.commit('setId', this.personalInformation.admin_id);
       })
     },

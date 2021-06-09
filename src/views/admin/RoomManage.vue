@@ -55,7 +55,7 @@
                 <i class="fa el-icon-edit"></i>
                 编辑
               </el-button>
-              <el-button type="danger" size="mini" @click.native="onDeleteRoom(props.row.id)">
+              <el-button type="danger" size="mini" @click.native="onDeleteRoom(props.row.room_id)">
                 <i class="fa fa-remove"></i>
                 删除
               </el-button>
@@ -119,6 +119,7 @@ export default {
       this.$http.get(this.formatString(this.$store.state.url.room.allInfo,body))
         .then(({data: rooms}) => {
           this.rooms = rooms.roomInfo
+          console.log(this.rooms)
           this.totalCount = rooms.totalNum
           this.loading = false
         })
@@ -138,9 +139,11 @@ export default {
     },
     //根据房间的id来删除房间
     onDeleteRoom(roomId){
-      this.$http.get(this.formatString(this.$store.state.url.admin.del, {roomId:roomId}))
+      console.log(roomId)
+      this.$http.get(this.formatString(this.$store.state.url.room.del, {roomId:roomId}))
           .then(()=> {
             this.$message.success('删除成功！')
+            this.onRefresh()
           }).catch(()=>{
             this.$message.error('删除失败！')
       })
