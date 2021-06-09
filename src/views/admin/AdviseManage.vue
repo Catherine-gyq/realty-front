@@ -30,10 +30,10 @@
                 <i class="fa el-icon-edit"></i>
                 回复
               </el-button>
-              <el-button type="info" v-if="searchStatus !=='unchecked'" size="mini" @click.native="onChangeStatus(props.row,'checked')">
-                <i class="fa el-icon-edit"></i>
-                查看
-              </el-button>
+<!--              <el-button type="info" v-if="searchStatus !=='unchecked'" size="mini" @click.native="onChangeStatus(props.row,'checked')">-->
+<!--                <i class="fa el-icon-edit"></i>-->
+<!--                查看-->
+<!--              </el-button>-->
               <el-button v-if="searchStatus!=='star'" type="primary" size="mini" @click.native="onChangeStatus(props.row,'star')">
                 <i class="fa el-icon-star-off"></i>
                 挂起

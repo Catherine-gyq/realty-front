@@ -12,9 +12,7 @@
         <span>报道人：</span>{{noticeData.adminName}}
       </div>
       <div class="dateTime">{{noticeData.time}}</div>
-      <!--    摘要展示-->
       <div class="abstract">{{noticeData.abstracts}}</div>
-      <!--    文章内容-->
       <div class="content" v-html="noticeData.content">{{noticeData.content}}</div>
     </div>
   </div>

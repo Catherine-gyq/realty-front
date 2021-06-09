@@ -237,7 +237,7 @@ export default {
 
     //提交活动室预约
     onReserveSubmit(){
-      this.$ref['reserveForm'].validate((valid)=>{
+      this.$refs['reserveForm'].validate((valid)=>{
         if (valid){
           this.$http.post(this.$store.state.url.activity.reserve, this.currentRow).then(()=>{
             this.$message.success("预约成功，等待审核");

@@ -58,6 +58,7 @@ export default new Vuex.Store({
                 del:'api/room/delete?roomId={roomId}',
                 add:'api/room/add',
                 update:'api/room/update',
+                upload:'api/room/upload',
                 detail:'api/room/detail?roomId={roomId}'
             },
             activity:{
