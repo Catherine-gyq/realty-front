@@ -55,6 +55,10 @@
                 <i class="fa el-icon-edit"></i>
                 编辑
               </el-button>
+              <el-button type="info" size="mini" @click.native="onAlterPic(props.row)">
+                <i class="fa el-icon-edit"></i>
+                图片修改
+              </el-button>
               <el-button type="danger" size="mini" @click.native="onDeleteRoom(props.row.room_id)">
                 <i class="fa fa-remove"></i>
                 删除
@@ -132,6 +136,10 @@ export default {
     onAlterInfo(roomData){
       let roomId=roomData.room_id
       this.$router.push({name:'RoomAdd',query:{roomId:roomId}})
+    },
+    onAlterPic(roomData){
+      let roomId=roomData.room_id
+      this.$router.push({name:'RoomPic',query:{roomId:roomId}})
     },
     //打开添加房间信息的弹窗
     onAddRoom(){

@@ -129,6 +129,11 @@ const router = new Router({
 					component: () => import('./views/admin/RoomAdd')
 				},
 				{
+					path: '/room/pic',
+					name: 'RoomPic',
+					component: () => import('./views/admin/RoomPic')
+				},
+				{
 					path: '/warn/manage',
 					name: 'WarnManage',
 					component: () => import('./views/admin/WarnManage')

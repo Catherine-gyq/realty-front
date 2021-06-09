@@ -21,20 +21,21 @@
           <el-input v-model="roomData.description" type="textarea"></el-input>
         </el-col>
       </el-form-item>
-      <el-form-item label="描述图片" prop="description">
-        <el-upload
-            class="upload-demo"
-            drag
-            :show-file-list="false"
-            action="/api/room/upload"
-            >
-          <img v-if="imageUrl" :src='imageUrl' class="avatar">
-<!--          <i  class="el-icon-plus avatar-uploader-icon"></i>-->
-          <i v-else class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </el-form-item>
+<!--      <el-form-item label="描述图片" prop="description">-->
+<!--        <el-upload-->
+<!--            class="upload-demo"-->
+<!--            drag-->
+<!--            :show-file-list="false"-->
+<!--            action=""-->
+<!--            :on-change="onUploadChange"-->
+<!--            >-->
+<!--&lt;!&ndash;       /api/room/upload   &ndash;&gt;-->
+<!--          <img v-if="imageUrl" :src='imageUrl' class="avatar">-->
+<!--          <i v-else class="el-icon-upload"></i>-->
+<!--          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+<!--          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>-->
+<!--        </el-upload>-->
+<!--      </el-form-item>-->
     </el-form>
     <div class="center_display">
       <el-button @click="cancelEdit" style="margin-right: 50px">
@@ -62,7 +63,7 @@ export default {
         room_address:'',
         room_id:'',
         room_num:'',
-        room_usage:''
+        room_usage:""
       },
       roomId:'',
       imageUrl:'',
@@ -72,6 +73,7 @@ export default {
         room_num: [{required: true, trigger: 'blur', message:'请输入房间'}],
         description:[{required: true, trigger: 'blur', message:'请输入房间描述'}]
       },
+      file:''
     }
   },
   created() {
@@ -83,26 +85,39 @@ export default {
       console.log(this.$route.query.roomId)
       if (this.$route.query.roomId){
         this.roomId = this.$route.query.roomId
+        let body={
+          roomId:this.roomId
+        }
+        this.$http.get(this.formatString(this.$store.state.url.room.detail, body)).then(({data: data}) => {
+          console.log(data)
+          this.roomData = data
+          this.imageUrl = data.picture
+        })
       }else{
         this.ifAdd = true
       }
-      let body={
-        roomId:this.roomId
-      }
-      this.$http.get(this.formatString(this.$store.state.url.room.detail, body)).then(({data: data}) => {
-        console.log(data)
-        this.roomData = data
-        this.imageUrl = data.picture
-      })
     },
     cancelEdit(){
       this.$router.push({name:'RoomManage'})
+    },
+    onUploadChange(file){
+      var reader = new FileReader();
+      console.log(file)
+      reader.readAsDataURL(file.raw);
     },
     //创建房间信息
     onCreateRoom(){
       this.$refs['roomRules'].validate((valid)=>{
         if (valid){
-          this.$http.post(this.$store.state.url.room.add, this.roomData)
+          let body={
+            id:this.roomData.room_id,
+            usage:this.roomData.room_usage,
+            num:this.roomData.room_num,
+            address:this.roomData.room_address,
+            description: this.roomData.description,
+            picture: this.roomData.picture
+          }
+          this.$http.post(this.$store.state.url.room.add, body)
               .then(() => {
                 this.$message.success("添加成功");
                 this.$router.push({name:'RoomManage'})
